@@ -14,7 +14,7 @@
 - **Sending and Receiving Messages:** Players will send messages to the server via WebSockets to indicate their chosen options or actions in the game. The server will then broadcast the updates to both players, keeping their game states synchronized.
 - **UI Updates:** Each player's React component will receive messages from the server and update the UI accordingly. This might involve displaying the chosen dilemma, opponent's selection (if applicable), and updating the game state.
 
-### Simplified example of how the communication might flow:
+### 📱📲 Simplified example of how the communication might flow:
 
 **Player 1 connects:**
 
