@@ -1,6 +1,6 @@
 # Jevil's Dillema
 
-## Setup considerations for 2-players
+## 👥 Setup considerations for 2-players
 
 ### Server-Side Setup:
 
@@ -16,30 +16,30 @@
 
 ### Simplified example of how the communication might flow:
 
-Player 1 connects:
+**Player 1 connects:**
 
 - Player 1's React app establishes a WebSocket connection to the server.
 - The server might add Player 1 to a waiting room.
 
-Player 2 connects:
+**Player 2 connects:**
 
 - Player 2's React app connects to the server.
 - The server detects two players waiting and starts the game.
 
-Server sends dilemma:
+**Server sends dilemma:**
 
 - The server sends the initial dilemma to both players' React components.
 
-Player 1 chooses option:
+**Player 1 chooses option:**
 
 - Player 1's React app sends a message containing their chosen option to the server via WebSocket.
 
-Server broadcasts update:
+**Server broadcasts update:**
 
 - The server receives Player 1's choice.
 - The server broadcasts the chosen option to both players' React components (including Player 2).
 
-Player 2 updates UI:
+**Player 2 updates UI:**
 
 - Player 2's React app receives the message and updates the UI to show Player 1's selection.
 
@@ -59,13 +59,13 @@ Player 2 updates UI:
 
 ### Client-Side Setup (using React):
 
-Joining a Game:
+**Joining a Game:**
 - When a player with the sharable link opens the game in their browser, their React app parses the link to extract the game ID.
 - The React app connects to the WebSocket server and sends a message indicating they want to join the game with the extracted ID.
-Server Validation
+**Server Validation**
 - The server receives the join request with the game ID.
 - The server checks if a game exists with that ID and if it's currently available for another player to join.
-Game Start/Waiting Room:
+**Game Start/Waiting Room:**
 - If the game exists and is available:
   - The server adds the joining player to the game and sends them the initial game state (current dilemma, player information).
   - Both players' React components receive updates and display the same dilemma.
