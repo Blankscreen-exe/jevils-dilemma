@@ -1,5 +1,21 @@
 # Jevil's Dillema
 
+## Single Player
+
+### The Flow
+
+1. The player enters the site
+2. They recieve a randomly selected dilemma question from a set of dilemmas (stored somewhere in a JSON file)
+3. They start typing their response to the dilemma question in the given text box below the question
+4. When they hit enter or click on the "submit" button, they see a list named "history" get appended by the current question (including the player's response). Also as a reaction to clicking the "submit" button, the current question is replaced with another question.
+5. Note that these questions cannot be repeated, so before we fetch the next question we will first filter out all the question that player have already seen. this can be done by assigning each question with unique IDs. These IDs will also be stored inside the JSON file.
+6. The Player after having their fill of the fun, should be able to export their question/response history in one of the selected format CSV,HTML,TXT,PDF(optional)
+7. The data related to player's play-routine will not be stored in the database
+
+## Two Player
+
+### 
+
 ## 👥 Setup considerations for 2-players
 
 ### Server-Side Setup:
