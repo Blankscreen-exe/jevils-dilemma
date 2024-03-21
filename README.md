@@ -4,17 +4,33 @@
 
 ### The Flow
 
-1. The player enters the site
-2. They recieve a randomly selected dilemma question from a set of dilemmas (stored somewhere in a JSON file)
-3. They start typing their response to the dilemma question in the given text box below the question
-4. When they hit enter or click on the "submit" button, they see a list named "history" get appended by the current question (including the player's response). Also as a reaction to clicking the "submit" button, the current question is replaced with another question.
-5. Note that these questions cannot be repeated, so before we fetch the next question we will first filter out all the question that player have already seen. this can be done by assigning each question with unique IDs. These IDs will also be stored inside the JSON file.
-6. The Player after having their fill of the fun, should be able to export their question/response history in one of the selected format CSV,HTML,TXT,PDF(optional)
-7. The data related to player's play-routine will not be stored in the database
+1. The player enters the site, writes their name in the given text box (labled as "your name") and chooses "single player".
+2. They are redirected to a new screen where the game is played.
+3. In the screen(point 2) the player has a single button "Start" which starts the game
+4. After clicking "start", they recieve a randomly selected dilemma question from a set of dilemmas (stored somewhere in a JSON file)
+5. They start typing their response to the dilemma question in the given text box below the question
+6. When they hit enter or click on the "submit" button, they see a list named "history" get appended by the current question (including the player's response). Also as a reaction to clicking the "submit" button, the current question is replaced with another question.
+7. Note that these questions cannot be repeated, so before we fetch the next question we will first filter out all the question that player have already seen. this can be done by assigning each question with unique IDs. These IDs will also be stored inside the JSON file.
+8. The Player after receiving total of 10 questions will have the option to restart the game or export the results.
+9. They should be able to export their question/response history in one of the selected format CSV,HTML,TXT,PDF(optional)
+10. The data related to player's play-routine will not be stored in the database
 
-## Two Player
+## Multi Player
 
-### 
+### The Flow
+
+1. The player enters the site, writes their name in the given text box (labled as "your name") and chooses "multiplayer player".
+2. They are redirected to a new screen where the game is played.
+3. In a corner they have a CODE for the current game session. This CODE can be shared to invite another player(s) into the game.
+4. As the new player clicks the link they are shown a page where they need to write their name (similar to point 1), but the option to choose "single player" or "multiplayer" are not given in this screen.
+5. As the new player joins the session, a Toast is shown in the top-right corner of the screen with the name of the new user.
+6. All the players will see a single button (start) on the screen. clicking it will display a randomly selected dilemma question.
+7. Each player will write their responses in a given text box and click "submit".
+8. A new dilemma question will not be shown until all of the players have submitted their response.
+9. A public history for each players responses w.r.t questions will be appended with the current response.
+10. All the players will go through this until they have submitted responses for total of 10 questions. After that they will have an option to export their results in one of the predefined formats CSV,HTML,TXT,PDF(optional)
+11. The session will then end as soon as the limit of 10 questions is reached. Kicking all players out of the session.
+12. The data related to player's play-routine will not be stored in the database
 
 ## 👥 Setup considerations for 2-players
 
