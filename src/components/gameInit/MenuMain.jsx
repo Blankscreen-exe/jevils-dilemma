@@ -7,7 +7,7 @@ const MenuMain = ({ handleCurrentView }) => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <input type="text" placeholder="Enter Your Name" className="mb-4" />
+      <input type="text" placeholder="Enter Your Name" className="mb-5" />
       <div className="flex">
         <button 
           className="bg-gray-800 text-white font-bold mx-4 py-3 px-6 rounded 
