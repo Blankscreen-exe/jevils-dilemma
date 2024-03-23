@@ -32,15 +32,15 @@ function DillemaBox(props) {
     };
   
     return (
-      <div>
+      <div className='w-fit mx-auto flex flex-col justify-center items-center gap-4 mt-6'>
         {currentDilemma && (
           <>
             <p>{currentDilemma.dillema}</p>
-            <button onClick={handleNextDilemma}>Next Dilemma</button>
-            <h2>Encountered Dilemmas</h2>
+            <button onClick={handleNextDilemma} className='bg-slate-300 hover:bg-slate-200 p-4 rounded-md'>Next Dilemma</button>
+            <h2 className='text-orange-600 text-3xl font-bold'>Encountered Dilemmas</h2>
             <ol>
               {history.slice().reverse().map((dilemma, index) => (
-                <li key={dilemma.id}>{dilemma.dillema}</li>
+                <li key={dilemma.id} className={index===0 && "text-red-500 font-bold"}>{index===0 && "RECENT >>"} {dilemma.dillema}</li>
               ))}
             </ol>
           </>
