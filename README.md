@@ -1,17 +1,18 @@
-# 1. Jevil's Dilemma
+![alt text](docs/images/title_img.png)
 
-- [1. Jevil's Dilemma](#1-jevils-dilemma)
-  - [1.1. Description](#11-description)
-  - [1.2. Technologies](#12-technologies)
-  - [1.3. Usage](#13-usage)
-    - [1.3.1. TailwindCSS](#131-tailwindcss)
-  - [1.4. Installation](#14-installation)
-  - [1.5. Contribution Guidelines\*](#15-contribution-guidelines)
-    - [1.5.1. DOs](#151-dos)
-    - [1.5.2. DONTs](#152-donts)
-  - [1.6. Game Flow For A Single Player](#16-game-flow-for-a-single-player)
-  - [1.7. Game Flow For Multiple Players](#17-game-flow-for-multiple-players)
-  - [1.8. Future Plans](#18-future-plans)
+> 📌 The character in the title is called Jevil who is taken from a fanmade Undertale sequel called Deltarune.
+
+- [1.1. Description](#11-description)
+- [1.2. Technologies](#12-technologies)
+- [1.3. Usage](#13-usage)
+  - [1.3.1. TailwindCSS](#131-tailwindcss)
+- [1.4. Installation](#14-installation)
+- [1.5. Contribution Guidelines\*](#15-contribution-guidelines)
+  - [1.5.1. DOs](#151-dos)
+  - [1.5.2. DONTs](#152-donts)
+- [1.6. Game Flow For A Single Player](#16-game-flow-for-a-single-player)
+- [1.7. Game Flow For Multiple Players](#17-game-flow-for-multiple-players)
+- [1.8. Future Plans](#18-future-plans)
 
 ## 1.1. Description
 
