@@ -107,9 +107,9 @@ src
 | `TODO:` | whenever there is something you need to do later on or let people know that some work is remaining. | write about what do we need to do in a block of code | **TODO**: we need to declare proptypes in this component |
 | `REF:` | if you copy an intellectual piece of code from somewhere. | paste a link from where you copied the code e.g. stack overflow or some other sites | **REF**: used this for implementing dilemma history management <some stackoverflow link> |
 | `REVIEW:` | use this if a piece of your code needs someone else's review. | describe what aspects or lines of code should be reviewed | **REVIEW**: should this component be included in the Home page? also review it for security vulnerabilities. |
-| `WARN:` | use this when there's a case that even the slightest change to line of block of code can break the app. Simply use it to warn other developers. | describe the warning. What is it that should or should not be changed such that it does not break the app | **WARN**: This function might cause performance issues with large datasets since we are using double for loops |
+| `WARN:` | use it to warn other developers about making any changes to a critical piece of code which can potentially cause bugs or cause the app to crash | describe the warning. What is it that should or should not be changed such that it does not break the app | **WARN**: This function might cause performance issues with large datasets since we are using double for loops |
 | `BUG:` | use this to let others know you have discovered a bug somewhere. | describe the bug you found | **BUG**: clicking the "next dilemma" button does not show another question. This was working before I wrote some code in this component. |
-| `FIXME:` | use this when a block of code crashes the app. | suggest a way how to fix it | **FIXME**: z-index of this component seems to be more than 100. Make it less than 10. |
+| `FIXME:` | Same scenario as `BUG:` but here you have supposedly found out what was causing the problem and you are now suggesting a fixing strategy | suggest a way how to fix it | **FIXME**: z-index of this component seems to be more than 100. Make it less than 10. |
 
 With all that said and done... have fun coding stuff. Hope you will have a great time 😁.
 
