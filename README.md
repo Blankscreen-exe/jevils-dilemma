@@ -10,27 +10,29 @@
 - [1.5. Contribution Guidelines\*](#15-contribution-guidelines)
   - [1.5.1. DOs](#151-dos)
   - [1.5.2. DONTs](#152-donts)
+  - [1.5.3. Allowed Comments](#153-allowed-comments)
 - [1.6. Game Flow For A Single Player](#16-game-flow-for-a-single-player)
 - [1.7. Game Flow For Multiple Players](#17-game-flow-for-multiple-players)
 - [1.8. Future Plans](#18-future-plans)
 
 ## 1.1. Description
 
-This is aWeb-based version of the tabletop party game called Dilemma. In the traditional version of this game you have a pack of flash cards, all of which contain a question. This question describes a scenario forces you to choose an "action". There are no scores, no correct answers, no winners ... just pure brimming creativity. 
+This is a Web-based version of the tabletop party game called Dilemma. In the traditional version of this game you have a pack of flash cards, all of which contain a question. This question describes a scenario which forces you to choose an "action". There are no scores, no correct answers, no winners ... just pure brimming creativity. 
 
-This game can be played [solo](#-Game-Flow-For-A-Single-Player) or with [multiple](#-Game-Flow-For-Multiple-Players) people.
+This game can be played [solo](#16-game-flow-for-a-single-player) or with [multiple](#17-game-flow-for-multiple-players) people.
 
-> If you have questions regarding this game, you can ping me on Discord (username: blankscreen.exe)
+> 📌 If you have questions regarding this game, you can ping me on Discord (username: blankscreen.exe)
 
 ## 1.2. Technologies
 
 - [Tailwindcss](https://tailwindcss.com/)
 - [Vite.js](https://vitejs.dev/)
+- [React Router v6](https://reactrouter.com/en/main)
 - [Redux Toolkit](https://redux-toolkit.js.org/) -- not used for now
 
 ## 1.3. Usage
 
-> 📌 **Note:** This will get update along time
+> 📌 **Note:** This section will get updated along time
 
 ### 1.3.1. TailwindCSS
 
@@ -88,6 +90,7 @@ src
 9. Follow clear variable naming conventions.
 10. Use `PropTypes` in each react component (as long as they are using any Props)
 11. Use the `src/data/*.json` folder to store any dummy data.
+12. Make use of TODOs, wherever you see it fit. A list of all allowed TODOs can be found [here](#153-allowed-comments).
 
 ### 1.5.2. DONTs
 
@@ -96,6 +99,17 @@ src
 3. Do NOT do a blank pull request. No need to go all out with words. Just explain what you have done in a nutshell.
 4. You should NOT directly commit to the `main` or `develop` branch. Just create your own branch inside a proper folder (e.g. `feat/*`, `fix/*` etc). After you are done, submit a pull request.
 5. I'm hoping none of you would commit an entire `node_modules` folder, now would you?
+
+### 1.5.3. Allowed Comments
+
+|Comment Tag|Description| What You Should Write About| Example |
+|---|---|---|---|
+| `TODO:` | whenever there is something you need to do later on or let people know that some work is remaining. | write about what do we need to do in a block of code | **TODO**: we need to declare proptypes in this component |
+| `REF:` | if you copy an intellectual piece of code from somewhere. | paste a link from where you copied the code e.g. stack overflow or some other sites | **REF**: used this for implementing dilemma history management <some stackoverflow link> |
+| `REVIEW:` | use this if a piece of your code needs someone else's review. | describe what aspects or lines of code should be reviewed | **REVIEW**: should this component be included in the Home page? also review it for security vulnerabilities. |
+| `WARN:` | use this when there's a case that even the slightest change to line of block of code can break the app. Simply use it to warn other developers. | describe the warning. What is it that should or should not be changed such that it does not break the app | **WARN**: This function might cause performance issues with large datasets since we are using double for loops |
+| `BUG:` | use this to let others know you have discovered a bug somewhere. | describe the bug you found | **BUG**: clicking the "next dilemma" button does not show another question. This was working before I wrote some code in this component. |
+| `FIXME:` | use this when a block of code crashes the app. | suggest a way how to fix it | **FIXME**: z-index of this component seems to be more than 100. Make it less than 10. |
 
 With all that said and done... have fun coding stuff. Hope you will have a great time 😁.
 
@@ -106,7 +120,7 @@ With all that said and done... have fun coding stuff. Hope you will have a great
 1. The player enters the site, writes their name in the given text box (labled as "your name") and chooses "single player".
 2. They are redirected to a new screen where the game is played.
 3. In the screen(point 2) the player has a single button "Start" which starts the game
-4. After clicking "start", they recieve a randomly selected dilemma question from a set of dilemmas (stored somewhere in a JSON file)
+4. After clicking "start", they recieve a randomly selected dilemma question from a set of dilemmas (stored in a JSON file in `./src/data/dilemmas.json`)
 5. They start typing their response to the dilemma question in the given text box below the question
 6. When they hit enter or click on the "submit" button, they see a list named "history" get appended by the current question (including the player's response). Also as a reaction to clicking the "submit" button, the current question is replaced with another question.
 7. Note that these questions cannot be repeated, so before we fetch the next question we will first filter out all the question that player have already seen. this can be done by assigning each question with unique IDs. These IDs will also be stored inside the JSON file.
@@ -138,3 +152,4 @@ With all that said and done... have fun coding stuff. Hope you will have a great
 - [ ] Make it available for players to share links to playrooms to play with their friends (details can be found [here](docs/shareable_link_considerations.md))
 - [ ] Make that sharable link able to be shared as a QR Code.
 - [ ] Make it available for player to chat while in a game session.
+- [ ] Make it available for people to export their data from a game session to multiple (not all, but some) formats CSV,HTML,TXT,PDF etc

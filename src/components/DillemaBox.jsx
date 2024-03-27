@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types'
 
 // data
-import dilemmas from '../data/dillemas.json'
+import dilemmas from '../data/dilemmas.json'
 
 function DillemaBox(props) {
     
