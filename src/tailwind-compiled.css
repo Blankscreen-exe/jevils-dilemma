@@ -587,6 +587,10 @@ video {
   background-color: rgb(203 213 225 / var(--tw-bg-opacity));
 }
 
+.fill-current {
+  fill: currentColor;
+}
+
 .p-4 {
   padding: 1rem;
 }
@@ -600,19 +604,24 @@ video {
   font-weight: 700;
 }
 
+.ordinal {
+  --tw-ordinal: ordinal;
+  font-variant-numeric: var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction);
+}
+
 .text-orange-600 {
   --tw-text-opacity: 1;
   color: rgb(234 88 12 / var(--tw-text-opacity));
 }
 
-.text-red-800 {
-  --tw-text-opacity: 1;
-  color: rgb(153 27 27 / var(--tw-text-opacity));
-}
-
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
+}
+
+.text-red-600 {
+  --tw-text-opacity: 1;
+  color: rgb(220 38 38 / var(--tw-text-opacity));
 }
 
 .filter {
