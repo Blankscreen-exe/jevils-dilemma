@@ -1,20 +1,20 @@
-import { useState } from 'react'
+
 import DillemaBox from './components/DillemaBox'
-import GameInit from './components/gameInit';
+import MenuMain from "./components/gameInit/MenuMain"
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
-  const [currentView, setCurrentView] = useState('gameInit');
-
-  const handleCurrentView = (newView) => {
-    setCurrentView(newView);
-  };
-
   return (
-    <div className='min-h-screen bg-gray-700'>
-      {currentView === 'gameInit' && <GameInit handleCurrentView={handleCurrentView} />}
-      {currentView === 'dillemaBox' && <DillemaBox />}
-    </div>
+    <Router>
+      <div className='min-h-screen bg-gray-700'>
+        <Routes>
+          <Route path="/" element={<MenuMain />} />
+          <Route path="/dilemma-box" element={<DillemaBox />} />
+        </Routes>
+      </div>
+    </Router>
   )
 }
 
 export default App;
+
