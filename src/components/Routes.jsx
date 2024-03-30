@@ -12,7 +12,6 @@ function RoutesList(props) {
   return (
     <Routes>
         <Route path={appConstants.routes.home} element={<Home/>}/>
-
         {/* TODO: replace the path with a constant from appConstants */}
         <Route path="/select" element={<MenuMain />} />
         <Route path={appConstants.routes.notFound} element={<h1 className='text-red-600 font-bold'>404 Not Found</h1>}/>
