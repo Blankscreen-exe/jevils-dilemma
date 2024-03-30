@@ -86,7 +86,7 @@ src
 2. Folders which are inside the `components` folder will be called **"secondary component folders"**
 3. Only the `index.jsx` files will be exported out of any **"secondary component folders"**. Other files inside those folders will be imported by their own `index.jsx` files.
 4. You will be following the [gitflow](https://www.youtube.com/watch?v=VK0KUolSCQg&list=PL_RrEj88onS98ELS0mWqav1qTIYaChf41) conventions.
-5. You should [ESLint](https://www.youtube.com/watch?v=SMbqi1HPprc) to keep your code clean. Javascript code tends to get messy real fast. It is ok to use the default one.
+5. You should [ESLint](https://www.youtube.com/watch?v=SMbqi1HPprc) to keep your code clean. Javascript code tends to get messy real fast. It is ok to use the default one. We will follow [AirBnB's style guide](https://github.com/airbnb/javascript).
 7. Use [Git Commit Message Conventions](https://www.conventionalcommits.org/en/v1.0.0/) to write proper commit messages. You can use a [this](https://marketplace.visualstudio.com/items?itemName=vivaxy.vscode-conventional-commits) (EXTENSION ID: vivaxy.vscode-conventional-commits) VS Code extension for this purpose too.
 8. Feel free to write some issues with this repository. All Critics are welcome.
 9. Follow clear variable naming conventions.
