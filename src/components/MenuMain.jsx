@@ -1,3 +1,4 @@
+// TODO: convert this to a peoper boilerplate component with prop types
 const MenuMain = () => {
   return (
     <div className="flex items-center justify-center h-screen">
