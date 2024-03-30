@@ -2,6 +2,8 @@
 
 > 📌 The character in the title is called Jevil who is taken from a fanmade Undertale sequel called Deltarune.
 
+> 📌 Join the Discord Server: 🟣 https://discord.gg/ec7XU7nD 🟣
+
 - [1.1. Description](#11-description)
 - [1.2. Technologies](#12-technologies)
 - [1.3. Usage](#13-usage)
