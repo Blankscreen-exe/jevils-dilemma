@@ -1,12 +1,11 @@
-import { useState } from 'react'
-import DillemaBox from './components/DillemaBox'
+import RoutesList from './components/Routes'
 
 function App() {
 
   return (
     <>
     {/* TODO: use Routes here */}
-      <DillemaBox/>
+      <RoutesList/>
     </>
   )
 }
