@@ -4,6 +4,8 @@
 
 > 📌 Join the Discord Server: 🟣 https://discord.gg/ec7XU7nD 🟣
 
+> 📌 Here is The 🟣 [Figma Link](https://www.figma.com/file/SH41uZRXfEhQfxOGUbACUS/Untitled?type=design&node-id=0%3A1&mode=design&t=EAoU2P1Cn54kKSOB-1) 🟣
+
 - [1.1. Description](#11-description)
 - [1.2. Technologies](#12-technologies)
 - [1.3. Usage](#13-usage)
