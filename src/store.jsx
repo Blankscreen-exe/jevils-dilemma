@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from "./features/counter/counterSlice";
-import storage from "@react-native-async-storage/async-storage";
+import { configureStore } from '@reduxjs/toolkit'
+import counterReducer from "./features/counter/counterSlice"
+import storage from "@react-native-async-storage/async-storage"
 import { persistStore, persistReducer, FLUSH,
   REHYDRATE,
   PAUSE,
