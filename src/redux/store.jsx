@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import counterReducer from "./features/counter/counterSlice"
+import counterReducer from "./redux/slices/counterSlice.jsx"
 import storage from "@react-native-async-storage/async-storage"
 import { persistStore, persistReducer, FLUSH,
   REHYDRATE,
@@ -14,7 +14,12 @@ const persistConfig = {
   version: 1
 }
 
-const persistedReducer = persistReducer(persistConfig, counterReducer)
+const rootReducer = combineReducers({ 
+  counter,
+  // any other reducers go here
+})
+
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
   reducer: {

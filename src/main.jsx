@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import { Provider } from "react-redux"
 import './tailwind-compiled.css'
-import store, { persistor } from "./store.jsx"
+import store, { persistor } from "./redux/store.jsx"
 import { PersistGate } from "redux-persist/integration/react"
 
 // Router
