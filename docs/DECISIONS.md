@@ -52,7 +52,9 @@ card JSON, fonts, and sprites, so the game installs and runs offline.
 The game has a small number of explicit phases (`title → playing → results`; while playing, a
 card is either awaiting a pick or has a `pending` pick awaiting the "why?" step). A reducer
 with discriminated-union state makes illegal states unrepresentable and is trivially unit-testable
-as a pure function. Exposed through a Context provider.
+as a pure function. A `useGame` hook owns the reducer and passes state and callbacks down as
+props; the tree is shallow (one screen at a time), so a Context provider would add indirection
+without removing any prop drilling.
 **Rejected:** Redux Toolkit / Zustand (overkill for one screen-flow); XState (good fit, but an
 extra dependency and learning curve for a machine this small — reconsider if flows grow).
 
@@ -62,7 +64,7 @@ into `deal()`.
 
 ## ADR-006 — No router in v1
 
-**Status:** Proposed
+**Status:** Accepted
 
 Screens are derived from the game phase, not from URLs; deep-linking into "card 7" is
 meaningless. Avoids a dependency and keeps state as the single source of truth.
@@ -70,9 +72,12 @@ meaningless. Avoids a dependency and keeps state as the single source of truth.
 
 ## ADR-007 — Persistence in `localStorage`, versioned and validated
 
-**Status:** Proposed
+**Status:** Accepted
 
-- A single key holds `{ version, currentRun, pastRuns }`.
+- A single key holds `{ version, current, history }` (implemented in `src/game/save.ts`).
+- The run in progress stores **card ids**, not card objects, and is rebuilt from the deck on
+  load; if a card has since been removed, the save is dropped rather than half-restored.
+- History keeps the latest 20 finished runs.
 - Data is **validated on load** (schema check); corrupt or old-version data is migrated or
   discarded instead of crashing the app.
 - All access wrapped in `try/catch` (private mode / quota errors).
