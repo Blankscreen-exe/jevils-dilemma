@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import * as z from 'zod/mini'
 import type { Card } from './deck'
 import type { Answer, GameState, PlayingState } from './state'
 
@@ -12,19 +12,21 @@ const optionIdSchema = z.enum(['a', 'b'])
 const answerSchema = z.object({
   cardId: z.string(),
   optionId: optionIdSchema,
-  elapsedMs: z.number().nonnegative(),
+  elapsedMs: z.number().check(z.nonnegative()),
   reason: z.string(),
-}) satisfies z.ZodType<Answer>
+}) satisfies z.ZodMiniType<Answer>
 
 /**
  * A run in progress. Cards are stored by id and looked up in the deck on load, so the
  * save stays small and picks up wording fixes to the deck.
  */
 const savedRunSchema = z.object({
-  cardIds: z.array(z.string()).min(1),
-  index: z.int().nonnegative(),
+  cardIds: z.array(z.string()).check(z.minLength(1)),
+  index: z.int().check(z.nonnegative()),
   answers: z.array(answerSchema),
-  pending: z.object({ optionId: optionIdSchema, elapsedMs: z.number().nonnegative() }).nullable(),
+  pending: z.nullable(
+    z.object({ optionId: optionIdSchema, elapsedMs: z.number().check(z.nonnegative()) }),
+  ),
 })
 
 const pastRunSchema = z.object({
@@ -34,7 +36,7 @@ const pastRunSchema = z.object({
 
 const saveSchema = z.object({
   version: z.literal(SAVE_VERSION),
-  current: savedRunSchema.nullable(),
+  current: z.nullable(savedRunSchema),
   history: z.array(pastRunSchema),
 })
 
