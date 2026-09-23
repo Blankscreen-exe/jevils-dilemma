@@ -14,21 +14,24 @@ interface PendingPick {
   elapsedMs: number
 }
 
+export interface PlayingState {
+  phase: 'playing'
+  cards: readonly Card[]
+  /** Index of the card on the table. */
+  index: number
+  answers: readonly Answer[]
+  /** Set once the player picks, cleared when they move on. */
+  pending: PendingPick | null
+}
+
 export type GameState =
   | { phase: 'title' }
-  | {
-      phase: 'playing'
-      cards: readonly Card[]
-      /** Index of the card on the table. */
-      index: number
-      answers: readonly Answer[]
-      /** Set once the player picks, cleared when they move on. */
-      pending: PendingPick | null
-    }
+  | PlayingState
   | { phase: 'results'; cards: readonly Card[]; answers: readonly Answer[] }
 
 export type GameAction =
   | { type: 'start'; cards: readonly Card[] }
+  | { type: 'resume'; run: PlayingState }
   | { type: 'pick'; optionId: OptionId; elapsedMs: number }
   | { type: 'next'; reason: string }
   | { type: 'quit' }
@@ -44,6 +47,9 @@ export function gameReducer(state: GameState, action: GameAction): GameState {
     case 'start':
       if (action.cards.length === 0) return state
       return { phase: 'playing', cards: action.cards, index: 0, answers: [], pending: null }
+
+    case 'resume':
+      return state.phase === 'title' ? action.run : state
 
     case 'pick':
       if (state.phase !== 'playing' || state.pending) return state

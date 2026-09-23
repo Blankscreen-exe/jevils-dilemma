@@ -106,6 +106,14 @@ describe('gameReducer', () => {
     )
   })
 
+  it('resumes a saved run from the title only', () => {
+    const playing = run({ type: 'start', cards }, { type: 'pick', optionId: 'a', elapsedMs: 5 })
+    if (playing.phase !== 'playing') throw new Error('expected playing')
+
+    expect(gameReducer(initialState, { type: 'resume', run: playing })).toBe(playing)
+    expect(gameReducer(playing, { type: 'resume', run: playing })).toBe(playing)
+  })
+
   it('returns to the title on quit from any phase', () => {
     expect(run({ type: 'start', cards }, { type: 'quit' })).toEqual(initialState)
   })
