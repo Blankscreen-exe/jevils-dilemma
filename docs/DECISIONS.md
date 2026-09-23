@@ -78,6 +78,11 @@ meaningless. Avoids a dependency and keeps state as the single source of truth.
 - The run in progress stores **card ids**, not card objects, and is rebuilt from the deck on
   load; if a card has since been removed, the save is dropped rather than half-restored.
 - History keeps the latest 20 finished runs.
+- The run in progress also stores each card's **dealt answer order**, so a resumed run shows
+  the answers exactly as they were dealt.
+- **Versioning in practice:** moving from two to three answers per card bumped the save to
+  v2. A v1 save fails validation and is discarded, which is the right call because its cards
+  no longer exist in the deck.
 - Data is **validated on load** (schema check); corrupt or old-version data is migrated or
   discarded instead of crashing the app.
 - All access wrapped in `try/catch` (private mode / quota errors).
