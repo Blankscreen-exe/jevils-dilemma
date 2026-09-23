@@ -85,6 +85,33 @@
   body {
     @apply bg-void font-body text-bone;
     min-height: 100dvh;
+
+    /* Faint checkerboard floor (like Jevil's cell) under a soft purple glow. */
+    --checker: color-mix(in srgb, var(--color-jester-300) 4%, transparent);
+    --checker-size: calc(var(--pixel) * 12);
+    background-image:
+      radial-gradient(
+        circle at 50% 30%,
+        color-mix(in srgb, var(--color-jester-700) 35%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(45deg, var(--checker) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--checker) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--checker) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--checker) 75%);
+    background-size:
+      100% 100dvh,
+      var(--checker-size) var(--checker-size),
+      var(--checker-size) var(--checker-size),
+      var(--checker-size) var(--checker-size),
+      var(--checker-size) var(--checker-size);
+    background-position:
+      0 0,
+      0 0,
+      0 calc(var(--checker-size) / 2),
+      calc(var(--checker-size) / 2) calc(var(--checker-size) / -2),
+      calc(var(--checker-size) / -2) 0;
+    background-repeat: no-repeat, repeat, repeat, repeat, repeat;
   }
 
   @media (prefers-reduced-motion: reduce) {
