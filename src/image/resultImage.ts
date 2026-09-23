@@ -1,13 +1,10 @@
-export type ShareOutcome = 'shared' | 'downloaded' | 'cancelled'
-
-/** Browser APIs used for sharing; injectable so the logic is testable outside a browser. */
-export interface ShareEnvironment {
-  navigator: Partial<Pick<Navigator, 'canShare' | 'share'>>
+/** Browser APIs used to trigger a download; injectable so the logic is testable. */
+export interface DownloadEnvironment {
   document: { createElement(tag: 'a'): Pick<HTMLAnchorElement, 'href' | 'download' | 'click'> }
   url: Pick<typeof URL, 'createObjectURL' | 'revokeObjectURL'>
 }
 
-const browserEnvironment = (): ShareEnvironment => ({ navigator, document, url: URL })
+const browserEnvironment = (): DownloadEnvironment => ({ document, url: URL })
 
 /**
  * Renders a DOM node to a PNG. The library is loaded on demand so it only costs
@@ -20,27 +17,12 @@ export async function renderToPng(node: HTMLElement, background: string): Promis
   return blob
 }
 
-/**
- * Opens the native share sheet where files can be shared (mostly mobile), otherwise
- * downloads the file. A share the player dismisses counts as cancelled, not failed.
- */
-export async function shareOrDownload(
+/** Saves the blob as a file via a temporary object URL and a download link. */
+export function downloadFile(
   blob: Blob,
   filename: string,
-  env: ShareEnvironment = browserEnvironment(),
-): Promise<ShareOutcome> {
-  const file = new File([blob], filename, { type: blob.type || 'image/png' })
-
-  if (env.navigator.share && env.navigator.canShare?.({ files: [file] })) {
-    try {
-      await env.navigator.share({ files: [file], title: "Jevil's Dilemma" })
-      return 'shared'
-    } catch (error) {
-      if (error instanceof DOMException && error.name === 'AbortError') return 'cancelled'
-      throw error
-    }
-  }
-
+  env: DownloadEnvironment = browserEnvironment(),
+): void {
   const href = env.url.createObjectURL(blob)
   try {
     const link = env.document.createElement('a')
@@ -51,7 +33,6 @@ export async function shareOrDownload(
     // Revoke after the click has been handled so the download can start.
     setTimeout(() => env.url.revokeObjectURL(href), 0)
   }
-  return 'downloaded'
 }
 
 /** e.g. "Chaotic Neutral" -> "jevils-dilemma-chaotic-neutral.png" */

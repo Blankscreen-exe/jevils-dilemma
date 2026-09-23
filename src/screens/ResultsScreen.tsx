@@ -7,13 +7,12 @@ import { SUIT_COPY, alignmentCopy } from '../game/copy'
 import { SUITS, type Card } from '../game/deck'
 import type { Answer } from '../game/state'
 import { summarize, type ResolvedPick } from '../game/summary'
-import { renderToPng, resultFilename, shareOrDownload } from '../share/resultImage'
+import { downloadFile, renderToPng, resultFilename } from '../image/resultImage'
 
-type SaveStatus = 'idle' | 'working' | 'shared' | 'downloaded' | 'failed'
+type SaveStatus = 'idle' | 'working' | 'saved' | 'failed'
 
 const STATUS_TEXT: Partial<Record<SaveStatus, string>> = {
-  shared: 'SHARED!',
-  downloaded: 'IMAGE SAVED!',
+  saved: 'IMAGE SAVED!',
   failed: 'COULD NOT SAVE THE IMAGE. TRY AGAIN?',
 }
 
@@ -47,11 +46,8 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
     setStatus('working')
     try {
       const background = getComputedStyle(document.body).backgroundColor
-      const outcome = await shareOrDownload(
-        await renderToPng(node, background),
-        resultFilename(label),
-      )
-      setStatus(outcome === 'cancelled' ? 'idle' : outcome)
+      downloadFile(await renderToPng(node, background), resultFilename(label))
+      setStatus('saved')
     } catch {
       setStatus('failed')
     }

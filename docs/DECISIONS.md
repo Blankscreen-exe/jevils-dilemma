@@ -108,23 +108,24 @@ the bundler drop unused validators. This cut the main bundle from 101.9 kB to 84
 **Rejected:** hand-written type guards (duplicated types, easy to get out of sync); JSON Schema
 (needs a separate type generator step).
 
-## ADR-009 — Result image: `html-to-image` + Web Share API
+## ADR-009 — Result image: `html-to-image`, downloaded as a PNG
 
 **Status:** Accepted
 
-Render the results card to PNG in the browser. On devices that support
-`navigator.share` with files, open the native share sheet; otherwise download the PNG.
+The SAVE IMAGE button renders the results card to PNG in the browser and downloads it.
 
 - `html-to-image` is **loaded on demand** (dynamic `import()`), so it is a separate ~13 kB
   chunk that only players who save their result download.
 - The capture target is a padded wrapper around the card, because the pixel border is drawn
   with `box-shadow` outside the element's box and would otherwise be clipped.
-- Sharing logic takes its browser APIs (`navigator`, `document`, `URL`) as an injectable
-  environment, so both paths are unit-tested. A dismissed share sheet is treated as a
-  cancel, not an error.
+- The download helper takes its browser APIs (`document`, `URL`) as an injectable
+  environment so it is unit-tested, and always releases the object URL, even on failure.
+- **Download only, no share sheet.** An earlier version opened the Web Share API where
+  supported. It was removed: the button says "save", so it should always save, with the same
+  behaviour on every device. Players can share the file however they like.
 
 **Rejected:** `html2canvas` (heavier, less accurate CSS support); server-side rendering of the
-image (would need a backend, see ADR-002).
+image (would need a backend, see ADR-002); Web Share API (see above).
 
 ## ADR-010 — Styling: Tailwind CSS v4 with a pixel-art theme layer
 

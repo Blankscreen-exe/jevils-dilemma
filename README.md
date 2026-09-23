@@ -6,7 +6,7 @@ A pixel-art take on the _Dilemma_ party card game, hosted by Jevil from Deltarun
 
 Each card puts you in an awkward situation with two choices. There are no right answers, but
 Jevil is keeping track: every pick nudges you across a **Lawful ↔ Chaotic** and **Good ↔ Evil**
-alignment chart, and at the end he gives you his reading of who you really are. Save the result as an image and share it.
+alignment chart, and at the end he gives you his reading of who you really are. Save the result as an image.
 
 > **Status:** in development. The project is being rebuilt from scratch.
 

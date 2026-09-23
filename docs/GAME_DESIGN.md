@@ -24,7 +24,7 @@ Example card:
   yellow and teal accents, card-suit motifs, carousel/chaos energy.
 - Questions are loaded from a **JSON file**.
 - Each question has **three answer cards**.
-- At the end, a **results card** the player can save/share as an image.
+- At the end, a **results card** the player can download as an image.
 
 ### The twist: an alignment chart
 
@@ -118,7 +118,7 @@ Status: ✅ in v1 · 🕓 later
    a card within a run.
 5. **Results**: alignment chart, Jevil's title, hardest and quickest decisions, alignment by
    suit, answers + reasons.
-6. **Save image / Share** and **Play again**.
+6. **Save image** (downloads a PNG) and **Play again**.
 
 ### Layout
 
