@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import type { Card } from './deck'
-import type { Answer, GameState } from './state'
+import type { Answer, GameState, PlayingState } from './state'
 
 export const SAVE_KEY = 'jevils-dilemma:save'
 export const SAVE_VERSION = 1
@@ -97,7 +97,7 @@ export function toSavedRun(state: GameState): SavedRun | null {
  * Rebuilds a playing state from a saved run. Returns null if the deck no longer
  * contains every card, or the saved position is inconsistent.
  */
-export function fromSavedRun(saved: SavedRun, deck: readonly Card[]): GameState | null {
+export function fromSavedRun(saved: SavedRun, deck: readonly Card[]): PlayingState | null {
   const byId = new Map(deck.map((card) => [card.id, card]))
   const cards = saved.cardIds.map((id) => byId.get(id))
   if (cards.some((card) => card === undefined)) return null
