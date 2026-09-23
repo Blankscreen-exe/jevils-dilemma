@@ -95,11 +95,21 @@ than the schema. Zod will also validate saved data from `localStorage` (ADR-007)
 
 ## ADR-009 — Result image: `html-to-image` + Web Share API
 
-**Status:** Proposed
+**Status:** Accepted
 
 Render the results card to PNG in the browser. On devices that support
 `navigator.share` with files, open the native share sheet; otherwise download the PNG.
-**Rejected:** `html2canvas` (heavier, less accurate CSS support).
+
+- `html-to-image` is **loaded on demand** (dynamic `import()`), so it is a separate ~13 kB
+  chunk that only players who save their result download.
+- The capture target is a padded wrapper around the card, because the pixel border is drawn
+  with `box-shadow` outside the element's box and would otherwise be clipped.
+- Sharing logic takes its browser APIs (`navigator`, `document`, `URL`) as an injectable
+  environment, so both paths are unit-tested. A dismissed share sheet is treated as a
+  cancel, not an error.
+
+**Rejected:** `html2canvas` (heavier, less accurate CSS support); server-side rendering of the
+image (would need a backend, see ADR-002).
 
 ## ADR-010 — Styling: Tailwind CSS v4 with a pixel-art theme layer
 
