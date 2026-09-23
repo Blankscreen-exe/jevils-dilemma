@@ -2,12 +2,23 @@ import { describe, expect, it } from 'vitest'
 import { QUICK_MS, REACTION_LINES, SLOW_MS, alignmentCopy, paceOf, reactionLine } from './copy'
 
 describe('alignmentCopy', () => {
-  it('has a title for every cell of the chart', () => {
-    for (const moral of ['good', 'neutral', 'evil'] as const) {
-      for (const ethic of ['lawful', 'neutral', 'chaotic'] as const) {
-        expect(alignmentCopy(moral, ethic).title).not.toBe('')
-      }
+  const cells = (['good', 'neutral', 'evil'] as const).flatMap((moral) =>
+    (['lawful', 'neutral', 'chaotic'] as const).map((ethic) => alignmentCopy(moral, ethic)),
+  )
+
+  it('has three tiered titles and at least three verdicts for every cell', () => {
+    for (const cell of cells) {
+      expect(Object.values(cell.titles).every((title) => title.length > 0)).toBe(true)
+      expect(cell.verdicts.length).toBeGreaterThanOrEqual(3)
     }
+  })
+
+  it('never reuses a title or verdict across cells', () => {
+    const titles = cells.flatMap((cell) => Object.values(cell.titles))
+    const verdicts = cells.flatMap((cell) => cell.verdicts)
+
+    expect(new Set(titles).size).toBe(titles.length)
+    expect(new Set(verdicts).size).toBe(verdicts.length)
   })
 })
 

@@ -36,3 +36,29 @@ export function alignmentOf(picks: readonly CardOption[]): Alignment {
 
   return { ethic: ethics[band(chaos)], moral: morals[band(good)], chaos, good }
 }
+
+export type Tier = 'slight' | 'solid' | 'pure'
+
+/**
+ * How firmly a result sits in its cell, from 0 (right on a border) to 1 (as deep as it
+ * gets). For a leaning axis that means far from the neutral band; for a neutral axis it
+ * means close to the centre. The two axes are averaged.
+ */
+export function intensityOf({ chaos, good }: Pick<Alignment, 'chaos' | 'good'>): number {
+  const depth = (value: number) => {
+    const distance = Math.abs(value)
+    const raw =
+      band(value) === 0
+        ? 1 - distance / NEUTRAL_BAND
+        : (distance - NEUTRAL_BAND) / (1 - NEUTRAL_BAND)
+    return Math.min(1, Math.max(0, raw))
+  }
+  return (depth(chaos) + depth(good)) / 2
+}
+
+export function tierOf(alignment: Pick<Alignment, 'chaos' | 'good'>): Tier {
+  const intensity = intensityOf(alignment)
+  if (intensity < 1 / 3) return 'slight'
+  if (intensity < 2 / 3) return 'solid'
+  return 'pure'
+}

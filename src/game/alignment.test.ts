@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { alignmentOf } from './alignment'
+import { alignmentOf, intensityOf, tierOf } from './alignment'
 import type { CardOption } from './deck'
 
 const pick = (chaos: number, good: number): CardOption => ({ id: 'a', text: 'x', chaos, good })
@@ -40,5 +40,18 @@ describe('alignmentOf', () => {
 
   it('treats an empty run as true neutral', () => {
     expect(alignmentOf([])).toEqual({ ethic: 'neutral', moral: 'neutral', chaos: 0, good: 0 })
+  })
+})
+
+describe('intensityOf / tierOf', () => {
+  it.each([
+    [{ chaos: 1, good: -1 }, 1, 'pure'],
+    [{ chaos: 0, good: 0 }, 1, 'pure'],
+    [{ chaos: 0.4, good: 0.4 }, 0.1, 'slight'],
+    [{ chaos: 1, good: 0.3 }, 0.55, 'solid'],
+    [{ chaos: 0.3, good: -0.3 }, 0.1, 'slight'],
+  ] as const)('rates %o at %d (%s)', (position, intensity, tier) => {
+    expect(intensityOf(position)).toBeCloseTo(intensity)
+    expect(tierOf(position)).toBe(tier)
   })
 })

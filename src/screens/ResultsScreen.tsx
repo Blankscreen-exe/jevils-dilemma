@@ -5,6 +5,7 @@ import { PixelButton } from '../components/PixelButton'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { SUIT_COPY, alignmentCopy } from '../game/copy'
 import { SUITS, type Card } from '../game/deck'
+import { readingOf } from '../game/reading'
 import type { Answer } from '../game/state'
 import { summarize, type ResolvedPick } from '../game/summary'
 import { downloadFile, renderToPng, resultFilename } from '../image/resultImage'
@@ -36,7 +37,7 @@ function Stat({ label, pick }: { label: string; pick: ResolvedPick | null }) {
 
 export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsScreenProps) {
   const summary = useMemo(() => summarize(cards, answers), [cards, answers])
-  const { label, title, verdict } = alignmentCopy(summary.alignment.moral, summary.alignment.ethic)
+  const reading = useMemo(() => readingOf(summary), [summary])
   const captureRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<SaveStatus>('idle')
 
@@ -46,7 +47,7 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
     setStatus('working')
     try {
       const background = getComputedStyle(document.body).backgroundColor
-      downloadFile(await renderToPng(node, background), resultFilename(label))
+      downloadFile(await renderToPng(node, background), resultFilename(reading.label))
       setStatus('saved')
     } catch {
       setStatus('failed')
@@ -64,9 +65,14 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
             <Jester size={96} />
             <div>
               <h2 className="font-display text-base leading-normal text-gold sm:text-xl">
-                {title}
+                {reading.title}
               </h2>
-              <p className="mt-1.5 text-lg text-jester-300">{verdict}</p>
+              <p className="mt-1.5 text-lg text-jester-300">{reading.verdict}</p>
+              <p
+                className={`mt-1 text-lg ${reading.suitLine.suit ? SUIT_TEXT[reading.suitLine.suit] : 'text-jester-500'}`}
+              >
+                {reading.suitLine.text}
+              </p>
             </div>
           </div>
 

@@ -154,13 +154,45 @@ sprite and suit symbols are placeholders; final art will be supplied separately.
 - `id` is a stable, human-readable slug (not random) so saved history survives edits to the deck.
 - Card text is original wording, not copied from the commercial deck.
 
-## 6. Alignment titles (draft)
+## 6. The reading
 
-|             | Lawful                    | Neutral                   | Chaotic                        |
-| ----------- | ------------------------- | ------------------------- | ------------------------------ |
-| **Good**    | A GOLDEN RULE-FOLLOWER    | A KINDLY WANDERER         | A MERRY TRICKSTER              |
-| **Neutral** | THE RULEBOOK INCARNATE    | A PERFECTLY SHUFFLED DECK | A TRUE CHAOS FREAK!            |
-| **Evil**    | A TYRANT WITH A CLIPBOARD | A SNEAKY LITTLE KNAVE     | A JESTER AFTER MINE OWN HEART! |
+The reading has three lines: a **title**, a **verdict** and a **suit line**. Text lives in
+`src/game/copy.ts`; the logic in `src/game/reading.ts`.
+
+### Titles: 9 cells × 3 tiers = 27
+
+The tier depends on how deep into its cell the result lands (0 = on a border, 1 = as deep as
+possible; for a neutral axis, "deep" means close to the centre). The two axes are averaged:
+below 1/3 is **slight**, below 2/3 **solid**, otherwise **pure**.
+
+| Alignment       | Slight                  | Solid                          | Pure                         |
+| --------------- | ----------------------- | ------------------------------ | ---------------------------- |
+| Lawful Good     | A MOSTLY DECENT CITIZEN | A GOLDEN RULE-FOLLOWER         | A PALADIN OF PAPERWORK       |
+| Neutral Good    | A SOFT-HEARTED STROLLER | A KINDLY WANDERER              | A SAINT IN JESTER'S CLOTHING |
+| Chaotic Good    | A CHEEKY DO-GOODER      | A MERRY TRICKSTER              | A ROBIN HOOD OF THE CAROUSEL |
+| Lawful Neutral  | A FAN OF THE FINE PRINT | THE RULEBOOK INCARNATE         | A CLOCKWORK BUREAUCRAT       |
+| True Neutral    | A SLIGHTLY WOBBLY COIN  | A PERFECTLY SHUFFLED DECK      | THE UNREADABLE CARD          |
+| Chaotic Neutral | A LITTLE WILD CARD      | A TRUE CHAOS FREAK!            | CHAOS, CHAOS INCARNATE!      |
+| Lawful Evil     | A PETTY OFFICIAL        | A TYRANT WITH A CLIPBOARD      | AN EMPEROR OF CRUEL DECREES  |
+| Neutral Evil    | A SNEAKY SNACK THIEF    | A SNEAKY LITTLE KNAVE          | A SHADOW IN THE CASTLE       |
+| Chaotic Evil    | A MISCHIEF MAKER        | A JESTER AFTER MINE OWN HEART! | A DEVILSKNIFE IN HUMAN FORM  |
+
+### Verdicts: 3 per cell = 27
+
+One is chosen from a hash of the run's answers, so a given run always shows the same line
+(on screen and in the saved image), while different runs in the same cell vary.
+
+### Suit line
+
+Names the suit where the player leaned hardest and which way, e.g. "♦ Most ruthless with
+money." If no suit leaves the neutral band: "Steady in every suit. How dull!"
+
+| Leaning | Word          |     | Suit     | Context                |
+| ------- | ------------- | --- | -------- | ---------------------- |
+| Lawful  | Strictest     |     | Hearts   | in love and friendship |
+| Chaotic | Wildest       |     | Diamonds | with money             |
+| Good    | Kindest       |     | Clubs    | among strangers        |
+| Evil    | Most ruthless |     | Spades   | when danger calls      |
 
 ## 7. Open questions
 
