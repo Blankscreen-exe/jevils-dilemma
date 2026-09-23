@@ -49,7 +49,8 @@ card JSON, fonts, and sprites, so the game installs and runs offline.
 
 **Status:** Accepted
 
-The game has a small number of explicit phases (`title → card → reacted → results`). A reducer
+The game has a small number of explicit phases (`title → playing → results`; while playing, a
+card is either awaiting a pick or has a `pending` pick awaiting the "why?" step). A reducer
 with discriminated-union state makes illegal states unrepresentable and is trivially unit-testable
 as a pure function. Exposed through a Context provider.
 **Rejected:** Redux Toolkit / Zustand (overkill for one screen-flow); XState (good fit, but an
