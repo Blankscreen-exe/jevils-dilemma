@@ -47,13 +47,17 @@ card JSON, fonts, and sprites, so the game installs and runs offline.
 
 ## ADR-005 — State: `useReducer` modelled as a state machine
 
-**Status:** Proposed
+**Status:** Accepted
 
 The game has a small number of explicit phases (`title → card → reacted → results`). A reducer
 with discriminated-union state makes illegal states unrepresentable and is trivially unit-testable
 as a pure function. Exposed through a Context provider.
 **Rejected:** Redux Toolkit / Zustand (overkill for one screen-flow); XState (good fit, but an
 extra dependency and learning curve for a machine this small — reconsider if flows grow).
+
+Implemented in `src/game/state.ts`. Timing is passed in with each `pick` action rather than
+read inside the reducer, which keeps it pure and deterministic; randomness is likewise injected
+into `deal()`.
 
 ## ADR-006 — No router in v1
 
@@ -75,11 +79,18 @@ meaningless. Avoids a dependency and keeps state as the single source of truth.
 
 ## ADR-008 — Cards in a bundled JSON file, schema-validated
 
-**Status:** Proposed
+**Status:** Accepted
 
 Questions live in `src/data/cards.json`, imported at build time (bundled and precached — no
 fetch/loading states). A schema (e.g. Zod) validates the deck in a unit test so a malformed
 card fails CI rather than production. Card IDs are stable slugs.
+
+Implemented with **Zod**: one schema in `src/game/deck.ts` both validates the JSON and generates
+the TypeScript types (`z.infer`), so the two cannot drift. The deck is parsed once at startup;
+content rules about balance (e.g. enough cards with a moral edge) live in the deck tests rather
+than the schema. Zod will also validate saved data from `localStorage` (ADR-007).
+**Rejected:** hand-written type guards (duplicated types, easy to get out of sync); JSON Schema
+(needs a separate type generator step).
 
 ## ADR-009 — Result image: `html-to-image` + Web Share API
 
