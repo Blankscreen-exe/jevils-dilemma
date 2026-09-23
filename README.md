@@ -30,9 +30,33 @@ he gives you his reading of who you really are. Save the result as an image and 
 | Offline / install | `vite-plugin-pwa` (Workbox)                   |
 | Persistence       | `localStorage` (versioned, validated on load) |
 | Testing           | Vitest, React Testing Library                 |
+| Tooling           | Bun, oxlint, Prettier, GitHub Actions         |
 
 The reasoning behind each choice is recorded in [docs/DECISIONS.md](docs/DECISIONS.md).
 Game design and future ideas are in [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md).
+
+## Getting started
+
+Requires [Bun](https://bun.sh).
+
+```sh
+bun install
+bun run dev
+```
+
+| Script                  | What it does                       |
+| ----------------------- | ---------------------------------- |
+| `bun run dev`           | Start the dev server               |
+| `bun run build`         | Typecheck and build for production |
+| `bun run preview`       | Serve the production build locally |
+| `bun run test`          | Run the test suite once            |
+| `bun run test:watch`    | Run tests in watch mode            |
+| `bun run test:coverage` | Run tests with a coverage report   |
+| `bun run lint`          | Lint with oxlint                   |
+| `bun run typecheck`     | Type-check without building        |
+| `bun run format`        | Format all files with Prettier     |
+
+> Use `bun run test`, not `bun test`: the latter starts Bun's own test runner instead of Vitest.
 
 ## Design
 

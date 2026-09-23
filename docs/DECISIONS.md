@@ -33,11 +33,17 @@ concerns (player answers never leave the device), and lets the app work fully of
 
 ## ADR-004 — PWA via `vite-plugin-pwa`
 
-**Status:** Proposed
+**Status:** Accepted
 
 Generates the web manifest and a Workbox service worker that precaches the app shell, the
 card JSON, fonts, and sprites, so the game installs and runs offline.
-**Rejected:** hand-written service worker (more code to get caching/update logic right).
+
+- Icons are generated at build time from one source SVG (`public/icon.svg`) by
+  `@vite-pwa/assets-generator`, so no binary icons are committed.
+- Only `.woff2` fonts are precached; every browser with service worker support reads woff2.
+- `registerType: 'autoUpdate'`: a new deploy replaces the old cache on next load. Saved games
+  live in `localStorage`, so updates never lose progress.
+  **Rejected:** hand-written service worker (more code to get caching/update logic right).
 
 ## ADR-005 — State: `useReducer` modelled as a state machine
 
@@ -106,12 +112,27 @@ The Jevil pixel look is defined **once** as a theme, not repeated ad hoc in clas
 
 ## ADR-011 — Quality tooling
 
-**Status:** Proposed
+**Status:** Accepted
 
-- **Vitest + React Testing Library** — reducer, scoring, persistence, deck validation, key flows.
-- **ESLint (flat config) + Prettier**, `tsc --noEmit` in CI.
-- **GitHub Actions** — lint, typecheck, test, build on every PR.
-- **Deploy** to GitHub Pages or Netlify (static hosting).
+- **Bun** as package manager and script runner — much faster installs, a single text lockfile
+  (`bun.lock`), version pinned via `packageManager`. Vite and Vitest still run the build and
+  tests, so the toolchain is standard.
+- **Vitest + React Testing Library** (jsdom) — reducer, scoring, persistence, deck validation, key
+  flows. Test functions are imported explicitly rather than used as globals.
+- **oxlint** — the linter the current Vite React template ships with. It is Rust-based and far
+  faster than ESLint, with built-in React, hooks, TypeScript, jsx-a11y and import rules.
+  Warnings fail CI (`--deny-warnings`).
+- **Prettier** (+ Tailwind class sorting) for formatting; `.gitattributes` and
+  `.editorconfig` enforce LF line endings across Windows and Linux.
+- **TypeScript** in strict mode with `noUncheckedIndexedAccess` (array/record lookups may be
+  `undefined`, which matters for card decks).
+- **GitHub Actions** — format, lint, typecheck, test and build on every PR into `develop` or
+  `main`.
+- **Deploy** to GitHub Pages from `main`. The base path comes from `BASE_PATH` so the same
+  build works at a domain root or under `/<repo>/`.
+
+**Rejected:** ESLint (slower, more config and plugins to keep in sync); npm (slower installs,
+no real benefit here).
 
 ## ADR-012 — Accessibility
 
