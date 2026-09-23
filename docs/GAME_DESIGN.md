@@ -25,12 +25,28 @@ Example card:
 - Questions are loaded from a **JSON file**.
 - At the end, a **results card** the player can save/share as an image.
 
-### The twist
+### The twist: an alignment chart
 
 The original has no scoring. We add a light, playful layer on top **without turning it into a
-quiz**: every option carries a hidden lean on an **Order ↔ Chaos** axis. Most cards are not
-moral questions (see the example above), so a good/evil axis would feel arbitrary; Order/Chaos
-works for any card and fits Jevil ("CHAOS, CHAOS!").
+quiz**: every option carries two hidden scores, and the run ends by placing the player on a
+3×3 **alignment chart**.
+
+|             | Lawful         | Neutral      | Chaotic         |
+| ----------- | -------------- | ------------ | --------------- |
+| **Good**    | Lawful Good    | Neutral Good | Chaotic Good    |
+| **Neutral** | Lawful Neutral | True Neutral | Chaotic Neutral |
+| **Evil**    | Lawful Evil    | Neutral Evil | Chaotic Evil    |
+
+- **Lawful ↔ Chaotic** fits any card, including silly ones, and suits Jevil ("CHAOS, CHAOS!").
+- **Good ↔ Evil** only moves on cards with a moral edge; purely silly options score `0`.
+- Each axis is averaged over the run to a value from -1 to 1 and split into thirds, so the
+  middle band is Neutral. The heart marker shows the exact point, the highlighted cell the
+  alignment.
+- Each of the 9 cells has its own Jevil title (see §6).
+
+**Deck balance matters:** if too few cards move the good/evil axis, almost everyone lands in
+the middle row. The deck validation should check that a healthy share of options have a
+non-zero `good` score.
 
 ## 3. Twist ideas
 
@@ -38,7 +54,7 @@ Status: ✅ planned for v1 · 🕓 later
 
 | #   | Idea                              | Status | Notes                                                                                                                        |
 | --- | --------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **Jevil's Reading**               | ✅ v1  | Final Order↔Chaos position + a Jevil-style title (e.g. _"A TRUE CHAOS FREAK!"_). This is the screenshot moment.              |
+| 1   | **Jevil's Reading**               | ✅ v1  | Final position on the 3×3 alignment chart + a Jevil-style title for that cell. This is the screenshot moment.                |
 | 2   | **Jevil reacts to every pick**    | ✅ v1  | Short pixel speech bubble after each answer ("UEE HEE HEE! HOW BORING!"). Keeps the conversational feel in solo play.        |
 | 3   | **Chaos Cards**                   | 🕓     | Occasionally Jevil "shuffles": a twisted card, a surprise third option, or swapped options. Nods to his card-carousel fight. |
 | 4   | **"Why?" prompt**                 | ✅ v1  | Optional one-line reason after picking. Preserves the open-ended spirit of the original; reasons appear on the results card. |
@@ -50,37 +66,54 @@ Status: ✅ planned for v1 · 🕓 later
 
 ## 4. Game flow (v1)
 
-1. **Title screen** — Start, plus Continue if a run is in progress.
-2. **Card** — question + options (A/B). Hesitation timer starts when the card is shown.
-3. **Pick** — Jevil reacts; optional "Why?" field; Next.
+1. **Title screen**: Start, plus Continue if a run is in progress.
+2. **Card**: question + options (A/B). Hesitation timer starts when the card is shown.
+3. **Pick**: Jevil reacts; optional "Why?" field; Next.
 4. Repeat for a fixed number of cards (default **10**), never repeating a card within a run.
-5. **Results** — Order↔Chaos meter, Jevil's title, hardest dilemma, answers + reasons.
+5. **Results**: alignment chart, Jevil's title, hardest dilemma, answers + reasons.
 6. **Save image / Share** and **Play again**.
+
+### Layout
+
+Chosen: **card table** (layout B in `docs/prototypes/layout-demo.html`). Jevil sits in the
+corner with a speech bubble, the question is a banner, and the two options are large playing
+cards (A ♠ / B ♥) that are dealt in. The picked card lifts; the other tilts away.
+
+The jester sprite in the prototype is a placeholder; final Jevil art will be supplied
+separately.
 
 ## 5. Card data shape (draft)
 
 ```json
 {
-  "id": "date-dress-vs-scent",
-  "category": "romance",
-  "prompt": "Out on a date, who would you choose?",
+  "id": "polite-ghost",
+  "prompt": "Your home is haunted by an extremely polite ghost.",
   "options": [
-    { "id": "a", "text": "Someone dressed perfectly but with absolutely no aroma", "lean": -1 },
-    {
-      "id": "b",
-      "text": "Someone with appalling dress sense who smells truly wonderful",
-      "lean": 1
-    }
+    { "id": "a", "text": "Draw up house rules together", "chaos": -1, "good": 1 },
+    { "id": "b", "text": "Train it to haunt your rivals", "chaos": 2, "good": -2 }
   ]
 }
 ```
 
-- `lean`: integer from `-2` (order) to `+2` (chaos). `0` = neutral.
+- `chaos`: integer from `-2` (lawful) to `+2` (chaotic).
+- `good`: integer from `-2` (evil) to `+2` (good). `0` = no moral weight.
 - `id` is a stable, human-readable slug (not random) so saved history survives edits to the deck.
+- Card text is original wording, not copied from the commercial deck.
 
-## 6. Open questions
+## 6. Alignment titles (draft)
+
+|             | Lawful                    | Neutral                   | Chaotic                        |
+| ----------- | ------------------------- | ------------------------- | ------------------------------ |
+| **Good**    | A GOLDEN RULE-FOLLOWER    | A KINDLY WANDERER         | A MERRY TRICKSTER              |
+| **Neutral** | THE RULEBOOK INCARNATE    | A PERFECTLY SHUFFLED DECK | A TRUE CHAOS FREAK!            |
+| **Evil**    | A TYRANT WITH A CLIPBOARD | A SNEAKY LITTLE KNAVE     | A JESTER AFTER MINE OWN HEART! |
+
+Jevil's reaction to a pick follows whichever axis it leans on hardest (lawful, chaotic, good,
+evil, or neutral).
+
+## 7. Open questions
 
 - How many cards are in the physical set, and will all of them be transcribed?
-- Final list of Jevil titles and the score ranges that map to them.
-- Reaction lines: generic per lean, or written per card?
+- Reaction lines: generic per axis (current), or written per card?
+- Minimum share of cards with moral weight, so the good/evil axis is meaningful.
 - Art: original pixel art only (see IP note in DECISIONS.md).

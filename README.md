@@ -5,8 +5,8 @@
 A pixel-art take on the _Dilemma_ party card game, hosted by Jevil from Deltarune.
 
 Each card puts you in an awkward situation with two choices. There are no right answers, but
-Jevil is keeping track: every pick nudges you along an **Order ↔ Chaos** meter, and at the end
-he gives you his reading of who you really are. Save the result as an image and share it.
+Jevil is keeping track: every pick nudges you across a **Lawful ↔ Chaotic** and **Good ↔ Evil**
+alignment chart, and at the end he gives you his reading of who you really are. Save the result as an image and share it.
 
 > **Status:** in development. The project is being rebuilt from scratch.
 
@@ -16,7 +16,7 @@ he gives you his reading of who you really are. Save the result as an image and 
 - Jevil reacts to every choice
 - Optional "why?" note for each answer
 - Hesitation meter: finds your hardest decision
-- Results card with your Order ↔ Chaos reading, exportable as an image
+- Results card with your place on a 3×3 alignment chart, exportable as an image
 - Installable PWA that works fully offline
 - No accounts and no server: your answers never leave your device
 
