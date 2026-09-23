@@ -81,8 +81,8 @@ meaningless. Avoids a dependency and keeps state as the single source of truth.
 - The run in progress also stores each card's **dealt answer order**, so a resumed run shows
   the answers exactly as they were dealt.
 - **Versioning in practice:** moving from two to three answers per card bumped the save to
-  v2. A v1 save fails validation and is discarded, which is the right call because its cards
-  no longer exist in the deck.
+  v2, and the CHAOS card's extra answers bumped it to v3. Older saves fail validation and are
+  discarded: a half-played run from an older shape cannot be resumed faithfully.
 - Data is **validated on load** (schema check); corrupt or old-version data is migrated or
   discarded instead of crashing the app.
 - All access wrapped in `try/catch` (private mode / quota errors).

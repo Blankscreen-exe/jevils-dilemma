@@ -92,6 +92,38 @@ run deals **at least two from every suit**.
 The results screen shows the player's alignment within each suit, e.g. "saintly in love,
 ruthless with money".
 
+### The CHAOS card (card 10)
+
+The 10th card of every run is the **CHAOS card**. It is an ordinary question from the deck,
+but instead of its three normal answers it shows **four drastic answers, one for each corner**
+of the chart, so there is no safe way out:
+
+| Drastic answer | `chaos` | `good` |
+| -------------- | ------- | ------ |
+| Lawful Good    | -1      | +1     |
+| Chaotic Good   | +1      | +1     |
+| Lawful Evil    | -1      | -1     |
+| Chaotic Evil   | +1      | -1     |
+| **Sum**        | **0**   | **0**  |
+
+- **Every pick is a big swing.** Each drastic answer is extreme on both axes, and the CHAOS
+  pick counts **×3** (`CHAOS_WEIGHT`).
+- **Still a mystery.** Every answer is drastic, so "drastic" does not give the direction away.
+- **Still balanced.** The four corners cancel out, so random picking stays neutral on average.
+
+The result becomes a weighted average:
+
+> result = (sum of the 9 normal picks + 3 × CHAOS pick) ÷ 12
+
+Whatever the player picks moves each axis by ±0.25. A result near the centre is pushed most of
+the way to a corner, and a borderline one can flip; nine cards of consistent play can still
+hold their ground.
+
+The CHAOS card is announced ("CHAOS, CHAOS! NO SAFE CHOICES NOW!") with its own banner and
+card style. The reading says what it did: "The CHAOS card dragged thee into Lawful Evil!" or
+"Even the CHAOS card could not budge thee!". Per-suit alignments count the CHAOS pick once,
+so one card cannot dominate a suit's small sample.
+
 ## 3. Twist ideas
 
 Status: ✅ in v1 · 🕓 later
@@ -100,7 +132,7 @@ Status: ✅ in v1 · 🕓 later
 | --- | --------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
 | 1   | **Jevil's Reading**               | ✅ v1  | Final position on the 3×3 alignment chart + a Jevil-style title for that cell. This is the screenshot moment.                |
 | 2   | **Jevil reacts to every pick**    | ✅ v1  | Short speech bubble after each answer. Deliberately vague: reacts to decision speed, never to the hidden scores.             |
-| 3   | **Chaos Cards**                   | 🕓     | Occasionally Jevil "shuffles": a twisted card, a surprise extra answer, or swapped answers. Nods to his card-carousel fight. |
+| 3   | **CHAOS card**                    | ✅ v1  | Card 10 shows four drastic, corner answers that count ×3 (see §2).                                                           |
 | 4   | **"Why?" prompt**                 | ✅ v1  | Optional one-line reason after picking. Preserves the open-ended spirit of the original; reasons appear on the results card. |
 | 5   | **Hesitation meter**              | ✅ v1  | Time taken per decision. Results highlight "your hardest dilemma". Timer pauses when the tab is hidden.                      |
 | 6   | **Deck suits**                    | ✅ v1  | Every question has a suit (see §2). Results show the player's alignment per suit.                                            |
@@ -112,7 +144,7 @@ Status: ✅ in v1 · 🕓 later
 
 1. **Title screen**: Start, plus Continue if a run is in progress.
 2. **Card**: suit + question + three answer cards (A/B/C, shuffled). Hesitation timer starts
-   when the card is shown.
+   when the card is shown. Card 10 is the **CHAOS card**: four drastic answers (A–D), ×3.
 3. **Pick**: Jevil reacts; optional "Why?" field; Next.
 4. Repeat for a fixed number of cards (default **10**, at least two per suit), never repeating
    a card within a run.
@@ -141,6 +173,32 @@ sprite and suit symbols are placeholders; final art will be supplied separately.
     { "id": "a", "text": "Report it to the bank, as you're supposed to", "chaos": -1, "good": 0 },
     { "id": "b", "text": "Keep it. The bank will never notice", "chaos": 0, "good": -1 },
     { "id": "c", "text": "Spend it on pizza for the whole street", "chaos": 1, "good": 1 }
+  ],
+  "chaosOptions": [
+    {
+      "id": "w",
+      "text": "Return the money, with a written report on how to fix the machine",
+      "chaos": -1,
+      "good": 1
+    },
+    {
+      "id": "x",
+      "text": "Keep withdrawing all night and hand the cash out to strangers",
+      "chaos": 1,
+      "good": 1
+    },
+    {
+      "id": "y",
+      "text": "Report it, and demand a reward for your honesty",
+      "chaos": -1,
+      "good": -1
+    },
+    {
+      "id": "z",
+      "text": "Tell the whole internet where the broken machine is",
+      "chaos": 1,
+      "good": -1
+    }
   ]
 }
 ```
@@ -149,8 +207,11 @@ sprite and suit symbols are placeholders; final art will be supplied separately.
 - `chaos`: `-1` (lawful), `0` or `+1` (chaotic). `good`: `-1` (evil), `0` or `+1` (good).
 - Across a card's three answers, each score uses `-1`, `0` and `+1` once (enforced by the
   schema).
-- Answer ids `a`/`b`/`c` identify answers in saves; the letters shown on screen are by
-  position, because order is shuffled.
+- `chaosOptions`: the four drastic answers for when the card is dealt as the CHAOS card.
+  Scores are `-1` or `+1` only, and the four must cover every corner once (enforced by the
+  schema).
+- Answer ids (`a`/`b`/`c`, and `w`/`x`/`y`/`z` for CHAOS answers) identify answers in saves;
+  the letters shown on screen are by position, because order is shuffled.
 - `id` is a stable, human-readable slug (not random) so saved history survives edits to the deck.
 - Card text is original wording, not copied from the commercial deck.
 
