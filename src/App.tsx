@@ -1,10 +1,26 @@
+import { deck } from './game/deck'
+import { useGame } from './hooks/useGame'
+import { CardScreen } from './screens/CardScreen'
+import { ResultsScreen } from './screens/ResultsScreen'
+import { TitleScreen } from './screens/TitleScreen'
+
 export default function App() {
-  return (
-    <main className="grid min-h-dvh place-items-center p-6">
-      <div className="bg-night p-8 text-center pixel-border">
-        <h1 className="font-display text-gold">Jevil&apos;s Dilemma</h1>
-        <p className="mt-4 text-jester-300">CHAOS, CHAOS!</p>
-      </div>
-    </main>
-  )
+  const game = useGame(deck)
+  const { state } = game
+
+  switch (state.phase) {
+    case 'title':
+      return <TitleScreen canResume={game.canResume} onStart={game.start} onResume={game.resume} />
+    case 'playing':
+      return <CardScreen state={state} onPick={game.pick} onNext={game.next} onQuit={game.quit} />
+    case 'results':
+      return (
+        <ResultsScreen
+          cards={state.cards}
+          answers={state.answers}
+          onPlayAgain={game.start}
+          onTitle={game.quit}
+        />
+      )
+  }
 }
