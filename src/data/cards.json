@@ -1,0 +1,272 @@
+[
+  {
+    "id": "basement-door",
+    "prompt": "A door appears in your basement that wasn't there yesterday.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Brick it up and never speak of it",
+        "chaos": -2,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Walk through it in your pajamas",
+        "chaos": 2,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "kazoo-neighbor",
+    "prompt": "Your lovely new neighbour plays the kazoo at 3 a.m.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Leave a polite, well-formatted note",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Buy a kazoo and harmonise",
+        "chaos": 2,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "wedding-cake",
+    "prompt": "The wedding cake collapses before anyone cuts it.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Quietly rescue it with spoons and dignity",
+        "chaos": -1,
+        "good": 2
+      },
+      {
+        "id": "b",
+        "text": "Declare it a buffet and dig in first",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "one-way-talk",
+    "prompt": "For one week you may only communicate one way.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Formal handwritten letters",
+        "chaos": -2,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Interpretive dance",
+        "chaos": 2,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "genie-fine-print",
+    "prompt": "A genie grants one wish. The contract is 400 pages.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Read every page, then wish for world peace",
+        "chaos": -2,
+        "good": 2
+      },
+      {
+        "id": "b",
+        "text": "Skip to the end and wish your enemies itchy forever",
+        "chaos": 2,
+        "good": -2
+      }
+    ]
+  },
+  {
+    "id": "group-trip",
+    "prompt": "Your friends are planning a trip together.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Build everyone a colour-coded itinerary",
+        "chaos": -2,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Arrive at the airport with no bag",
+        "chaos": 2,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "lost-wallet",
+    "prompt": "You find a wallet stuffed with cash. No one saw you.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hand it to the police, untouched",
+        "chaos": -2,
+        "good": 2
+      },
+      {
+        "id": "b",
+        "text": "Keep the cash, post the wallet back",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "swap-a-day",
+    "prompt": "You can swap lives with someone for one day.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Your boss, to see how it really works",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "A cat who lives in a bakery",
+        "chaos": 2,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "last-slice",
+    "prompt": "One slice of pizza left. You and a friend both want it.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cut it into two perfectly equal halves",
+        "chaos": -2,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Lick it and claim it",
+        "chaos": 2,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "polite-ghost",
+    "prompt": "Your home is haunted by an extremely polite ghost.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Draw up house rules together",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Train it to haunt your rivals",
+        "chaos": 2,
+        "good": -2
+      }
+    ]
+  },
+  {
+    "id": "random-button",
+    "prompt": "You receive a button that does something random. Once.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Lock it in a safe, unpressed",
+        "chaos": -2,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Press it while pointing at your neighbour's house",
+        "chaos": 2,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "villain-job",
+    "prompt": "A supervillain offers you a job. Great benefits.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Accept, and run their paperwork flawlessly",
+        "chaos": -2,
+        "good": -2
+      },
+      {
+        "id": "b",
+        "text": "Accept, then sabotage everything from within",
+        "chaos": 2,
+        "good": 2
+      }
+    ]
+  },
+  {
+    "id": "no-theme-party",
+    "prompt": "You're invited to a costume party with no theme.",
+    "options": [
+      {
+        "id": "a",
+        "text": "A classic costume, flawlessly made",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "A sentient houseplant",
+        "chaos": 2,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "autocorrect",
+    "prompt": "Your phone’s autocorrect develops a personality.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Factory reset immediately",
+        "chaos": -2,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Let it write your work emails",
+        "chaos": 2,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "instant-skill",
+    "prompt": "You can master one skill instantly.",
+    "options": [
+      {
+        "id": "a",
+        "text": "First aid",
+        "chaos": -1,
+        "good": 2
+      },
+      {
+        "id": "b",
+        "text": "Pickpocketing",
+        "chaos": 2,
+        "good": -2
+      }
+    ]
+  }
+]
