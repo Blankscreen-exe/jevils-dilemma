@@ -1,271 +1,601 @@
 [
   {
-    "id": "basement-door",
-    "prompt": "A door appears in your basement that wasn't there yesterday.",
+    "id": "cheating-partner",
+    "suit": "hearts",
+    "prompt": "Your best friend's partner is cheating. Only you know.",
     "options": [
       {
         "id": "a",
-        "text": "Brick it up and never speak of it",
-        "chaos": -2,
-        "good": 0
-      },
-      {
-        "id": "b",
-        "text": "Walk through it in your pajamas",
-        "chaos": 2,
-        "good": 0
-      }
-    ]
-  },
-  {
-    "id": "kazoo-neighbor",
-    "prompt": "Your lovely new neighbour plays the kazoo at 3 a.m.",
-    "options": [
-      {
-        "id": "a",
-        "text": "Leave a polite, well-formatted note",
+        "text": "Say nothing, but keep the proof somewhere safe, just in case",
         "chaos": -1,
-        "good": 1
+        "good": -1
       },
       {
         "id": "b",
-        "text": "Buy a kazoo and harmonise",
-        "chaos": 2,
+        "text": "Stay out of it. It's their relationship",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Tell your friend tonight, even though it’s their birthday party",
+        "chaos": 1,
         "good": 1
       }
     ]
   },
   {
-    "id": "wedding-cake",
-    "prompt": "The wedding cake collapses before anyone cuts it.",
+    "id": "sibling-loan",
+    "suit": "hearts",
+    "prompt": "Your sibling asks to borrow money. Again.",
     "options": [
       {
         "id": "a",
-        "text": "Quietly rescue it with spoons and dignity",
+        "text": "Lend it, with a written repayment plan",
         "chaos": -1,
-        "good": 2
+        "good": 1
       },
       {
         "id": "b",
-        "text": "Declare it a buffet and dig in first",
+        "text": "Tell them you're broke too",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Lend it, then mention it in the family group chat",
         "chaos": 1,
         "good": -1
       }
     ]
   },
   {
-    "id": "one-way-talk",
-    "prompt": "For one week you may only communicate one way.",
+    "id": "surprise-holiday",
+    "suit": "hearts",
+    "prompt": "Your partner booked a surprise holiday. You hate the destination.",
     "options": [
       {
         "id": "a",
-        "text": "Formal handwritten letters",
-        "chaos": -2,
-        "good": 0
+        "text": "Go, and keep a list of everything wrong to bring up later",
+        "chaos": -1,
+        "good": -1
       },
       {
         "id": "b",
-        "text": "Interpretive dance",
-        "chaos": 2,
-        "good": 0
-      }
-    ]
-  },
-  {
-    "id": "genie-fine-print",
-    "prompt": "A genie grants one wish. The contract is 400 pages.",
-    "options": [
-      {
-        "id": "a",
-        "text": "Read every page, then wish for world peace",
-        "chaos": -2,
-        "good": 2
-      },
-      {
-        "id": "b",
-        "text": "Skip to the end and wish your enemies itchy forever",
-        "chaos": 2,
-        "good": -2
-      }
-    ]
-  },
-  {
-    "id": "group-trip",
-    "prompt": "Your friends are planning a trip together.",
-    "options": [
-      {
-        "id": "a",
-        "text": "Build everyone a colour-coded itinerary",
-        "chaos": -2,
+        "text": "Smile and enjoy it for their sake",
+        "chaos": 0,
         "good": 1
       },
       {
-        "id": "b",
-        "text": "Arrive at the airport with no bag",
-        "chaos": 2,
+        "id": "c",
+        "text": "Pack for somewhere else entirely and see what happens",
+        "chaos": 1,
         "good": 0
       }
     ]
   },
   {
-    "id": "lost-wallet",
-    "prompt": "You find a wallet stuffed with cash. No one saw you.",
+    "id": "terrible-host",
+    "suit": "hearts",
+    "prompt": "Your friend's cooking is terrible. They're hosting again.",
     "options": [
       {
         "id": "a",
-        "text": "Hand it to the police, untouched",
-        "chaos": -2,
-        "good": 2
+        "text": "Eat every bite. Guests don't criticise the host",
+        "chaos": -1,
+        "good": 0
       },
       {
         "id": "b",
-        "text": "Keep the cash, post the wallet back",
+        "text": "Eat beforehand and slip your plate to their dog",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Arrive early and \"help\" in the kitchen until it’s edible",
+        "chaos": 1,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "family-reunion",
+    "suit": "hearts",
+    "prompt": "Your parents want everyone at the family reunion. You would rather not.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Go, stay exactly two hours, leave on schedule",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Go, and spend the day with the relative nobody talks to",
+        "chaos": 0,
+        "good": 1
+      },
+      {
+        "id": "c",
+        "text": "Say yes, then come down with something mysterious on the day",
         "chaos": 1,
         "good": -1
       }
     ]
   },
   {
-    "id": "swap-a-day",
-    "prompt": "You can swap lives with someone for one day.",
+    "id": "ex-plus-one",
+    "suit": "hearts",
+    "prompt": "Your ex asks you to be their plus-one at a wedding.",
     "options": [
       {
         "id": "a",
-        "text": "Your boss, to see how it really works",
-        "chaos": -1,
-        "good": 0
-      },
-      {
-        "id": "b",
-        "text": "A cat who lives in a bakery",
-        "chaos": 2,
-        "good": 0
-      }
-    ]
-  },
-  {
-    "id": "last-slice",
-    "prompt": "One slice of pizza left. You and a friend both want it.",
-    "options": [
-      {
-        "id": "a",
-        "text": "Cut it into two perfectly equal halves",
-        "chaos": -2,
-        "good": 1
-      },
-      {
-        "id": "b",
-        "text": "Lick it and claim it",
-        "chaos": 2,
-        "good": -1
-      }
-    ]
-  },
-  {
-    "id": "polite-ghost",
-    "prompt": "Your home is haunted by an extremely polite ghost.",
-    "options": [
-      {
-        "id": "a",
-        "text": "Draw up house rules together",
+        "text": "Go as a favour, with ground rules agreed in advance",
         "chaos": -1,
         "good": 1
       },
       {
         "id": "b",
-        "text": "Train it to haunt your rivals",
-        "chaos": 2,
-        "good": -2
+        "text": "Go for the free food and the open bar",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Go, and bring a plus-one of your own",
+        "chaos": 1,
+        "good": 0
       }
     ]
   },
   {
-    "id": "random-button",
-    "prompt": "You receive a button that does something random. Once.",
+    "id": "found-wallet",
+    "suit": "diamonds",
+    "prompt": "You find a wallet stuffed with cash and an ID.",
     "options": [
       {
         "id": "a",
-        "text": "Lock it in a safe, unpressed",
-        "chaos": -2,
+        "text": "Return it through the proper channels, then invoice them for your time",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "b",
+        "text": "Leave it where it is. Not your problem",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Track the owner down online and deliver it tonight",
+        "chaos": 1,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "failing-startup",
+    "suit": "diamonds",
+    "prompt": "Your friend's startup is failing. They ask for your savings.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Invest a little, and help them write a proper business plan",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Decline politely. Money ruins friendships",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Decline, then pitch their idea to investors yourself",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "promotion-cut",
+    "suit": "diamonds",
+    "prompt": "You're offered a promotion, but it means letting a teammate go.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Accept, and follow the process to the letter",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "b",
+        "text": "Turn it down and stay with your team",
+        "chaos": 0,
+        "good": 1
+      },
+      {
+        "id": "c",
+        "text": "Flip a coin in front of your boss",
+        "chaos": 1,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "generous-atm",
+    "suit": "diamonds",
+    "prompt": "A cash machine gives you double what you asked for.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Report it to the bank, as you’re supposed to",
+        "chaos": -1,
         "good": 0
       },
       {
         "id": "b",
-        "text": "Press it while pointing at your neighbour's house",
-        "chaos": 2,
+        "text": "Keep it. The bank will never notice",
+        "chaos": 0,
         "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Spend it on pizza for the whole street",
+        "chaos": 1,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "lottery-win",
+    "suit": "diamonds",
+    "prompt": "You win the lottery.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tell no one, hire an adviser, change nothing",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Quietly pay off your friends' debts",
+        "chaos": 0,
+        "good": 1
+      },
+      {
+        "id": "c",
+        "text": "Buy the building your old boss works in, and raise the rent",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "head-shave",
+    "suit": "diamonds",
+    "prompt": "A rich stranger offers you $10,000 to shave your head right now.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Accept, if it goes to a children’s hospital, with a receipt",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Haggle them up to $20,000 first",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Shave exactly half",
+        "chaos": 1,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "stray-dog",
+    "suit": "clubs",
+    "prompt": "A stranger's dog keeps following you home.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Report the owner to the council for letting it roam",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "b",
+        "text": "Ignore it. It'll find its way",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Follow the dog instead, to see where it lives",
+        "chaos": 1,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "quiet-carriage",
+    "suit": "clubs",
+    "prompt": "Someone is on a loud phone call in the quiet carriage.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Politely point at the 'Quiet' sign",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Put your headphones in",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Start narrating their call to the whole carriage",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "street-performer",
+    "suit": "clubs",
+    "prompt": "A street performer picks you as their volunteer.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Agree, if you get half the tips",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "b",
+        "text": "Play along and make them look amazing",
+        "chaos": 0,
+        "good": 1
+      },
+      {
+        "id": "c",
+        "text": "Play along, then take over the show",
+        "chaos": 1,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "hedge-dispute",
+    "suit": "clubs",
+    "prompt": "Your neighbour's hedge is 3 cm over your property line.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Measure it properly and send a formal letter",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Say nothing, but block their drive now and then",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Trim it at midnight into a lovely shape, as a gift",
+        "chaos": 1,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "party-game",
+    "suit": "clubs",
+    "prompt": "Everyone at the party is playing a game you find ridiculous.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Play by the rules anyway",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Sit out, and keep the host company in the kitchen",
+        "chaos": 0,
+        "good": 1
+      },
+      {
+        "id": "c",
+        "text": "Join in, and quietly rig it so you win",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "alarm-button",
+    "suit": "clubs",
+    "prompt": "You get a button that silences every car alarm in the city.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hand it to the council to use responsibly",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Sell it to the highest bidder",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Press it at 3 a.m. and see what happens",
+        "chaos": 1,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "zombie-bunker",
+    "suit": "spades",
+    "prompt": "Zombie outbreak. You run the only safe bunker.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Let people in, in exchange for a lifetime of service",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "b",
+        "text": "Seal the doors. Nobody in, nobody out",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Leave the doors open and go looking for survivors",
+        "chaos": 1,
+        "good": 1
+      }
+    ]
+  },
+  {
+    "id": "ruler-for-a-day",
+    "suit": "spades",
+    "prompt": "You become ruler of the country for one day.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Pass one sensible law everyone has been waiting for",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "b",
+        "text": "Spend the day touring the palace",
+        "chaos": 0,
+        "good": 0
+      },
+      {
+        "id": "c",
+        "text": "Settle every grudge you have ever had",
+        "chaos": 1,
+        "good": -1
+      }
+    ]
+  },
+  {
+    "id": "lifeboat",
+    "suit": "spades",
+    "prompt": "Your lifeboat holds five. There are six of you.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Draw straws, and make sure the loser respects the result",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "b",
+        "text": "Take turns swimming alongside",
+        "chaos": 0,
+        "good": 1
+      },
+      {
+        "id": "c",
+        "text": "Row back to the ship for another boat",
+        "chaos": 1,
+        "good": 0
+      }
+    ]
+  },
+  {
+    "id": "mind-reading",
+    "suit": "spades",
+    "prompt": "You can read minds for one day.",
+    "options": [
+      {
+        "id": "a",
+        "text": "Only read people who say it’s okay",
+        "chaos": -1,
+        "good": 0
+      },
+      {
+        "id": "b",
+        "text": "Win every argument and every bet",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Walk around town fixing people's problems before they ask",
+        "chaos": 1,
+        "good": 1
       }
     ]
   },
   {
     "id": "villain-job",
+    "suit": "spades",
     "prompt": "A supervillain offers you a job. Great benefits.",
     "options": [
       {
         "id": "a",
-        "text": "Accept, and run their paperwork flawlessly",
-        "chaos": -2,
-        "good": -2
-      },
-      {
-        "id": "b",
-        "text": "Accept, then sabotage everything from within",
-        "chaos": 2,
-        "good": 2
-      }
-    ]
-  },
-  {
-    "id": "no-theme-party",
-    "prompt": "You're invited to a costume party with no theme.",
-    "options": [
-      {
-        "id": "a",
-        "text": "A classic costume, flawlessly made",
+        "text": "Accept, and just do the job you were hired for",
         "chaos": -1,
         "good": 0
       },
       {
         "id": "b",
-        "text": "A sentient houseplant",
-        "chaos": 2,
-        "good": 0
-      }
-    ]
-  },
-  {
-    "id": "autocorrect",
-    "prompt": "Your phone’s autocorrect develops a personality.",
-    "options": [
-      {
-        "id": "a",
-        "text": "Factory reset immediately",
-        "chaos": -2,
-        "good": 0
+        "text": "Decline, and warn the other recruits",
+        "chaos": 0,
+        "good": 1
       },
       {
-        "id": "b",
-        "text": "Let it write your work emails",
-        "chaos": 2,
+        "id": "c",
+        "text": "Accept, then plot to take over their empire",
+        "chaos": 1,
         "good": -1
       }
     ]
   },
   {
-    "id": "instant-skill",
-    "prompt": "You can master one skill instantly.",
+    "id": "basement-portal",
+    "suit": "spades",
+    "prompt": "You discover a portal to another world in your basement.",
     "options": [
       {
         "id": "a",
-        "text": "First aid",
+        "text": "Report it, and help scientists study it safely",
         "chaos": -1,
-        "good": 2
+        "good": 1
       },
       {
         "id": "b",
-        "text": "Pickpocketing",
-        "chaos": 2,
-        "good": -2
+        "text": "Charge the neighbours for a peek",
+        "chaos": 0,
+        "good": -1
+      },
+      {
+        "id": "c",
+        "text": "Walk through it in your pajamas",
+        "chaos": 1,
+        "good": 0
       }
     ]
   }

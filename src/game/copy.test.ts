@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { REACTION_LINES, alignmentCopy, reactionLine } from './copy'
+import { QUICK_MS, REACTION_LINES, SLOW_MS, alignmentCopy, paceOf, reactionLine } from './copy'
 
 describe('alignmentCopy', () => {
   it('has a title for every cell of the chart', () => {
@@ -11,13 +11,25 @@ describe('alignmentCopy', () => {
   })
 })
 
+describe('paceOf', () => {
+  it.each([
+    [0, 'quick'],
+    [QUICK_MS - 1, 'quick'],
+    [QUICK_MS, 'steady'],
+    [SLOW_MS, 'steady'],
+    [SLOW_MS + 1, 'slow'],
+  ] as const)('reads %i ms as %s', (ms, pace) => {
+    expect(paceOf(ms)).toBe(pace)
+  })
+})
+
 describe('reactionLine', () => {
-  it('picks a line for the reaction', () => {
-    expect(REACTION_LINES.chaotic).toContain(reactionLine('chaotic'))
+  it('picks a line for the pace', () => {
+    expect(REACTION_LINES.slow).toContain(reactionLine('slow'))
   })
 
   it('uses the random source to choose', () => {
-    expect(reactionLine('lawful', () => 0)).toBe(REACTION_LINES.lawful[0])
-    expect(reactionLine('lawful', () => 0.999)).toBe(REACTION_LINES.lawful.at(-1))
+    expect(reactionLine('steady', () => 0)).toBe(REACTION_LINES.steady[0])
+    expect(reactionLine('steady', () => 0.999)).toBe(REACTION_LINES.steady.at(-1))
   })
 })

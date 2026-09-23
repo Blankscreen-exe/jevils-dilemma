@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import type { Card } from './deck'
+import { makeCard } from '../test/fixtures'
+import { reorderOptions } from './deal'
 import {
   HISTORY_LIMIT,
   SAVE_KEY,
@@ -14,14 +15,7 @@ import {
 } from './save'
 import { gameReducer, initialState, type Answer, type GameState } from './state'
 
-const card = (id: string): Card => ({
-  id,
-  prompt: `${id}?`,
-  options: [
-    { id: 'a', text: 'A', chaos: -1, good: 0 },
-    { id: 'b', text: 'B', chaos: 1, good: 0 },
-  ],
-})
+const card = (id: string) => makeCard(id)
 
 const deck = [card('one'), card('two'), card('three')]
 
@@ -65,6 +59,12 @@ describe('loadSave / writeSave', () => {
     expect(loadSave(memoryStorage(initial))).toEqual(emptySave)
   })
 
+  it('discards a version 1 save from the old two-answer deck', () => {
+    const v1 = { version: 1, current: null, history: [] }
+
+    expect(loadSave(memoryStorage({ [SAVE_KEY]: JSON.stringify(v1) }))).toEqual(emptySave)
+  })
+
   it('survives storage that throws', () => {
     expect(loadSave(brokenStorage)).toEqual(emptySave)
     expect(writeSave(emptySave, brokenStorage)).toBe(false)
@@ -77,23 +77,29 @@ describe('loadSave / writeSave', () => {
 })
 
 describe('toSavedRun / fromSavedRun', () => {
+  // Cards as dealt: answers shuffled out of their a/b/c order.
+  const dealt = deck.map((c, i) => reorderOptions(c, i % 2 ? ['c', 'a', 'b'] : ['b', 'c', 'a'])!)
   const playing = [
-    { type: 'start', cards: deck },
+    { type: 'start', cards: dealt },
     { type: 'pick', optionId: 'b', elapsedMs: 800 },
     { type: 'next', reason: 'fun' },
     { type: 'pick', optionId: 'a', elapsedMs: 300 },
   ] as const
   const state = playing.reduce<GameState>(gameReducer, initialState)
 
-  it('restores an in-progress run exactly', () => {
+  it('restores an in-progress run exactly, including the dealt answer order', () => {
     const saved = toSavedRun(state)
 
     expect(saved).not.toBeNull()
     expect(fromSavedRun(saved!, deck)).toEqual(state)
   })
 
-  it('stores cards by id only', () => {
-    expect(toSavedRun(state)?.cardIds).toEqual(['one', 'two', 'three'])
+  it('stores cards by id and answer order only', () => {
+    expect(toSavedRun(state)?.cards).toEqual([
+      { id: 'one', order: ['b', 'c', 'a'] },
+      { id: 'two', order: ['c', 'a', 'b'] },
+      { id: 'three', order: ['b', 'c', 'a'] },
+    ])
   })
 
   it('has nothing to save outside of play', () => {

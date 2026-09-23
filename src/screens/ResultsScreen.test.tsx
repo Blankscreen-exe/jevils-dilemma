@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import type { Card } from '../game/deck'
 import type { Answer } from '../game/state'
 import { renderToPng, shareOrDownload } from '../share/resultImage'
+import { makeCard } from '../test/fixtures'
 import { ResultsScreen } from './ResultsScreen'
 
 vi.mock('../share/resultImage', async (importOriginal) => ({
@@ -12,17 +12,9 @@ vi.mock('../share/resultImage', async (importOriginal) => ({
   shareOrDownload: vi.fn<typeof shareOrDownload>(),
 }))
 
-const cards: Card[] = [
-  {
-    id: 'one',
-    prompt: 'One?',
-    options: [
-      { id: 'a', text: 'Order', chaos: -2, good: 0 },
-      { id: 'b', text: 'Chaos', chaos: 2, good: 0 },
-    ],
-  },
-]
-const answers: Answer[] = [{ cardId: 'one', optionId: 'b', elapsedMs: 1200, reason: '' }]
+// Option c is Chaotic Good (see makeCard).
+const cards = [makeCard('one', 'diamonds')]
+const answers: Answer[] = [{ cardId: 'one', optionId: 'c', elapsedMs: 1200, reason: '' }]
 
 const renderResults = () =>
   render(
@@ -44,7 +36,7 @@ describe('ResultsScreen save image', () => {
     expect(renderToPng).toHaveBeenCalledWith(expect.any(HTMLElement), expect.any(String))
     expect(shareOrDownload).toHaveBeenCalledWith(
       expect.any(Blob),
-      'jevils-dilemma-chaotic-neutral.png',
+      'jevils-dilemma-chaotic-good.png',
     )
     expect(await screen.findByText('IMAGE SAVED!')).toBeInTheDocument()
   })

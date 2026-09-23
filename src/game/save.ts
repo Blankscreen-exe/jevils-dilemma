@@ -1,13 +1,18 @@
 import * as z from 'zod/mini'
-import type { Card } from './deck'
+import { reorderOptions } from './deal'
+import { OPTION_IDS, type Card } from './deck'
 import type { Answer, GameState, PlayingState } from './state'
 
 export const SAVE_KEY = 'jevils-dilemma:save'
-export const SAVE_VERSION = 1
+/**
+ * Bump when the saved shape changes. v2: three answers per card and a saved answer order.
+ * Older saves fail validation and are discarded (their cards no longer exist).
+ */
+export const SAVE_VERSION = 2
 /** Oldest finished runs are dropped beyond this. */
 export const HISTORY_LIMIT = 20
 
-const optionIdSchema = z.enum(['a', 'b'])
+const optionIdSchema = z.enum(OPTION_IDS)
 
 const answerSchema = z.object({
   cardId: z.string(),
@@ -17,11 +22,13 @@ const answerSchema = z.object({
 }) satisfies z.ZodMiniType<Answer>
 
 /**
- * A run in progress. Cards are stored by id and looked up in the deck on load, so the
- * save stays small and picks up wording fixes to the deck.
+ * A run in progress. Cards are stored by id (plus the order their answers were dealt in)
+ * and looked up in the deck on load, so the save stays small and picks up wording fixes.
  */
 const savedRunSchema = z.object({
-  cardIds: z.array(z.string()).check(z.minLength(1)),
+  cards: z
+    .array(z.object({ id: z.string(), order: z.array(optionIdSchema) }))
+    .check(z.minLength(1)),
   index: z.int().check(z.nonnegative()),
   answers: z.array(answerSchema),
   pending: z.nullable(
@@ -88,7 +95,7 @@ export function writeSave(data: SaveData, storage: SaveStorage | null = browserS
 export function toSavedRun(state: GameState): SavedRun | null {
   if (state.phase !== 'playing') return null
   return {
-    cardIds: state.cards.map((card) => card.id),
+    cards: state.cards.map((card) => ({ id: card.id, order: card.options.map((o) => o.id) })),
     index: state.index,
     answers: [...state.answers],
     pending: state.pending,
@@ -96,13 +103,16 @@ export function toSavedRun(state: GameState): SavedRun | null {
 }
 
 /**
- * Rebuilds a playing state from a saved run. Returns null if the deck no longer
- * contains every card, or the saved position is inconsistent.
+ * Rebuilds a playing state from a saved run. Returns null if the deck no longer contains
+ * every card with the same answers, or the saved position is inconsistent.
  */
 export function fromSavedRun(saved: SavedRun, deck: readonly Card[]): PlayingState | null {
   const byId = new Map(deck.map((card) => [card.id, card]))
-  const cards = saved.cardIds.map((id) => byId.get(id))
-  if (cards.some((card) => card === undefined)) return null
+  const cards = saved.cards.map(({ id, order }) => {
+    const card = byId.get(id)
+    return card ? reorderOptions(card, order) : null
+  })
+  if (cards.some((card) => card === null)) return null
   if (saved.index >= cards.length || saved.answers.length !== saved.index) return null
 
   return {

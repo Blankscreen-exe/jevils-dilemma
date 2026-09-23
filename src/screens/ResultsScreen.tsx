@@ -2,8 +2,9 @@ import { useMemo, useRef, useState } from 'react'
 import { AlignmentChart } from '../components/AlignmentChart'
 import { Jester } from '../components/Jester'
 import { PixelButton } from '../components/PixelButton'
-import { alignmentCopy } from '../game/copy'
-import type { Card } from '../game/deck'
+import { SUIT_TEXT } from '../components/suitStyles'
+import { SUIT_COPY, alignmentCopy } from '../game/copy'
+import { SUITS, type Card } from '../game/deck'
 import type { Answer } from '../game/state'
 import { summarize, type ResolvedPick } from '../game/summary'
 import { renderToPng, resultFilename, shareOrDownload } from '../share/resultImage'
@@ -78,6 +79,25 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
             <div className="grid gap-3">
               <Stat label="HARDEST DILEMMA" pick={summary.hardest} />
               <Stat label="QUICKEST DRAW" pick={summary.quickest} />
+              <div className="bg-void p-3 pixel-border pixel-border-jester-700">
+                <h3 className="mb-2 font-display text-[9px] text-jester-300">BY SUIT</h3>
+                <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-lg">
+                  {SUITS.map((suit) => {
+                    const suitAlignment = summary.bySuit[suit]
+                    if (!suitAlignment) return null
+                    const { symbol, name } = SUIT_COPY[suit]
+                    return (
+                      <div key={suit} className="contents">
+                        <dt className={`font-display text-[11px] leading-7 ${SUIT_TEXT[suit]}`}>
+                          <span aria-hidden="true">{symbol} </span>
+                          {name}
+                        </dt>
+                        <dd>{alignmentCopy(suitAlignment.moral, suitAlignment.ethic).label}</dd>
+                      </div>
+                    )
+                  })}
+                </dl>
+              </div>
             </div>
           </div>
 
@@ -89,7 +109,12 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
                   className={`mt-1 size-3.5 ${option.chaos > 0 ? 'bg-chaos' : option.chaos < 0 ? 'bg-order' : 'bg-jester-300'}`}
                 />
                 <div>
-                  <p className="text-jester-300">{card.prompt}</p>
+                  <p className="text-jester-300">
+                    <span aria-hidden="true" className={SUIT_TEXT[card.suit]}>
+                      {SUIT_COPY[card.suit].symbol}{' '}
+                    </span>
+                    {card.prompt}
+                  </p>
                   <p>{option.text}</p>
                   {answer.reason && <p className="text-jester-500 italic">“{answer.reason}”</p>}
                 </div>

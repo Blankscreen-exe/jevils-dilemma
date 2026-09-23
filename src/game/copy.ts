@@ -1,16 +1,45 @@
-import type { EthicAxis, MoralAxis, Reaction } from './alignment'
+import type { EthicAxis, MoralAxis } from './alignment'
+import type { Suit } from './deck'
 
-/** Jevil's lines after a pick, keyed by the axis the pick leans on hardest. */
-export const REACTION_LINES: Record<Reaction, readonly string[]> = {
-  lawful: ['BORING! BORING!!', 'A PERFECT LITTLE SQUARE!', 'HOW SENSIBLE. HOW DULL.'],
-  chaotic: [
-    'UEE HEE HEE! NOW WE PLAY!',
-    'DELIGHTFUL! SIMPLY DELIGHTFUL!',
-    'THE CAROUSEL SPINS FASTER!',
+export interface SuitCopy {
+  symbol: string
+  name: string
+  theme: string
+}
+
+export const SUIT_COPY: Record<Suit, SuitCopy> = {
+  hearts: { symbol: '♥', name: 'HEARTS', theme: 'love, friendship and family' },
+  diamonds: { symbol: '♦', name: 'DIAMONDS', theme: 'money, greed and ambition' },
+  clubs: { symbol: '♣', name: 'CLUBS', theme: 'society, strangers and the absurd' },
+  spades: { symbol: '♠', name: 'SPADES', theme: 'danger, power and survival' },
+}
+
+export type Pace = 'quick' | 'steady' | 'slow'
+
+/** Decisions faster or slower than these (ms) get their own reactions. */
+export const QUICK_MS = 2500
+export const SLOW_MS = 10_000
+
+export function paceOf(elapsedMs: number): Pace {
+  if (elapsedMs < QUICK_MS) return 'quick'
+  if (elapsedMs > SLOW_MS) return 'slow'
+  return 'steady'
+}
+
+/**
+ * Jevil's lines after a pick. They react to how the player chose, never to what the
+ * answer scored, so the hidden alignment stays hidden until the reading.
+ */
+export const REACTION_LINES: Record<Pace, readonly string[]> = {
+  quick: ['SO QUICK! SO SURE!', 'NO HESITATION? DELICIOUS!', 'SNAP! JUST LIKE THAT!'],
+  steady: [
+    'OHO? INTERESTING...',
+    'HOW VERY LIKE YOU!',
+    'I SEE, I SEE...',
+    'UEE HEE! NOTED!',
+    'THE CAROUSEL TURNS...',
   ],
-  good: ['UGH, HOW NOBLE.', 'A HERO! HOW TERRIBLY SWEET.'],
-  evil: ['OHO! WICKED! I LOVE IT!', 'NAUGHTY, NAUGHTY!'],
-  neutral: ['A COIN THAT LANDS ON ITS EDGE!'],
+  slow: ['TOOK THY SWEET TIME, DIDST THOU?', 'SUCH AGONY! I LOVE IT!', 'TICK TOCK, TICK TOCK!'],
 }
 
 export interface AlignmentCopy {
@@ -73,7 +102,7 @@ export function alignmentCopy(moral: MoralAxis, ethic: EthicAxis): AlignmentCopy
   return ALIGNMENT_COPY[`${moral}-${ethic}`]
 }
 
-export function reactionLine(reaction: Reaction, random: () => number = Math.random): string {
-  const lines = REACTION_LINES[reaction]
+export function reactionLine(pace: Pace, random: () => number = Math.random): string {
+  const lines = REACTION_LINES[pace]
   return lines[Math.floor(random() * lines.length)] ?? lines[0] ?? ''
 }

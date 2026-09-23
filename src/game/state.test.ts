@@ -1,15 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import type { Card } from './deck'
+import { makeCard } from '../test/fixtures'
 import { gameReducer, initialState, type GameAction, type GameState } from './state'
 
-const card = (id: string): Card => ({
-  id,
-  prompt: `${id}?`,
-  options: [
-    { id: 'a', text: 'A', chaos: -1, good: 0 },
-    { id: 'b', text: 'B', chaos: 1, good: 0 },
-  ],
-})
+const card = (id: string) => makeCard(id)
 
 const cards = [card('one'), card('two')]
 

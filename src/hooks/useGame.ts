@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
-import { deal } from '../game/deal'
-import { CARDS_PER_RUN, type Card, type OptionId } from '../game/deck'
+import { dealRun } from '../game/deal'
+import type { Card, OptionId } from '../game/deck'
 import {
   fromSavedRun,
   loadSave,
@@ -37,7 +37,7 @@ export function useGame(deck: readonly Card[], storage?: SaveStorage | null) {
 
   const start = useCallback(() => {
     setResumable(null)
-    dispatch({ type: 'start', cards: deal(deck, CARDS_PER_RUN) })
+    dispatch({ type: 'start', cards: dealRun(deck) })
   }, [deck])
 
   const resume = useCallback(() => {

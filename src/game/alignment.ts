@@ -36,12 +36,3 @@ export function alignmentOf(picks: readonly CardOption[]): Alignment {
 
   return { ethic: ethics[band(chaos)], moral: morals[band(good)], chaos, good }
 }
-
-export type Reaction = 'lawful' | 'chaotic' | 'good' | 'evil' | 'neutral'
-
-/** Jevil reacts to whichever axis a pick leans on hardest; ties go to law/chaos. */
-export function reactionTo({ chaos, good }: Pick<CardOption, 'chaos' | 'good'>): Reaction {
-  if (chaos === 0 && good === 0) return 'neutral'
-  if (Math.abs(good) > Math.abs(chaos)) return good > 0 ? 'good' : 'evil'
-  return chaos > 0 ? 'chaotic' : 'lawful'
-}

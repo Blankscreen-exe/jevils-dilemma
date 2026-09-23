@@ -1,20 +1,13 @@
 import { describe, expect, it } from 'vitest'
-import type { Card } from './deck'
+import { makeCard } from '../test/fixtures'
+import type { OptionId } from './deck'
 import type { Answer } from './state'
 import { summarize } from './summary'
 
-const card = (id: string): Card => ({
-  id,
-  prompt: `${id}?`,
-  options: [
-    { id: 'a', text: `${id} A`, chaos: -2, good: 2 },
-    { id: 'b', text: `${id} B`, chaos: 2, good: -2 },
-  ],
-})
+// Option a is Lawful Evil, b True Neutral, c Chaotic Good (see makeCard).
+const cards = [makeCard('one', 'hearts'), makeCard('two', 'hearts'), makeCard('three', 'spades')]
 
-const cards = [card('one'), card('two'), card('three')]
-
-const answer = (cardId: string, optionId: 'a' | 'b', elapsedMs: number): Answer => ({
+const answer = (cardId: string, optionId: OptionId, elapsedMs: number): Answer => ({
   cardId,
   optionId,
   elapsedMs,
@@ -22,12 +15,12 @@ const answer = (cardId: string, optionId: 'a' | 'b', elapsedMs: number): Answer 
 })
 
 describe('summarize', () => {
-  const answers = [answer('one', 'b', 4000), answer('two', 'b', 900), answer('three', 'b', 2500)]
+  const answers = [answer('one', 'c', 4000), answer('two', 'c', 900), answer('three', 'a', 2500)]
 
   it('resolves each answer to its card and option', () => {
     const { picks } = summarize(cards, answers)
 
-    expect(picks.map((pick) => pick.option.text)).toEqual(['one B', 'two B', 'three B'])
+    expect(picks.map((pick) => pick.option.text)).toEqual(['one C', 'two C', 'three A'])
   })
 
   it('finds the hardest and quickest decisions', () => {
@@ -37,8 +30,21 @@ describe('summarize', () => {
     expect(quickest?.card.id).toBe('two')
   })
 
-  it('computes the alignment from the chosen options', () => {
-    expect(summarize(cards, answers).alignment).toMatchObject({ ethic: 'chaotic', moral: 'evil' })
+  it('computes the overall alignment from the chosen answers', () => {
+    // Net +1 on both axes over three picks: 1/3 each, which is still neutral.
+    expect(summarize(cards, answers).alignment).toMatchObject({
+      ethic: 'neutral',
+      moral: 'neutral',
+    })
+  })
+
+  it('computes an alignment per suit, and null for suits not played', () => {
+    const { bySuit } = summarize(cards, answers)
+
+    expect(bySuit.hearts).toMatchObject({ ethic: 'chaotic', moral: 'good' })
+    expect(bySuit.spades).toMatchObject({ ethic: 'lawful', moral: 'evil' })
+    expect(bySuit.diamonds).toBeNull()
+    expect(bySuit.clubs).toBeNull()
   })
 
   it('skips answers whose card is unknown', () => {
