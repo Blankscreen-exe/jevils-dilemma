@@ -1,0 +1,90 @@
+@import 'tailwindcss';
+
+/* Self-hosted pixel fonts (latin subset only) so the game works offline. */
+@import '@fontsource/press-start-2p/latin-400.css';
+@import '@fontsource/pixelify-sans/latin-400.css';
+@import '@fontsource/pixelify-sans/latin-700.css';
+
+/*
+ * Jevil theme.
+ * Default palettes, radii and soft shadows are cleared so only on-theme values exist.
+ */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  /* Dark World backdrop */
+  --color-void: #0b0614;
+  --color-night: #1a0f2e;
+
+  /* Jester purples */
+  --color-jester-900: #2a1450;
+  --color-jester-700: #4b2a8c;
+  --color-jester-500: #7b4fd6;
+  --color-jester-300: #b69cf2;
+
+  /* Accents */
+  --color-gold: #f5d63d;
+  --color-gold-dark: #b8901a;
+  --color-teal: #3ec7c2;
+  --color-bone: #ece8f4;
+
+  /* Order <-> Chaos meter */
+  --color-order: #3ec7c2;
+  --color-chaos: #e0436b;
+
+  --font-*: initial;
+  --font-display: 'Press Start 2P', monospace;
+  --font-body: 'Pixelify Sans', monospace;
+
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+
+  /* One "art pixel" at 1x. Spacing is a multiple of this to keep the grid. */
+  --pixel: 4px;
+  --spacing: var(--pixel);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-void font-body text-bone;
+    min-height: 100dvh;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Stepped border with notched corners, drawn with box-shadow so it adds no layout size. */
+@utility pixel-border {
+  --pixel-border-color: var(--color-jester-300);
+  box-shadow:
+    0 calc(var(--pixel) * -1) 0 0 var(--pixel-border-color),
+    0 var(--pixel) 0 0 var(--pixel-border-color),
+    calc(var(--pixel) * -1) 0 0 0 var(--pixel-border-color),
+    var(--pixel) 0 0 0 var(--pixel-border-color);
+}
+
+@utility pixel-border-* {
+  --pixel-border-color: --value(--color-*);
+}
+
+/* Keeps scaled sprites crisp instead of blurred. */
+@utility pixelated {
+  image-rendering: pixelated;
+}

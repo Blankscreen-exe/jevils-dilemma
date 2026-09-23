@@ -7,7 +7,7 @@
 
 Based on the tabletop party game **Dilemma**: a deck of cards, each posing a scenario with
 two awkward choices. There are no scores and no winners in the original — the cards exist to
-start conversations ("why would you pick *that*?").
+start conversations ("why would you pick _that_?").
 
 Example card:
 
@@ -36,17 +36,17 @@ works for any card and fits Jevil ("CHAOS, CHAOS!").
 
 Status: ✅ planned for v1 · 🕓 later
 
-| # | Idea | Status | Notes |
-|---|------|--------|-------|
-| 1 | **Jevil's Reading** | ✅ v1 | Final Order↔Chaos position + a Jevil-style title (e.g. *"A TRUE CHAOS FREAK!"*). This is the screenshot moment. |
-| 2 | **Jevil reacts to every pick** | ✅ v1 | Short pixel speech bubble after each answer ("UEE HEE HEE! HOW BORING!"). Keeps the conversational feel in solo play. |
-| 3 | **Chaos Cards** | 🕓 | Occasionally Jevil "shuffles": a twisted card, a surprise third option, or swapped options. Nods to his card-carousel fight. |
-| 4 | **"Why?" prompt** | ✅ v1 | Optional one-line reason after picking. Preserves the open-ended spirit of the original; reasons appear on the results card. |
-| 5 | **Hesitation meter** | ✅ v1 | Time taken per decision. Results highlight "your hardest dilemma". Timer pauses when the tab is hidden. |
-| 6 | **Deck suits** | 🕓 | Categories (romance, morality, absurd, gross…) mapped to ♠ ♥ ♣ ♦. Results show which suit brings out the chaos. |
-| 7 | **Past selves** | 🕓 | Keep previous runs locally; Jevil calls out when you answer a repeat card differently. |
-| 8 | **Unlockable titles / portraits** | 🕓 | Extreme results unlock rare titles or sprites to collect. |
-| 9 | **"Think like Jevil" mode** | 🕓 | Try to pick the chaos option every time; scored at the end. |
+| #   | Idea                              | Status | Notes                                                                                                                        |
+| --- | --------------------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Jevil's Reading**               | ✅ v1  | Final Order↔Chaos position + a Jevil-style title (e.g. _"A TRUE CHAOS FREAK!"_). This is the screenshot moment.              |
+| 2   | **Jevil reacts to every pick**    | ✅ v1  | Short pixel speech bubble after each answer ("UEE HEE HEE! HOW BORING!"). Keeps the conversational feel in solo play.        |
+| 3   | **Chaos Cards**                   | 🕓     | Occasionally Jevil "shuffles": a twisted card, a surprise third option, or swapped options. Nods to his card-carousel fight. |
+| 4   | **"Why?" prompt**                 | ✅ v1  | Optional one-line reason after picking. Preserves the open-ended spirit of the original; reasons appear on the results card. |
+| 5   | **Hesitation meter**              | ✅ v1  | Time taken per decision. Results highlight "your hardest dilemma". Timer pauses when the tab is hidden.                      |
+| 6   | **Deck suits**                    | 🕓     | Categories (romance, morality, absurd, gross…) mapped to ♠ ♥ ♣ ♦. Results show which suit brings out the chaos.              |
+| 7   | **Past selves**                   | 🕓     | Keep previous runs locally; Jevil calls out when you answer a repeat card differently.                                       |
+| 8   | **Unlockable titles / portraits** | 🕓     | Extreme results unlock rare titles or sprites to collect.                                                                    |
+| 9   | **"Think like Jevil" mode**       | 🕓     | Try to pick the chaos option every time; scored at the end.                                                                  |
 
 ## 4. Game flow (v1)
 
@@ -66,7 +66,11 @@ Status: ✅ planned for v1 · 🕓 later
   "prompt": "Out on a date, who would you choose?",
   "options": [
     { "id": "a", "text": "Someone dressed perfectly but with absolutely no aroma", "lean": -1 },
-    { "id": "b", "text": "Someone with appalling dress sense who smells truly wonderful", "lean": 1 }
+    {
+      "id": "b",
+      "text": "Someone with appalling dress sense who smells truly wonderful",
+      "lean": 1
+    }
   ]
 }
 ```

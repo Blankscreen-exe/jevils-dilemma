@@ -6,6 +6,7 @@
 ---
 
 ## ADR-001 — Rebuild from a clean slate
+
 **Status:** Accepted
 
 The previous codebase was scaffolding for a different design (free-text answers, planned
@@ -13,6 +14,7 @@ multiplayer, Redux, React Router). Rather than migrate it, we start fresh with a
 matches the current design ([GAME_DESIGN.md](./GAME_DESIGN.md)).
 
 ## ADR-002 — Client-only, no backend
+
 **Status:** Accepted
 
 Solo play with static content needs no server. This removes hosting cost, auth, and privacy
@@ -20,22 +22,31 @@ concerns (player answers never leave the device), and lets the app work fully of
 **Trade-off:** no cross-device sync or multiplayer; revisit only if multiplayer returns.
 
 ## ADR-003 — React + Vite + TypeScript
+
 **Status:** Accepted
 
 - **React** — requirement.
 - **Vite** — fast dev server, first-class PWA plugin, standard choice now that CRA is deprecated.
 - **TypeScript** — the card data, game state, and persisted save format are all structured
   data; types catch mismatches at compile time and document the shapes.
-**Rejected:** Next.js (SSR/routing we don't need for a static offline app).
+  **Rejected:** Next.js (SSR/routing we don't need for a static offline app).
 
 ## ADR-004 — PWA via `vite-plugin-pwa`
-**Status:** Proposed
+
+**Status:** Accepted
 
 Generates the web manifest and a Workbox service worker that precaches the app shell, the
 card JSON, fonts, and sprites, so the game installs and runs offline.
-**Rejected:** hand-written service worker (more code to get caching/update logic right).
+
+- Icons are generated at build time from one source SVG (`public/icon.svg`) by
+  `@vite-pwa/assets-generator`, so no binary icons are committed.
+- Only `.woff2` fonts are precached; every browser with service worker support reads woff2.
+- `registerType: 'autoUpdate'`: a new deploy replaces the old cache on next load. Saved games
+  live in `localStorage`, so updates never lose progress.
+  **Rejected:** hand-written service worker (more code to get caching/update logic right).
 
 ## ADR-005 — State: `useReducer` modelled as a state machine
+
 **Status:** Proposed
 
 The game has a small number of explicit phases (`title → card → reacted → results`). A reducer
@@ -45,6 +56,7 @@ as a pure function. Exposed through a Context provider.
 extra dependency and learning curve for a machine this small — reconsider if flows grow).
 
 ## ADR-006 — No router in v1
+
 **Status:** Proposed
 
 Screens are derived from the game phase, not from URLs; deep-linking into "card 7" is
@@ -52,15 +64,17 @@ meaningless. Avoids a dependency and keeps state as the single source of truth.
 **Revisit** if we add pages that deserve URLs (e.g. an "about" or collection page).
 
 ## ADR-007 — Persistence in `localStorage`, versioned and validated
+
 **Status:** Proposed
 
 - A single key holds `{ version, currentRun, pastRuns }`.
 - Data is **validated on load** (schema check); corrupt or old-version data is migrated or
   discarded instead of crashing the app.
 - All access wrapped in `try/catch` (private mode / quota errors).
-**Rejected:** IndexedDB — unnecessary for a few KB of JSON.
+  **Rejected:** IndexedDB — unnecessary for a few KB of JSON.
 
 ## ADR-008 — Cards in a bundled JSON file, schema-validated
+
 **Status:** Proposed
 
 Questions live in `src/data/cards.json`, imported at build time (bundled and precached — no
@@ -68,6 +82,7 @@ fetch/loading states). A schema (e.g. Zod) validates the deck in a unit test so 
 card fails CI rather than production. Card IDs are stable slugs.
 
 ## ADR-009 — Result image: `html-to-image` + Web Share API
+
 **Status:** Proposed
 
 Render the results card to PNG in the browser. On devices that support
@@ -75,6 +90,7 @@ Render the results card to PNG in the browser. On devices that support
 **Rejected:** `html2canvas` (heavier, less accurate CSS support).
 
 ## ADR-010 — Styling: Tailwind CSS v4 with a pixel-art theme layer
+
 **Status:** Accepted
 
 Tailwind keeps styling co-located with components and constrains everything to a shared scale.
@@ -95,14 +111,31 @@ The Jevil pixel look is defined **once** as a theme, not repeated ad hoc in clas
 (runtime styling cost and an extra dependency for no benefit here).
 
 ## ADR-011 — Quality tooling
-**Status:** Proposed
 
-- **Vitest + React Testing Library** — reducer, scoring, persistence, deck validation, key flows.
-- **ESLint (flat config) + Prettier**, `tsc --noEmit` in CI.
-- **GitHub Actions** — lint, typecheck, test, build on every PR.
-- **Deploy** to GitHub Pages or Netlify (static hosting).
+**Status:** Accepted
+
+- **Bun** as package manager and script runner — much faster installs, a single text lockfile
+  (`bun.lock`), version pinned via `packageManager`. Vite and Vitest still run the build and
+  tests, so the toolchain is standard.
+- **Vitest + React Testing Library** (jsdom) — reducer, scoring, persistence, deck validation, key
+  flows. Test functions are imported explicitly rather than used as globals.
+- **oxlint** — the linter the current Vite React template ships with. It is Rust-based and far
+  faster than ESLint, with built-in React, hooks, TypeScript, jsx-a11y and import rules.
+  Warnings fail CI (`--deny-warnings`).
+- **Prettier** (+ Tailwind class sorting) for formatting; `.gitattributes` and
+  `.editorconfig` enforce LF line endings across Windows and Linux.
+- **TypeScript** in strict mode with `noUncheckedIndexedAccess` (array/record lookups may be
+  `undefined`, which matters for card decks).
+- **GitHub Actions** — format, lint, typecheck, test and build on every PR into `develop` or
+  `main`.
+- **Deploy** to GitHub Pages from `main`. The base path comes from `BASE_PATH` so the same
+  build works at a domain root or under `/<repo>/`.
+
+**Rejected:** ESLint (slower, more config and plugins to keep in sync); npm (slower installs,
+no real benefit here).
 
 ## ADR-012 — Accessibility
+
 **Status:** Proposed
 
 Full keyboard play (A/B hotkeys), visible focus, `aria-live` for Jevil's reactions,
@@ -110,6 +143,7 @@ Full keyboard play (A/B hotkeys), visible focus, `aria-live` for Jevil's reactio
 purple palette.
 
 ## ADR-013 — Intellectual property
+
 **Status:** Proposed
 
 Jevil and Deltarune belong to Toby Fox. This is a non-commercial fan project: use **original
