@@ -34,6 +34,7 @@ alignment chart, and at the end he gives you his reading of who you really are. 
 
 The reasoning behind each choice is recorded in [docs/DECISIONS.md](docs/DECISIONS.md).
 Game design and future ideas are in [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md).
+The image asset spec is in [docs/ASSETS.md](docs/ASSETS.md).
 
 ## Getting started
 

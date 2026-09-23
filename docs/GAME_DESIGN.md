@@ -197,5 +197,5 @@ money." If no suit leaves the neutral band: "Steady in every suit. How dull!"
 ## 7. Open questions
 
 - Pixel-art suit icons: the pixel fonts have no ♥ ♦ ♣ ♠ glyphs, so the symbols currently fall
-  back to a system font. Planned with the other image assets.
+  back to a system font. Planned with the other image assets (see [ASSETS.md](./ASSETS.md)).
 - Art: original pixel art only (see IP note in DECISIONS.md).
