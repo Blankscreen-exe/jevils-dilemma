@@ -47,6 +47,34 @@
   /* One "art pixel" at 1x. Spacing is a multiple of this to keep the grid. */
   --pixel: 4px;
   --spacing: var(--pixel);
+
+  /* Stepped animations read as sprite frames rather than smooth tweens. */
+  --animate-bob: bob 1.2s steps(2) infinite;
+  --animate-shake: shake 0.4s steps(4);
+  --animate-deal: deal 0.3s steps(4) both;
+
+  @keyframes bob {
+    50% {
+      transform: translateY(calc(var(--pixel) * -2));
+    }
+  }
+  @keyframes shake {
+    25% {
+      transform: translate(calc(var(--pixel) * -2), 0);
+    }
+    50% {
+      transform: translate(calc(var(--pixel) * 2), calc(var(--pixel) * -1));
+    }
+    75% {
+      transform: translate(calc(var(--pixel) * -1), var(--pixel));
+    }
+  }
+  @keyframes deal {
+    from {
+      transform: translateY(calc(var(--pixel) * 10)) rotate(-6deg);
+      opacity: 0;
+    }
+  }
 }
 
 @layer base {
@@ -64,6 +92,7 @@
     *::before,
     *::after {
       animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
