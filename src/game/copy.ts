@@ -194,6 +194,15 @@ export const SUIT_CONTEXT: Record<Suit, string> = {
 
 export const STEADY_SUIT_LINE = 'Steady in every suit. How dull!'
 
+/** Shown when the CHAOS card is dealt, before the player picks. */
+export const CHAOS_INTRO_LINE = 'CHAOS, CHAOS! NO SAFE CHOICES NOW!'
+
+/** Reading line when the CHAOS pick moved the player into a different cell. */
+export const chaosDraggedLine = (label: string) => `The CHAOS card dragged thee into ${label}!`
+
+/** Reading line when the CHAOS pick left the player's cell unchanged. */
+export const CHAOS_HELD_LINE = 'Even the CHAOS card could not budge thee!'
+
 export function reactionLine(pace: Pace, random: () => number = Math.random): string {
   const lines = REACTION_LINES[pace]
   return lines[Math.floor(random() * lines.length)] ?? lines[0] ?? ''

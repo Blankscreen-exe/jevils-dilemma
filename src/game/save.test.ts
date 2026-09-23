@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { makeCard } from '../test/fixtures'
-import { reorderOptions } from './deal'
+import { reorderAnswers } from './deal'
 import {
   HISTORY_LIMIT,
   SAVE_KEY,
@@ -59,10 +59,10 @@ describe('loadSave / writeSave', () => {
     expect(loadSave(memoryStorage(initial))).toEqual(emptySave)
   })
 
-  it('discards a version 1 save from the old two-answer deck', () => {
-    const v1 = { version: 1, current: null, history: [] }
+  it.each([1, 2])('discards a save from version %i', (version) => {
+    const old = { version, current: null, history: [] }
 
-    expect(loadSave(memoryStorage({ [SAVE_KEY]: JSON.stringify(v1) }))).toEqual(emptySave)
+    expect(loadSave(memoryStorage({ [SAVE_KEY]: JSON.stringify(old) }))).toEqual(emptySave)
   })
 
   it('survives storage that throws', () => {
@@ -77,8 +77,13 @@ describe('loadSave / writeSave', () => {
 })
 
 describe('toSavedRun / fromSavedRun', () => {
-  // Cards as dealt: answers shuffled out of their a/b/c order.
-  const dealt = deck.map((c, i) => reorderOptions(c, i % 2 ? ['c', 'a', 'b'] : ['b', 'c', 'a'])!)
+  // Cards as dealt: answers shuffled. The last card is the CHAOS card, so its drastic
+  // answers are the ones on screen.
+  const dealt = [
+    reorderAnswers(deck[0]!, ['b', 'c', 'a'])!,
+    reorderAnswers(deck[1]!, ['c', 'a', 'b'])!,
+    reorderAnswers(deck[2]!, ['y', 'w', 'z', 'x'])!,
+  ]
   const playing = [
     { type: 'start', cards: dealt },
     { type: 'pick', optionId: 'b', elapsedMs: 800 },
@@ -98,7 +103,7 @@ describe('toSavedRun / fromSavedRun', () => {
     expect(toSavedRun(state)?.cards).toEqual([
       { id: 'one', order: ['b', 'c', 'a'] },
       { id: 'two', order: ['c', 'a', 'b'] },
-      { id: 'three', order: ['b', 'c', 'a'] },
+      { id: 'three', order: ['y', 'w', 'z', 'x'] },
     ])
   })
 

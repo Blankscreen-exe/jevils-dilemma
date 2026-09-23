@@ -1,18 +1,20 @@
 import * as z from 'zod/mini'
-import { reorderOptions } from './deal'
-import { OPTION_IDS, type Card } from './deck'
+import { reorderAnswers } from './deal'
+import { ALL_OPTION_IDS, answersFor, isChaosCard, type Card } from './deck'
 import type { Answer, GameState, PlayingState } from './state'
 
 export const SAVE_KEY = 'jevils-dilemma:save'
 /**
  * Bump when the saved shape changes. v2: three answers per card and a saved answer order.
- * Older saves fail validation and are discarded (their cards no longer exist).
+ * v3: the CHAOS card, whose four drastic answers have their own ids.
+ * Older saves fail validation and are discarded; a half-played run from an older version
+ * cannot be resumed faithfully, so starting fresh is the safe choice.
  */
-export const SAVE_VERSION = 2
+export const SAVE_VERSION = 3
 /** Oldest finished runs are dropped beyond this. */
 export const HISTORY_LIMIT = 20
 
-const optionIdSchema = z.enum(OPTION_IDS)
+const optionIdSchema = z.enum(ALL_OPTION_IDS)
 
 const answerSchema = z.object({
   cardId: z.string(),
@@ -95,7 +97,11 @@ export function writeSave(data: SaveData, storage: SaveStorage | null = browserS
 export function toSavedRun(state: GameState): SavedRun | null {
   if (state.phase !== 'playing') return null
   return {
-    cards: state.cards.map((card) => ({ id: card.id, order: card.options.map((o) => o.id) })),
+    cards: state.cards.map((card, index) => ({
+      id: card.id,
+      // Order of the answers on screen: the CHAOS answers on the last card, else the normal ones.
+      order: answersFor(card, isChaosCard(index, state.cards.length)).map((o) => o.id),
+    })),
     index: state.index,
     answers: [...state.answers],
     pending: state.pending,
@@ -110,7 +116,7 @@ export function fromSavedRun(saved: SavedRun, deck: readonly Card[]): PlayingSta
   const byId = new Map(deck.map((card) => [card.id, card]))
   const cards = saved.cards.map(({ id, order }) => {
     const card = byId.get(id)
-    return card ? reorderOptions(card, order) : null
+    return card ? reorderAnswers(card, order) : null
   })
   if (cards.some((card) => card === null)) return null
   if (saved.index >= cards.length || saved.answers.length !== saved.index) return null

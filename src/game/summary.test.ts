@@ -47,6 +47,26 @@ describe('summarize', () => {
     expect(bySuit.clubs).toBeNull()
   })
 
+  it('counts the CHAOS pick triple and reports the result without it', () => {
+    // Two Chaotic Good normal picks, then CHAOS answer y (Lawful Evil) worth 3.
+    const withChaos = [
+      answer('one', 'c', 1000),
+      answer('two', 'c', 1000),
+      answer('three', 'y', 1000),
+    ]
+    const summary = summarize(cards, withChaos)
+
+    expect(summary.chaosPick?.option.id).toBe('y')
+    expect(summary.chaosPick?.isChaos).toBe(true)
+    // (1 + 1 - 3) / 5 = -0.2 on both axes.
+    expect(summary.alignment.chaos).toBeCloseTo(-0.2)
+    expect(summary.alignmentBeforeChaos).toMatchObject({ ethic: 'chaotic', moral: 'good' })
+  })
+
+  it('has no CHAOS pick when none was made', () => {
+    expect(summarize(cards, answers).chaosPick).toBeNull()
+  })
+
   it('skips answers whose card is unknown', () => {
     const { picks } = summarize(cards, [answer('missing', 'a', 1), answer('one', 'a', 1)])
 

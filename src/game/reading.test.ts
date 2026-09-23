@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { makeCard } from '../test/fixtures'
 import type { Alignment } from './alignment'
-import { ALIGNMENT_COPY, STEADY_SUIT_LINE } from './copy'
+import { ALIGNMENT_COPY, CHAOS_HELD_LINE, STEADY_SUIT_LINE, chaosDraggedLine } from './copy'
 import type { OptionId, Suit } from './deck'
 import { readingOf, suitLineOf } from './reading'
 import type { Answer } from './state'
@@ -61,6 +61,24 @@ describe('readingOf', () => {
     })
     expect(ALIGNMENT_COPY['evil-lawful'].verdicts).toContain(reading.verdict)
     expect(reading.suitLine.text).toBe('♠ Strictest when danger calls.')
+  })
+
+  it('says when the CHAOS card dragged the player into a new cell', () => {
+    // Nine True Neutral picks, then the Chaotic Evil CHAOS answer (z) worth 3:
+    // 3/12 = 0.25 is still neutral, so it holds; three Chaotic Good picks tip it instead.
+    const held = [...run('b').slice(0, 9), { ...run('b')[9]!, optionId: 'z' as const }]
+    const tipped = [
+      ...run('c').slice(0, 3),
+      ...run('b').slice(3, 9),
+      { ...run('b')[9]!, optionId: 'x' as const },
+    ]
+
+    expect(readingOf(summarize(cards, held)).chaosLine).toBe(CHAOS_HELD_LINE)
+    expect(readingOf(summarize(cards, tipped)).chaosLine).toBe(chaosDraggedLine('Chaotic Good'))
+  })
+
+  it('has no CHAOS line without a CHAOS pick', () => {
+    expect(readingOf(summarize(cards, run('b'))).chaosLine).toBeNull()
   })
 
   it('always gives the same run the same verdict', () => {

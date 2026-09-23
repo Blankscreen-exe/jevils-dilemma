@@ -83,6 +83,34 @@ describe('deckSchema', () => {
     },
   )
 
+  it('rejects a card without four CHAOS answers', () => {
+    const card = makeCard('bad')
+    const [w, x, y] = card.chaosOptions
+
+    expect(deckSchema.safeParse(withCard({ ...card, chaosOptions: [w, x, y] })).success).toBe(false)
+  })
+
+  it('rejects a neutral score on a CHAOS answer', () => {
+    const card = makeCard('bad')
+    const [w, x, y, z] = card.chaosOptions
+
+    expect(
+      deckSchema.safeParse(withCard({ ...card, chaosOptions: [{ ...w, good: 0 }, x, y, z] }))
+        .success,
+    ).toBe(false)
+  })
+
+  it('rejects CHAOS answers that repeat a corner', () => {
+    const card = makeCard('bad')
+    const [w, x, y, z] = card.chaosOptions
+    const repeated = { ...card, chaosOptions: [w, x, y, { ...z, chaos: -1, good: 1 }] }
+
+    const result = deckSchema.safeParse(withCard(repeated))
+
+    expect(result.success).toBe(false)
+    expect(result.error?.issues[0]?.message).toContain('all four corners')
+  })
+
   it('rejects an unknown suit', () => {
     expect(deckSchema.safeParse(withCard({ ...makeCard('bad'), suit: 'cups' })).success).toBe(false)
   })

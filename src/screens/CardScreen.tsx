@@ -3,16 +3,23 @@ import { Jester } from '../components/Jester'
 import { PixelButton } from '../components/PixelButton'
 import { SpeechBubble } from '../components/SpeechBubble'
 import { SUIT_TEXT } from '../components/suitStyles'
-import { SUIT_COPY, paceOf, reactionLine } from '../game/copy'
-import type { Card, CardOption, OptionId } from '../game/deck'
+import { CHAOS_INTRO_LINE, SUIT_COPY, paceOf, reactionLine } from '../game/copy'
+import {
+  CHAOS_WEIGHT,
+  answersFor,
+  isChaosCard,
+  type Card,
+  type CardOption,
+  type OptionId,
+} from '../game/deck'
 import type { PlayingState } from '../game/state'
 import { useDecisionTimer } from '../hooks/useDecisionTimer'
 
 /** Answer cards are labelled by position; ids stay hidden because order is shuffled. */
-const LETTERS = ['A', 'B', 'C'] as const
+const LETTERS = ['A', 'B', 'C', 'D'] as const
 
 /** Hotkey -> answer position. */
-const HOTKEYS: Record<string, number> = { a: 0, 1: 0, b: 1, 2: 1, c: 2, 3: 2 }
+const HOTKEYS: Record<string, number> = { a: 0, 1: 0, b: 1, 2: 1, c: 2, 3: 2, d: 3, 4: 3 }
 
 interface CardScreenProps {
   state: PlayingState
@@ -24,6 +31,7 @@ interface CardScreenProps {
 export function CardScreen({ state, onPick, onNext, onQuit }: CardScreenProps) {
   const card = state.cards[state.index]
   if (!card) return null
+  const chaos = isChaosCard(state.index, state.cards.length)
 
   return (
     <main className="mx-auto flex min-h-dvh max-w-4xl flex-col gap-5 p-6">
@@ -35,7 +43,7 @@ export function CardScreen({ state, onPick, onNext, onQuit }: CardScreenProps) {
           {state.cards.map((c, i) => (
             <li
               key={c.id}
-              className={`size-2.5 ${i < state.index ? 'bg-jester-500' : i === state.index ? 'bg-gold' : 'bg-jester-900'}`}
+              className={`size-2.5 ${i < state.index ? 'bg-jester-500' : i === state.index ? 'bg-gold' : isChaosCard(i, state.cards.length) ? 'bg-chaos' : 'bg-jester-900'}`}
             />
           ))}
         </ol>
@@ -52,6 +60,7 @@ export function CardScreen({ state, onPick, onNext, onQuit }: CardScreenProps) {
       <Dilemma
         key={card.id}
         card={card}
+        chaos={chaos}
         pickedId={state.pending?.optionId ?? null}
         onPick={onPick}
         onNext={onNext}
@@ -62,14 +71,20 @@ export function CardScreen({ state, onPick, onNext, onQuit }: CardScreenProps) {
 
 interface DilemmaProps {
   card: Card
+  /** The CHAOS card: shows the four drastic answers, which count CHAOS_WEIGHT times. */
+  chaos: boolean
   pickedId: OptionId | null
   onPick: (optionId: OptionId, elapsedMs: number) => void
   onNext: (reason: string) => void
 }
 
-function Dilemma({ card, pickedId, onPick, onNext }: DilemmaProps) {
+function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
   const readElapsed = useDecisionTimer()
-  const [reaction, setReaction] = useState<{ line: string; quick: boolean } | null>(null)
+  const answers = answersFor(card, chaos)
+  // Jevil announces the CHAOS card as soon as it is dealt.
+  const [reaction, setReaction] = useState<{ line: string; shake: boolean } | null>(
+    chaos ? { line: CHAOS_INTRO_LINE, shake: true } : null,
+  )
   const [reason, setReason] = useState('')
   const reasonRef = useRef<HTMLInputElement>(null)
   const locked = pickedId !== null
@@ -82,14 +97,14 @@ function Dilemma({ card, pickedId, onPick, onNext }: DilemmaProps) {
     if (locked) return
     const elapsedMs = readElapsed()
     const pace = paceOf(elapsedMs)
-    setReaction({ line: reactionLine(pace), quick: pace === 'quick' })
+    setReaction({ line: reactionLine(pace), shake: pace === 'quick' })
     onPick(option.id, elapsedMs)
   }
 
   const onHotkey = useEffectEvent((event: KeyboardEvent) => {
     if (locked || event.target instanceof HTMLInputElement) return
     const position = HOTKEYS[event.key.toLowerCase()]
-    const option = position === undefined ? undefined : card.options[position]
+    const option = position === undefined ? undefined : answers[position]
     if (!option) return
     // Stop the key from also being typed into the "why?" box that takes focus next.
     event.preventDefault()
@@ -112,11 +127,16 @@ function Dilemma({ card, pickedId, onPick, onNext }: DilemmaProps) {
   return (
     <>
       <div className="flex items-end gap-4">
-        <Jester size={112} className={reaction?.quick ? 'animate-shake' : ''} />
+        <Jester size={112} className={reaction?.shake ? 'animate-shake' : ''} />
         <SpeechBubble text={reaction?.line ?? null} />
       </div>
 
       <div className="flex flex-col items-center gap-2 px-3 text-center">
+        {chaos && (
+          <p className="animate-shake bg-chaos px-3 py-1.5 font-display text-xs text-void pixel-border pixel-border-gold">
+            CHAOS CARD · COUNTS ×{CHAOS_WEIGHT} · NO SAFE ANSWERS
+          </p>
+        )}
         <p className={`font-display text-[11px] ${suitColor}`}>
           <span aria-hidden="true">{suit.symbol} </span>
           {suit.name}
@@ -125,13 +145,15 @@ function Dilemma({ card, pickedId, onPick, onNext }: DilemmaProps) {
       </div>
 
       <fieldset className="flex-1">
-        <legend className="sr-only">Choose an answer (A, B or C)</legend>
-        <div className="grid h-full gap-5 md:grid-cols-3">
-          {card.options.map((option, i) => {
+        <legend className="sr-only">
+          Choose an answer ({LETTERS.slice(0, answers.length).join(', ')})
+        </legend>
+        <div className={`grid h-full gap-5 ${chaos ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
+          {answers.map((option, i) => {
             const letter = LETTERS[i]
             const isPicked = option.id === pickedId
             const look = !locked
-              ? 'hover:-translate-y-3 hover:pixel-border-gold focus-visible:-translate-y-3 focus-visible:pixel-border-gold'
+              ? `hover:-translate-y-3 hover:pixel-border-gold focus-visible:-translate-y-3 focus-visible:pixel-border-gold ${chaos ? 'bg-jester-900 pixel-border-chaos' : ''}`
               : isPicked
                 ? '-translate-y-4 bg-jester-900 pixel-border-gold'
                 : 'translate-y-1 rotate-2 opacity-30'
@@ -142,7 +164,7 @@ function Dilemma({ card, pickedId, onPick, onNext }: DilemmaProps) {
                 onClick={() => choose(option)}
                 disabled={locked}
                 aria-pressed={isPicked}
-                className={`relative flex min-h-32 animate-deal items-center justify-center bg-night px-5 py-10 text-lg leading-snug pixel-border transition-transform duration-150 ease-[steps(3)] focus-visible:outline-none md:min-h-60 ${look}`}
+                className={`relative flex min-h-32 animate-deal items-center justify-center bg-night px-5 py-10 text-lg leading-snug pixel-border transition-transform duration-150 ease-[steps(3)] focus-visible:outline-none ${chaos ? 'md:min-h-40' : 'md:min-h-60'} ${look}`}
                 style={{ animationDelay: `${i * 120}ms` }}
               >
                 <span className={`absolute top-3 left-3 font-display text-sm ${suitColor}`}>

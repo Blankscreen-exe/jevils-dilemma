@@ -38,6 +38,21 @@ describe('alignmentOf', () => {
     expect(alignmentOf([...leaning, ...neutral]).ethic).toBe(ethic)
   })
 
+  it('counts a weighted pick that many times', () => {
+    // Nine neutral picks and one chaotic pick worth 3: 3 / 12 = 0.25 (still neutral).
+    const picks = [...repeat(pick(0, 0), 9), { ...pick(1, 1), weight: 3 }]
+
+    expect(alignmentOf(picks)).toMatchObject({ chaos: 0.25, good: 0.25, ethic: 'neutral' })
+  })
+
+  it('lets a weighted pick tip a borderline run over the line', () => {
+    // Net +3 over nine picks is neutral (3/9 = 0.33); a CHAOS +1 worth 3 makes it 6/12 = 0.5.
+    const borderline = [...repeat(pick(1, 0), 3), ...repeat(pick(0, 0), 6)]
+
+    expect(alignmentOf(borderline).ethic).toBe('neutral')
+    expect(alignmentOf([...borderline, { ...pick(1, 0), weight: 3 }]).ethic).toBe('chaotic')
+  })
+
   it('treats an empty run as true neutral', () => {
     expect(alignmentOf([])).toEqual({ ethic: 'neutral', moral: 'neutral', chaos: 0, good: 0 })
   })

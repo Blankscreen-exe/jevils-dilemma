@@ -4,7 +4,7 @@ import { Jester } from '../components/Jester'
 import { PixelButton } from '../components/PixelButton'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { SUIT_COPY, alignmentCopy } from '../game/copy'
-import { SUITS, type Card } from '../game/deck'
+import { CHAOS_WEIGHT, SUITS, type Card } from '../game/deck'
 import { readingOf } from '../game/reading'
 import type { Answer } from '../game/state'
 import { summarize, type ResolvedPick } from '../game/summary'
@@ -73,6 +73,11 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
               >
                 {reading.suitLine.text}
               </p>
+              {reading.chaosLine && (
+                <p className="mt-1 font-display text-[11px] leading-relaxed text-chaos">
+                  {reading.chaosLine}
+                </p>
+              )}
             </div>
           </div>
 
@@ -104,7 +109,7 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
           </div>
 
           <ol className="flex flex-col gap-2.5">
-            {summary.picks.map(({ card, option, answer }) => (
+            {summary.picks.map(({ card, option, answer, isChaos }) => (
               <li key={card.id} className="grid grid-cols-[26px_1fr] gap-2.5 leading-snug">
                 <span
                   aria-hidden="true"
@@ -117,7 +122,14 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
                     </span>
                     {card.prompt}
                   </p>
-                  <p>{option.text}</p>
+                  <p>
+                    {isChaos && (
+                      <span className="mr-2 font-display text-[9px] text-chaos">
+                        CHAOS ×{CHAOS_WEIGHT}
+                      </span>
+                    )}
+                    {option.text}
+                  </p>
                   {answer.reason && <p className="text-jester-500 italic">“{answer.reason}”</p>}
                 </div>
               </li>

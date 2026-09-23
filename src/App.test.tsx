@@ -16,7 +16,7 @@ async function playCard(user: ReturnType<typeof userEvent.setup>, reason = '') {
   if (!first) throw new Error('no choices on screen')
   await user.click(first)
   if (reason) await user.type(screen.getByLabelText(/why/i), reason)
-  await user.click(screen.getByRole('button', { name: /next/i }))
+  await user.click(screen.getByRole('button', { name: /^next/i }))
 }
 
 describe('App', () => {
@@ -42,6 +42,21 @@ describe('App', () => {
     expect(screen.getByRole('figure', { name: /alignment chart/i })).toBeInTheDocument()
     expect(screen.getByText('“no regrets”')).toBeInTheDocument()
     expect(loadSave().history).toHaveLength(1)
+  })
+
+  it('makes the last card the CHAOS card, with four drastic answers', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.click(screen.getByRole('button', { name: 'START' }))
+
+    expect(screen.queryByText(/chaos card/i)).not.toBeInTheDocument()
+    for (let i = 1; i < CARDS_PER_RUN; i++) await playCard(user)
+
+    expect(screen.getByText(/chaos card/i)).toBeInTheDocument()
+    expect(choices()).toHaveLength(4)
+
+    await user.keyboard('d')
+    expect(screen.getByRole('button', { pressed: true })).toHaveTextContent('D')
   })
 
   it('shows a reaction and asks why after a pick', async () => {

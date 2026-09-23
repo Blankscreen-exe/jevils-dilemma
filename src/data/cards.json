@@ -22,6 +22,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Tell your friend, then book couples therapy for all three of you",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Announce it at their next dinner party, with a slideshow",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Blackmail the partner into paying for your friend's gifts, forever",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Start dating the cheater yourself, just to wreck them from the inside",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -44,6 +70,32 @@
       {
         "id": "c",
         "text": "Lend it, then mention it in the family group chat",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Become their legal guardian and manage all their money",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Give them your entire savings and your car. Family is family",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Lend it at 40% interest, with a contract your lawyer drafted",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Say yes, then rob them back in disguise",
         "chaos": 1,
         "good": -1
       }
@@ -72,6 +124,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Go, and plan every minute of it on a laminated itinerary, just for them",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Cancel it and book a round-the-world trip for you both on your card",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Go, but make them sign an agreement that you pick every holiday from now on",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Let them go alone, and move house while they are away",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -97,6 +175,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Enrol them in a cooking course and attend every lesson with them",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Break into their kitchen the night before and cook the whole meal yourself",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Report their kitchen to the health inspector, for their own good",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Fake severe food poisoning at the table and call an ambulance",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -119,6 +223,32 @@
       {
         "id": "c",
         "text": "Say yes, then come down with something mysterious on the day",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Organise the whole reunion yourself, with name tags and a timetable",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Turn up with a long-lost relative you tracked down online",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Go, and formally present a list of everyone's past mistakes",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Go, and loudly reveal every family secret you know",
         "chaos": 1,
         "good": -1
       }
@@ -147,6 +277,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Go, and give a heartfelt speech wishing everyone well, your ex included",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Go, and help your ex win back the one who got away, mid-ceremony",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Agree, then invoice them for your time, outfit and emotional labour",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Go, and object when the officiant asks if anyone objects",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -172,6 +328,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Hand it in, then report yourself to the police for touching it",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Find the owner, and anonymously pay off all their debts too",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Return it, then sue the owner for your emotional distress",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Burn the ID and spend the cash on fireworks tonight",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -194,6 +376,32 @@
       {
         "id": "c",
         "text": "Decline, then pitch their idea to investors yourself",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Invest everything, and personally audit their books every week",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Quit your job to become their co-founder, unpaid",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Invest, then buy enough shares to fire them from their own company",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Decline, and open a rival company across the street",
         "chaos": 1,
         "good": -1
       }
@@ -222,6 +430,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Accept, and pay your teammate's salary out of your own raise",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Decline, then organise a walkout until nobody gets fired",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Accept, and let go of everyone who ever annoyed you while you are at it",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Accept, then let go of your boss's favourite instead",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -247,6 +481,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Return the money, with a written report on how to fix the machine",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Keep withdrawing all night and hand the cash out to strangers",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Report it, and demand a reward for your honesty",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Tell the whole internet where the broken machine is",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -269,6 +529,32 @@
       {
         "id": "c",
         "text": "Buy the building your old boss works in, and raise the rent",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Give it all to a carefully chosen charity, with a five-year plan",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Throw it off a rooftop in small bills",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Buy your town council and pass laws in your own favour",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Buy the lottery company and rig every future draw",
         "chaos": 1,
         "good": -1
       }
@@ -297,6 +583,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Shave it, and donate your hair to make wigs for children",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Shave it, then shave theirs too, for free",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Only if they sign a contract to shave theirs every day for a year",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Take the money, refuse, and run",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -322,6 +634,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Return it, then volunteer for the council's animal patrol every weekend",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Adopt it, and every other stray in the neighbourhood",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Return it, and bill the owner for boarding, plus a late fee",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Keep it, and train it to steal from the neighbours",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -344,6 +682,32 @@
       {
         "id": "c",
         "text": "Start narrating their call to the whole carriage",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Pay for their upgrade to first class so everyone gets some peace",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Start a carriage-wide singalong to drown them out",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Record them and file a formal complaint with the rail company",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Pull the emergency brake",
         "chaos": 1,
         "good": -1
       }
@@ -372,6 +736,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Help out, then pass the hat round the crowd for them",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Grab the mic and get the whole crowd to join the act",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Help out, then demand to see their permit and have them fined",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Steal the show, and the tip jar",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -397,6 +787,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Trim it yourself and pay for a new fence for you both",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Plant a vine that joins both gardens into one",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Take them to court over the 3 cm",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Set the hedge on fire",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -419,6 +835,32 @@
       {
         "id": "c",
         "text": "Join in, and quietly rig it so you win",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Play by the rules, then write a better rulebook for next time",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Invent a new game on the spot that everyone joins",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Play, and appoint yourself referee with the power to disqualify anyone",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Flip the table and declare yourself the winner",
         "chaos": 1,
         "good": -1
       }
@@ -447,6 +889,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Hand it in, with a proposal for quieter alarms nationwide",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Press it every night so the whole city finally sleeps",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Sell it to the government, and charge them per press",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Sell it to car thieves",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -472,6 +940,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Open the doors to everyone, and draw up a strict rota for all survivors",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Leave the bunker to the survivors and go out fighting zombies alone",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Only let in people who sign their property over to you",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Let the zombies in, just to see what happens",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -494,6 +988,32 @@
       {
         "id": "c",
         "text": "Settle every grudge you have ever had",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Write a constitution and hand power to the people at midnight",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Abolish all taxes and throw a festival for the whole country",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Pass a law making yourself ruler forever",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Declare war on a neighbouring country, for fun",
         "chaos": 1,
         "good": -1
       }
@@ -522,6 +1042,32 @@
         "chaos": 1,
         "good": 0
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Give up your own seat, and leave detailed survival instructions",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Jump into the sea and tow the boat yourself",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Hold a formal vote, then enforce the result on the loser",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Tip the boat over and make everyone swim",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -547,6 +1093,32 @@
         "chaos": 1,
         "good": 1
       }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Read only criminals' minds and report every plan to the police",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Reveal everyone's secret crushes to help them get together",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Read your managers' minds and take over the company by the book",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Read everyone's secrets, then post them all online",
+        "chaos": 1,
+        "good": -1
+      }
     ]
   },
   {
@@ -569,6 +1141,32 @@
       {
         "id": "c",
         "text": "Accept, then plot to take over their empire",
+        "chaos": 1,
+        "good": -1
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Accept, then report their every move to the authorities as a double agent",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Accept, and give their doomsday budget to charity",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Accept, and become their most loyal, efficient henchperson",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Accept, and end the world before they get the chance",
         "chaos": 1,
         "good": -1
       }
@@ -596,6 +1194,32 @@
         "text": "Walk through it in your pajamas",
         "chaos": 1,
         "good": 0
+      }
+    ],
+    "chaosOptions": [
+      {
+        "id": "w",
+        "text": "Report it, and volunteer to be the first one sent through, for science",
+        "chaos": -1,
+        "good": 1
+      },
+      {
+        "id": "x",
+        "text": "Invite the whole street through for a party on the other side",
+        "chaos": 1,
+        "good": 1
+      },
+      {
+        "id": "y",
+        "text": "Seal it, and charge the government rent to study it",
+        "chaos": -1,
+        "good": -1
+      },
+      {
+        "id": "z",
+        "text": "Push your worst enemy through and seal it behind them",
+        "chaos": 1,
+        "good": -1
       }
     ]
   }

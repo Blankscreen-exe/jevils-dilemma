@@ -22,7 +22,8 @@ export function deal<T>(items: readonly T[], count: number, random: Random = Mat
 
 /**
  * Deals a run: at least MIN_PER_SUIT cards from every suit, the rest from anywhere, in
- * random order. Each card's answers are shuffled too, so position never hints at a score.
+ * random order. Every answer list is shuffled too, so position never hints at a score.
+ * The last card becomes the CHAOS card (see `isChaosCard`).
  */
 export function dealRun(
   deck: readonly Card[],
@@ -39,20 +40,28 @@ export function dealRun(
   const rest = deck.filter((card) => !guaranteed.includes(card))
   const hand = [...guaranteed, ...deal(rest, count - guaranteed.length, random)]
 
-  return shuffle(hand, random).map((card) => withOptionOrder(card, shuffle(card.options, random)))
+  return shuffle(hand, random).map((card) => ({
+    ...card,
+    options: shuffle(card.options, random) as Card['options'],
+    chaosOptions: shuffle(card.chaosOptions, random) as Card['chaosOptions'],
+  }))
 }
 
-/** A copy of the card with its answers in the given order. */
-function withOptionOrder(card: Card, options: Card['options'][number][]): Card {
-  const [first, second, third] = options
-  if (!first || !second || !third) throw new Error(`Card "${card.id}" must have three options`)
-  return { ...card, options: [first, second, third] }
+/** The answers rearranged to match `order` (a list of ids), or null if they don't match. */
+function permute<T extends { id: string }>(answers: readonly T[], order: readonly string[]) {
+  if (order.length !== answers.length || new Set(order).size !== order.length) return null
+  const result = order.map((id) => answers.find((answer) => answer.id === id))
+  return result.every((answer): answer is T => answer !== undefined) ? result : null
 }
 
-/** Reorders a card's answers to match saved option ids; null if they don't match the card. */
-export function reorderOptions(card: Card, order: readonly string[]): Card | null {
-  const options = order.map((id) => card.options.find((option) => option.id === id))
-  if (options.length !== card.options.length || options.some((o) => o === undefined)) return null
-  if (new Set(order).size !== order.length) return null
-  return withOptionOrder(card, options as Card['options'][number][])
+/**
+ * Restores a saved answer order. `order` holds the ids of the answers that were on screen:
+ * either the three normal answers or the four CHAOS answers. Null if it matches neither.
+ */
+export function reorderAnswers(card: Card, order: readonly string[]): Card | null {
+  const options = permute(card.options, order)
+  if (options) return { ...card, options: options as Card['options'] }
+  const chaosOptions = permute(card.chaosOptions, order)
+  if (chaosOptions) return { ...card, chaosOptions: chaosOptions as Card['chaosOptions'] }
+  return null
 }

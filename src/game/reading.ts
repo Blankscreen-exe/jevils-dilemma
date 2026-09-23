@@ -1,5 +1,13 @@
 import { tierOf, type Alignment, type Tier } from './alignment'
-import { LEANING_WORDS, STEADY_SUIT_LINE, SUIT_CONTEXT, SUIT_COPY, alignmentCopy } from './copy'
+import {
+  CHAOS_HELD_LINE,
+  LEANING_WORDS,
+  STEADY_SUIT_LINE,
+  SUIT_CONTEXT,
+  SUIT_COPY,
+  alignmentCopy,
+  chaosDraggedLine,
+} from './copy'
 import { SUITS, type Suit } from './deck'
 import type { RunSummary } from './summary'
 
@@ -18,6 +26,8 @@ export interface Reading {
   title: string
   verdict: string
   suitLine: SuitLine
+  /** What the CHAOS card did to the result; null when there was no CHAOS pick. */
+  chaosLine: string | null
 }
 
 /** Small stable string hash (djb2), so the same run always gets the same verdict line. */
@@ -56,6 +66,16 @@ export function suitLineOf(bySuit: Record<Suit, Alignment | null>): SuitLine {
   }
 }
 
+/** Whether the CHAOS pick moved the result into a different cell of the chart. */
+function chaosLineOf({ chaosPick, alignment, alignmentBeforeChaos }: RunSummary): string | null {
+  if (!chaosPick) return null
+  const moved =
+    alignment.ethic !== alignmentBeforeChaos.ethic || alignment.moral !== alignmentBeforeChaos.moral
+  return moved
+    ? chaosDraggedLine(alignmentCopy(alignment.moral, alignment.ethic).label)
+    : CHAOS_HELD_LINE
+}
+
 /** Everything Jevil says about a finished run. */
 export function readingOf(summary: RunSummary): Reading {
   const { alignment } = summary
@@ -69,5 +89,6 @@ export function readingOf(summary: RunSummary): Reading {
     title: copy.titles[tier],
     verdict: copy.verdicts[hash(runKey) % copy.verdicts.length] ?? copy.verdicts[0] ?? '',
     suitLine: suitLineOf(summary.bySuit),
+    chaosLine: chaosLineOf(summary),
   }
 }

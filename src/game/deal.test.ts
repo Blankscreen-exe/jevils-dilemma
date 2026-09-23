@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { makeCard } from '../test/fixtures'
-import { deal, dealRun, reorderOptions, shuffle } from './deal'
+import { deal, dealRun, reorderAnswers, shuffle } from './deal'
 import { CARDS_PER_RUN, MIN_PER_SUIT, SUITS } from './deck'
 
 const items = ['a', 'b', 'c', 'd', 'e']
@@ -63,6 +63,17 @@ describe('dealRun', () => {
     )
   })
 
+  it('shuffles the CHAOS answers too', () => {
+    const firstChaos = new Set(
+      Array.from(
+        { length: 20 },
+        (_, seed) => dealRun(deck, seeded(seed)).at(-1)?.chaosOptions[0]?.id,
+      ),
+    )
+
+    expect(firstChaos).toEqual(new Set(['w', 'x', 'y', 'z']))
+  })
+
   it('shuffles the answers so position does not give scores away', () => {
     const orders = new Set(
       Array.from({ length: 20 }, (_, seed) =>
@@ -80,18 +91,26 @@ describe('dealRun', () => {
   })
 })
 
-describe('reorderOptions', () => {
+describe('reorderAnswers', () => {
   const card = makeCard('one')
 
-  it('puts the answers in the given order', () => {
-    expect(reorderOptions(card, ['c', 'a', 'b'])?.options.map((o) => o.id)).toEqual(['c', 'a', 'b'])
+  it('puts the normal answers in the given order', () => {
+    expect(reorderAnswers(card, ['c', 'a', 'b'])?.options.map((o) => o.id)).toEqual(['c', 'a', 'b'])
+  })
+
+  it('puts the CHAOS answers in the given order', () => {
+    const reordered = reorderAnswers(card, ['z', 'x', 'w', 'y'])
+
+    expect(reordered?.chaosOptions.map((o) => o.id)).toEqual(['z', 'x', 'w', 'y'])
+    expect(reordered?.options).toEqual(card.options)
   })
 
   it.each([
     ['too few ids', ['a', 'b']],
     ['a repeated id', ['a', 'a', 'b']],
     ['an unknown id', ['a', 'b', 'x']],
+    ['a mix of normal and CHAOS ids', ['a', 'b', 'c', 'w']],
   ])('returns null for %s', (_, order) => {
-    expect(reorderOptions(card, order)).toBeNull()
+    expect(reorderAnswers(card, order)).toBeNull()
   })
 })

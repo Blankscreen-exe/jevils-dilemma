@@ -15,10 +15,14 @@ export interface Alignment {
 /** Values beyond ±1/3 leave the neutral band. */
 const NEUTRAL_BAND = 1 / 3
 
-function average(picks: readonly CardOption[], axis: 'chaos' | 'good'): number {
-  if (picks.length === 0) return 0
-  const total = picks.reduce((sum, pick) => sum + pick[axis], 0)
-  return total / (picks.length * SCORE_LIMIT)
+/** A pick's scores, counted `weight` times (default 1; the CHAOS card counts more). */
+export type WeightedPick = Pick<CardOption, 'chaos' | 'good'> & { weight?: number }
+
+function average(picks: readonly WeightedPick[], axis: 'chaos' | 'good'): number {
+  const totalWeight = picks.reduce((sum, pick) => sum + (pick.weight ?? 1), 0)
+  if (totalWeight === 0) return 0
+  const total = picks.reduce((sum, pick) => sum + pick[axis] * (pick.weight ?? 1), 0)
+  return total / (totalWeight * SCORE_LIMIT)
 }
 
 function band(value: number): -1 | 0 | 1 {
@@ -27,8 +31,8 @@ function band(value: number): -1 | 0 | 1 {
   return 0
 }
 
-/** Places a set of picks on the 3×3 alignment chart. */
-export function alignmentOf(picks: readonly CardOption[]): Alignment {
+/** Places a set of picks on the 3×3 alignment chart, using a weighted average per axis. */
+export function alignmentOf(picks: readonly WeightedPick[]): Alignment {
   const chaos = average(picks, 'chaos')
   const good = average(picks, 'good')
   const ethics = { [-1]: 'lawful', 0: 'neutral', 1: 'chaotic' } as const
