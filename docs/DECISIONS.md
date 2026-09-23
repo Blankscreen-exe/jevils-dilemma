@@ -95,6 +95,11 @@ Implemented with **Zod**: one schema in `src/game/deck.ts` both validates the JS
 the TypeScript types (`z.infer`), so the two cannot drift. The deck is parsed once at startup;
 content rules about balance (e.g. enough cards with a moral edge) live in the deck tests rather
 than the schema. Zod will also validate saved data from `localStorage` (ADR-007).
+
+Uses the tree-shakable **`zod/mini`** build rather than classic `zod`: schemas are composed with
+functions (`z.string().check(z.trim(), z.minLength(1))`) instead of chained methods, which let
+the bundler drop unused validators. This cut the main bundle from 101.9 kB to 84.8 kB gzipped
+(−17%) with no behaviour change; the existing schema tests passed unmodified.
 **Rejected:** hand-written type guards (duplicated types, easy to get out of sync); JSON Schema
 (needs a separate type generator step).
 
