@@ -10,6 +10,7 @@
     "react/react-in-jsx-scope": "off",
     "react/exhaustive-deps": "warn",
     "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }],
     "no-console": "warn"
   },
   "ignorePatterns": ["dist", "dev-dist", "coverage"]
