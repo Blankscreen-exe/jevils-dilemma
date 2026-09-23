@@ -2,7 +2,7 @@
 
 # Jevil's Dilemma
 
-A pixel-art take on the *Dilemma* party card game, hosted by Jevil from Deltarune.
+A pixel-art take on the _Dilemma_ party card game, hosted by Jevil from Deltarune.
 
 Each card puts you in an awkward situation with two choices. There are no right answers, but
 Jevil is keeping track: every pick nudges you along an **Order ↔ Chaos** meter, and at the end
@@ -22,14 +22,14 @@ he gives you his reading of who you really are. Save the result as an image and 
 
 ## Tech stack
 
-| | |
-|---|---|
-| UI | React, TypeScript |
-| Build | Vite |
-| Styling | Tailwind CSS v4 with a custom pixel-art theme |
-| Offline / install | `vite-plugin-pwa` (Workbox) |
-| Persistence | `localStorage` (versioned, validated on load) |
-| Testing | Vitest, React Testing Library |
+|                   |                                               |
+| ----------------- | --------------------------------------------- |
+| UI                | React, TypeScript                             |
+| Build             | Vite                                          |
+| Styling           | Tailwind CSS v4 with a custom pixel-art theme |
+| Offline / install | `vite-plugin-pwa` (Workbox)                   |
+| Persistence       | `localStorage` (versioned, validated on load) |
+| Testing           | Vitest, React Testing Library                 |
 
 The reasoning behind each choice is recorded in [docs/DECISIONS.md](docs/DECISIONS.md).
 Game design and future ideas are in [docs/GAME_DESIGN.md](docs/GAME_DESIGN.md).
@@ -47,5 +47,5 @@ UI mockups: [Figma](https://www.figma.com/file/SH41uZRXfEhQfxOGUbACUS/Untitled?t
 ## Disclaimer
 
 This is a non-commercial fan project. Jevil and Deltarune are created by and belong to
-Toby Fox. *Dilemma* is a separate commercial card game; the cards in this project are
+Toby Fox. _Dilemma_ is a separate commercial card game; the cards in this project are
 original wording. All artwork in this repository is original.
