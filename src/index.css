@@ -129,6 +129,32 @@
     background-repeat: no-repeat, repeat, repeat, repeat, repeat;
   }
 
+  /*
+   * Pixel scrollbars everywhere: a square gold thumb on a dark track. Chromium and Safari
+   * use the ::-webkit-scrollbar parts (which allow square shapes). Firefox only supports
+   * colours, so it gets scrollbar-color, which Chromium would otherwise prefer over the parts.
+   */
+  ::-webkit-scrollbar {
+    width: calc(var(--pixel) * 3);
+    height: calc(var(--pixel) * 3);
+  }
+  ::-webkit-scrollbar-track,
+  ::-webkit-scrollbar-corner {
+    background: var(--color-night);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-jester-500);
+    border: var(--pixel) solid var(--color-night);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-gold);
+  }
+  @supports not selector(::-webkit-scrollbar) {
+    * {
+      scrollbar-color: var(--color-jester-500) var(--color-night);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

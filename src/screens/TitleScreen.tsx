@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { AboutDialog } from '../components/AboutDialog'
+import { HowToPlayDialog } from '../components/HowToPlayDialog'
 import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
 import { SpeechBubble } from '../components/SpeechBubble'
 import { titleGreeting } from '../game/copy'
-import { CARDS_PER_RUN } from '../game/deck'
 import { TITLE_EXPRESSION } from '../game/expressions'
 import { pokeReaction } from '../game/poke'
 import type { DeckState } from '../hooks/useDeck'
@@ -28,8 +28,8 @@ export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleS
   const reaction = pokes > 0 ? pokeReaction(pokes) : { line: greeting, face: TITLE_EXPRESSION }
 
   return (
-    <main className="flex min-h-dvh flex-col items-center justify-center gap-7 p-6 text-center">
-      <div className="flex flex-col items-center gap-4">
+    <main className="flex min-h-dvh flex-col items-center justify-center gap-4 p-4 text-center sm:gap-7 sm:p-6">
+      <div className="flex flex-col items-center gap-3 sm:gap-4">
         {/* Fixed size so the layout does not jump as lines change length. */}
         <SpeechBubble
           tail="down"
@@ -52,23 +52,24 @@ export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleS
             key={pokes}
             expression={reaction.face}
             scale={4}
-            className={pokes > 0 ? 'animate-shake' : ''}
+            // Shrinks on shorter screens so the whole menu fits without scrolling.
+            className={`[@media(700px<height<=860px)]:[--face-scale:3] [@media(max-height:700px)]:[--face-scale:2] ${pokes > 0 ? 'animate-shake' : ''}`}
           />
         </div>
       </div>
-      <h1 className="font-display text-3xl leading-normal text-gold uppercase text-shadow-[4px_4px_0_var(--color-jester-700)] sm:text-4xl">
+      <h1 className="font-display text-2xl leading-normal text-gold uppercase text-shadow-[4px_4px_0_var(--color-jester-700)] min-[400px]:text-3xl sm:text-4xl">
         Jevil&apos;s
         <br />
         Dilemma
       </h1>
-      <p className="text-xl text-jester-300">Choose. Explain. Be judged.</p>
+      <p className="text-lg text-jester-300 sm:text-xl">Choose. Explain. Be judged.</p>
 
-      <nav className="flex flex-col items-stretch gap-4" aria-label="Main menu">
+      <nav className="flex flex-col items-stretch gap-3 sm:gap-4" aria-label="Main menu">
         {canResume && <PixelButton onClick={onResume}>CONTINUE</PixelButton>}
         <PixelButton onClick={onStart} disabled={!ready}>
           {ready ? (canResume ? 'NEW GAME' : 'START') : 'SHUFFLING...'}
         </PixelButton>
-        <PixelButton onClick={() => setShowHelp((open) => !open)} aria-expanded={showHelp}>
+        <PixelButton onClick={() => setShowHelp(true)} aria-haspopup="dialog">
           HOW TO PLAY
         </PixelButton>
         <PixelButton onClick={() => setShowAbout(true)} aria-haspopup="dialog">
@@ -82,15 +83,7 @@ export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleS
         </p>
       )}
 
-      {showHelp && (
-        <p className="max-w-md text-lg leading-snug text-bone">
-          Jevil deals {CARDS_PER_RUN} dilemmas. Pick an answer, and tell him why if you like. The
-          last one is the CHAOS card: every answer is drastic, and it counts extra. There are no
-          right answers, but he is keeping score: at the end he reveals where you stand on the
-          alignment chart.
-        </p>
-      )}
-
+      <HowToPlayDialog open={showHelp} onClose={() => setShowHelp(false)} />
       <AboutDialog open={showAbout} onClose={() => setShowAbout(false)} />
     </main>
   )

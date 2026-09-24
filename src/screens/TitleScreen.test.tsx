@@ -69,3 +69,18 @@ describe('TitleScreen about dialog', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })
+
+describe('TitleScreen how-to-play dialog', () => {
+  it('opens with the rules, and closes again', async () => {
+    const user = userEvent.setup()
+    renderTitle()
+
+    await user.click(screen.getByRole('button', { name: 'HOW TO PLAY' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'HOW TO PLAY' })
+    expect(dialog).toHaveTextContent(/CHAOS card/)
+
+    await user.click(within(dialog).getByRole('button', { name: 'CLOSE' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+  })
+})

@@ -23,10 +23,21 @@ const SOURCES: Record<Expression, string> = {
   flabbergasted,
 }
 
+/**
+ * The scale lives in the `--face-scale` custom property so a caller can change it per
+ * breakpoint with a class such as `max-sm:[--face-scale:1]`, without JS media queries.
+ */
+const SCALE_CLASS = {
+  1: '[--face-scale:1]',
+  2: '[--face-scale:2]',
+  3: '[--face-scale:3]',
+  4: '[--face-scale:4]',
+} as const
+
 interface JevilFaceProps {
   expression: Expression
-  /** Whole-number scale of the 55 × 56 sprite. */
-  scale: 1 | 2 | 3 | 4
+  /** Whole-number scale of the 55 × 56 sprite; responsive overrides go in `className`. */
+  scale: keyof typeof SCALE_CLASS
   className?: string
 }
 
@@ -40,7 +51,11 @@ export function JevilFace({ expression, scale, className }: JevilFaceProps) {
       aria-hidden="true"
       draggable={false}
       data-expression={expression}
-      className={`shrink-0 pixelated ${className ?? ''}`}
+      className={`shrink-0 pixelated ${SCALE_CLASS[scale]} ${className ?? ''}`}
+      style={{
+        width: `calc(var(--face-scale) * ${FACE_WIDTH}px)`,
+        height: `calc(var(--face-scale) * ${FACE_HEIGHT}px)`,
+      }}
     />
   )
 }
