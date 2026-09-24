@@ -34,8 +34,10 @@ export function CardScreen({ state, onPick, onNext, onQuit }: CardScreenProps) {
   const chaos = isChaosCard(state.index, state.cards.length)
 
   return (
-    <main className="mx-auto flex min-h-dvh max-w-4xl flex-col gap-5 p-6">
-      <header className="flex items-center justify-between font-display text-[11px] text-jester-300">
+    // A fixed, screen-high frame: only the answer cards scroll, so the prompt and the
+    // "why?" box stay in view. Below min-h-120 (phones in landscape) the page scrolls instead.
+    <main className="mx-auto flex h-dvh min-h-120 max-w-4xl flex-col gap-3 p-4 sm:gap-5 sm:p-6">
+      <header className="flex shrink-0 items-center justify-between font-display text-[11px] text-jester-300">
         <span>
           CARD {state.index + 1}/{state.cards.length}
         </span>
@@ -136,17 +138,17 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
 
   return (
     <>
-      <div className="flex items-end gap-4">
+      <div className="flex shrink-0 items-end gap-4">
         <JevilFace
           key={reaction.face}
           expression={reaction.face}
           scale={2}
-          className={reaction.shake ? 'animate-shake' : ''}
+          className={`max-sm:[--face-scale:1] ${reaction.shake ? 'animate-shake' : ''}`}
         />
         <SpeechBubble>{reaction.line}</SpeechBubble>
       </div>
 
-      <div className="flex flex-col items-center gap-2 px-3 text-center">
+      <div className="flex shrink-0 flex-col items-center gap-2 px-3 text-center">
         {chaos && (
           <p className="animate-shake bg-chaos px-3 py-1.5 font-display text-xs text-void pixel-border pixel-border-gold">
             CHAOS CARD · NO SAFE ANSWERS!
@@ -156,21 +158,28 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
           <SuitIcon suit={card.suit} />
           {suit.name}
         </p>
-        <h2 className="text-2xl leading-snug">{card.prompt}</h2>
+        <h2 className="text-xl leading-snug sm:text-2xl">{card.prompt}</h2>
       </div>
 
-      <fieldset className="flex-1">
+      <fieldset className="flex min-h-0 flex-1 flex-col">
         <legend className="sr-only">
           Choose an answer ({LETTERS.slice(0, answers.length).join(', ')})
         </legend>
-        <div className={`grid h-full gap-5 ${chaos ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}>
+        {/*
+          The scroll area. Its padding (offset by negative margins) leaves room for the
+          box-shadow pixel borders and the lifted, tilted cards, which overflow would clip. Cards
+          lift less on phones, where there is no room above them.
+        */}
+        <div
+          className={`-mx-3 -mt-2 grid min-h-0 flex-1 gap-3 overflow-x-hidden overflow-y-auto overscroll-contain px-3 pt-2 pb-4 sm:-mt-5 sm:gap-5 sm:pt-5 ${chaos ? 'md:grid-cols-2' : 'md:grid-cols-3'}`}
+        >
           {answers.map((option, i) => {
             const letter = LETTERS[i]
             const isPicked = option.id === pickedId
             const look = !locked
-              ? `hover:-translate-y-3 hover:pixel-border-gold focus-visible:-translate-y-3 focus-visible:pixel-border-gold ${chaos ? 'bg-jester-900 pixel-border-chaos' : ''}`
+              ? `hover:-translate-y-1 hover:pixel-border-gold focus-visible:-translate-y-1 focus-visible:pixel-border-gold sm:hover:-translate-y-3 sm:focus-visible:-translate-y-3 ${chaos ? 'bg-jester-900 pixel-border-chaos' : ''}`
               : isPicked
-                ? '-translate-y-4 bg-jester-900 pixel-border-gold'
+                ? '-translate-y-1 bg-jester-900 pixel-border-gold sm:-translate-y-4'
                 : 'translate-y-1 rotate-2 opacity-30'
             return (
               <button
@@ -179,11 +188,11 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
                 onClick={() => choose(option)}
                 disabled={locked}
                 aria-pressed={isPicked}
-                className={`relative flex min-h-32 animate-deal items-center justify-center bg-night px-5 py-10 text-lg leading-snug pixel-border transition-transform duration-150 ease-[steps(3)] focus-visible:outline-none ${chaos ? 'md:min-h-40' : 'md:min-h-60'} ${look}`}
+                className={`relative flex min-h-20 animate-deal items-center justify-center bg-night px-5 py-8 text-base leading-snug pixel-border transition-transform duration-150 ease-[steps(3)] focus-visible:outline-none sm:min-h-32 sm:py-10 sm:text-lg ${chaos ? 'md:min-h-40' : 'md:min-h-60'} ${look}`}
                 style={{ animationDelay: `${i * 120}ms` }}
               >
                 <span
-                  className={`absolute top-3 left-3 flex items-center gap-1.5 font-display text-sm ${suitColor}`}
+                  className={`absolute top-2 left-2 flex items-center gap-1.5 font-display text-xs sm:top-3 sm:left-3 sm:text-sm ${suitColor}`}
                 >
                   {letter}
                   <SuitIcon suit={card.suit} />
@@ -191,7 +200,7 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
                 <span>{option.text}</span>
                 <span
                   aria-hidden="true"
-                  className={`absolute right-3 bottom-3 flex rotate-180 items-center gap-1.5 font-display text-sm ${suitColor}`}
+                  className={`absolute right-2 bottom-2 flex rotate-180 items-center gap-1.5 font-display text-xs sm:right-3 sm:bottom-3 sm:text-sm ${suitColor}`}
                 >
                   {letter}
                   <SuitIcon suit={card.suit} />
@@ -203,7 +212,7 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
       </fieldset>
 
       {locked && (
-        <form onSubmit={submit} className="flex flex-col gap-2.5">
+        <form onSubmit={submit} className="flex shrink-0 flex-col gap-2.5">
           <label htmlFor="reason" className="font-display text-[11px] text-jester-300">
             WHY? (OPTIONAL)
           </label>

@@ -198,3 +198,20 @@ Jevil and Deltarune belong to Toby Fox. This is a non-commercial fan project: us
 pixel art inspired by** the character, no ripped sprites/music, and a clear fan-project
 disclaimer in the README. Card text should be our own wording rather than a verbatim copy of
 the commercial deck.
+
+## ADR-014 — Phone layout: fixed-height play screen
+
+**Status:** Accepted
+
+The title and card screens must fit a phone screen (down to 360 × 640) without page scrolling.
+The card screen is a `100dvh` flex column: header, Jevil, prompt and the "why?" box keep their
+size, and only the answer list scrolls. Sprites shrink by whole-number steps (a
+`--face-scale` custom property set per breakpoint or screen height), so pixel art stays crisp.
+HOW TO PLAY opens in a dialog like ABOUT instead of expanding the menu. The viewport uses
+`interactive-widget=resizes-content` so the on-screen keyboard shrinks the layout instead of
+covering the "why?" box. Below 480px of height (phones in landscape) the page scrolls as a
+fallback. Scrollbars are styled to the pixel theme. The results screen stays a scrolling page.
+
+**Rejected:** scaling the whole screen to fit with a transform or `vw`/`vh` font sizes (blurs
+the pixel grid and makes text unreadably small); a carousel of answers (hides options and adds
+swipe logic for no gain over a short scrolling list).
