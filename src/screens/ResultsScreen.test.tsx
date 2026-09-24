@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { ALIGNMENT_COPY } from '../game/copy'
 import type { Answer } from '../game/state'
 import { downloadFile, renderToPng } from '../image/resultImage'
 import { makeCard } from '../test/fixtures'
@@ -24,6 +25,16 @@ const renderResults = () =>
 beforeEach(() => {
   vi.clearAllMocks()
   vi.mocked(renderToPng).mockResolvedValue(new Blob(['png'], { type: 'image/png' }))
+})
+
+describe('ResultsScreen reading', () => {
+  it("puts Jevil's verdict in his speech bubble", () => {
+    renderResults()
+
+    const verdict = ALIGNMENT_COPY['good-chaotic'].verdicts.find((line) => screen.queryByText(line))
+    expect(verdict).toBeDefined()
+    expect(screen.getByText(verdict!).closest('[aria-live]')).not.toBeNull()
+  })
 })
 
 describe('ResultsScreen save image', () => {

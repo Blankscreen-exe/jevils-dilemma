@@ -193,6 +193,22 @@ export const SUIT_CONTEXT: Record<Suit, string> = {
 
 export const STEADY_SUIT_LINE = 'Steady in every suit. How dull!'
 
+/** Jevil's greeting on the title screen; one is picked at random each visit. */
+export const TITLE_GREETINGS: readonly string[] = [
+  'UEE HEE! A NEW PLAYMATE!',
+  'WELCOME, WELCOME, LITTLE PLAYER!',
+  'SHALL WE PLAY A GAME? THE CARDS ARE WAITING!',
+  'TEN CARDS. ONE TRUE SELF. UEE HEE!',
+  'COME CLOSER. I DO NOT BITE... MUCH.',
+  'THE CAROUSEL SPINS FOR THEE!',
+  'EVERY CHOICE TELLS ME A SECRET!',
+  'NO RIGHT ANSWERS. ONLY DELICIOUS ONES!',
+]
+
+export function titleGreeting(random: () => number = Math.random): string {
+  return TITLE_GREETINGS[Math.floor(random() * TITLE_GREETINGS.length)] ?? TITLE_GREETINGS[0] ?? ''
+}
+
 /** Shown when the CHAOS card is dealt, before the player picks. */
 export const CHAOS_INTRO_LINE = 'CHAOS, CHAOS! NO SAFE CHOICES NOW!'
 

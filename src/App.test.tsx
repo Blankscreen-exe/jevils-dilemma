@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import App from './App'
+import { TITLE_GREETINGS } from './game/copy'
 import { CARDS_PER_RUN } from './game/deck'
 import { SAVE_KEY, loadSave } from './game/save'
 
@@ -26,6 +27,13 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: /jevil's\s*dilemma/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'CONTINUE' })).not.toBeInTheDocument()
+  })
+
+  it("greets the player with one of Jevil's lines", () => {
+    render(<App />)
+
+    const shown = TITLE_GREETINGS.filter((line) => screen.queryByText(line))
+    expect(shown).toHaveLength(1)
   })
 
   it('plays a full run through to the reading', async () => {

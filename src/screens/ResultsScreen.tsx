@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { AlignmentChart } from '../components/AlignmentChart'
 import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
+import { SpeechBubble } from '../components/SpeechBubble'
 import { SuitIcon } from '../components/SuitIcon'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { SUIT_COPY, alignmentCopy } from '../game/copy'
@@ -63,27 +64,31 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
       {/* Padded wrapper so the box-shadow pixel border is inside the captured image. */}
       <div ref={captureRef} className="p-2">
         <section className="flex flex-col gap-5 bg-night p-6 pixel-border pixel-border-gold">
-          <div className="flex items-center gap-5">
-            <JevilFace expression={expressionForAlignment(summary.alignment)} scale={2} />
-            <div>
-              <h2 className="font-display text-base leading-normal text-gold sm:text-xl">
-                {reading.title}
-              </h2>
-              <p className="mt-1.5 text-lg text-jester-300">{reading.verdict}</p>
-              <p
-                className={`mt-1 text-lg ${reading.suitLine.suit ? SUIT_TEXT[reading.suitLine.suit] : 'text-jester-500'}`}
+          <div className="flex flex-col gap-4">
+            <h2 className="font-display text-base leading-normal text-gold sm:text-xl">
+              {reading.title}
+            </h2>
+            {/* Jevil delivers the verdict (and what the CHAOS card did) himself. */}
+            {/* Stacked on phones (bubble below, tail up); side by side from sm. */}
+            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-end">
+              <JevilFace expression={expressionForAlignment(summary.alignment)} scale={2} />
+              <SpeechBubble
+                tail="up-then-left"
+                wide
+                className="self-stretch sm:flex-1 sm:self-auto"
               >
-                {reading.suitLine.suit && (
-                  <SuitIcon suit={reading.suitLine.suit} className="mr-1.5" />
-                )}
-                {reading.suitLine.text}
-              </p>
-              {reading.chaosLine && (
-                <p className="mt-1 font-display text-[11px] leading-relaxed text-chaos">
-                  {reading.chaosLine}
-                </p>
-              )}
+                <p>{reading.verdict}</p>
+                {reading.chaosLine && <p className="mt-2 text-chaos">{reading.chaosLine}</p>}
+              </SpeechBubble>
             </div>
+            <p
+              className={`text-lg ${reading.suitLine.suit ? SUIT_TEXT[reading.suitLine.suit] : 'text-jester-500'}`}
+            >
+              {reading.suitLine.suit && (
+                <SuitIcon suit={reading.suitLine.suit} className="mr-1.5" />
+              )}
+              {reading.suitLine.text}
+            </p>
           </div>
 
           <div className="grid items-start gap-5 md:grid-cols-[300px_1fr]">

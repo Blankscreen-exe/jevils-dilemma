@@ -5,14 +5,7 @@ import { SpeechBubble } from '../components/SpeechBubble'
 import { SuitIcon } from '../components/SuitIcon'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { CHAOS_INTRO_LINE, SUIT_COPY, paceOf, reactionLine } from '../game/copy'
-import {
-  CHAOS_WEIGHT,
-  answersFor,
-  isChaosCard,
-  type Card,
-  type CardOption,
-  type OptionId,
-} from '../game/deck'
+import { answersFor, isChaosCard, type Card, type CardOption, type OptionId } from '../game/deck'
 import {
   CHAOS_EXPRESSION,
   IDLE_EXPRESSION,
@@ -150,13 +143,13 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
           scale={2}
           className={reaction.shake ? 'animate-shake' : ''}
         />
-        <SpeechBubble text={reaction.line} />
+        <SpeechBubble>{reaction.line}</SpeechBubble>
       </div>
 
       <div className="flex flex-col items-center gap-2 px-3 text-center">
         {chaos && (
           <p className="animate-shake bg-chaos px-3 py-1.5 font-display text-xs text-void pixel-border pixel-border-gold">
-            CHAOS CARD · COUNTS ×{CHAOS_WEIGHT} · NO SAFE ANSWERS
+            CHAOS CARD · NO SAFE ANSWERS!
           </p>
         )}
         <p className={`flex items-center gap-2 font-display text-[11px] ${suitColor}`}>

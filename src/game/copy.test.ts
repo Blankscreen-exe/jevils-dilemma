@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest'
-import { QUICK_MS, REACTION_LINES, SLOW_MS, alignmentCopy, paceOf, reactionLine } from './copy'
+import {
+  QUICK_MS,
+  REACTION_LINES,
+  SLOW_MS,
+  TITLE_GREETINGS,
+  alignmentCopy,
+  paceOf,
+  reactionLine,
+  titleGreeting,
+} from './copy'
 
 describe('alignmentCopy', () => {
   const cells = (['good', 'neutral', 'evil'] as const).flatMap((moral) =>
@@ -42,5 +51,16 @@ describe('reactionLine', () => {
   it('uses the random source to choose', () => {
     expect(reactionLine('steady', () => 0)).toBe(REACTION_LINES.steady[0])
     expect(reactionLine('steady', () => 0.999)).toBe(REACTION_LINES.steady.at(-1))
+  })
+})
+
+describe('titleGreeting', () => {
+  it('picks a greeting from the list', () => {
+    expect(TITLE_GREETINGS).toContain(titleGreeting())
+  })
+
+  it('uses the random source to choose', () => {
+    expect(titleGreeting(() => 0)).toBe(TITLE_GREETINGS[0])
+    expect(titleGreeting(() => 0.999)).toBe(TITLE_GREETINGS.at(-1))
   })
 })
