@@ -5,3 +5,18 @@ import { afterEach } from 'vitest'
 afterEach(() => {
   cleanup()
 })
+
+/*
+ * jsdom does not implement <dialog>'s modal API. This minimal stand-in mirrors the parts the
+ * app relies on: `open` toggles, and close() fires a "close" event like a real browser.
+ */
+if (!HTMLDialogElement.prototype.showModal) {
+  HTMLDialogElement.prototype.showModal = function showModal(this: HTMLDialogElement) {
+    this.open = true
+  }
+  HTMLDialogElement.prototype.close = function close(this: HTMLDialogElement) {
+    if (!this.open) return
+    this.open = false
+    this.dispatchEvent(new Event('close'))
+  }
+}

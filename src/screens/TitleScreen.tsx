@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { AboutDialog } from '../components/AboutDialog'
 import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
 import { SpeechBubble } from '../components/SpeechBubble'
@@ -19,6 +20,7 @@ interface TitleScreenProps {
 export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleScreenProps) {
   const ready = deckStatus === 'ready'
   const [showHelp, setShowHelp] = useState(false)
+  const [showAbout, setShowAbout] = useState(false)
   // A new greeting each time the title screen is shown.
   const [greeting] = useState(() => titleGreeting())
   // Poking Jevil's head makes him react; the count resets whenever the title screen is left.
@@ -69,6 +71,9 @@ export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleS
         <PixelButton onClick={() => setShowHelp((open) => !open)} aria-expanded={showHelp}>
           HOW TO PLAY
         </PixelButton>
+        <PixelButton onClick={() => setShowAbout(true)} aria-haspopup="dialog">
+          ABOUT
+        </PixelButton>
       </nav>
 
       {deckStatus === 'failed' && (
@@ -85,6 +90,8 @@ export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleS
           alignment chart.
         </p>
       )}
+
+      <AboutDialog open={showAbout} onClose={() => setShowAbout(false)} />
     </main>
   )
 }
