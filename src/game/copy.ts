@@ -2,16 +2,15 @@ import type { EthicAxis, MoralAxis, Tier } from './alignment'
 import type { Suit } from './deck'
 
 export interface SuitCopy {
-  symbol: string
   name: string
   theme: string
 }
 
 export const SUIT_COPY: Record<Suit, SuitCopy> = {
-  hearts: { symbol: '♥', name: 'HEARTS', theme: 'love, friendship and family' },
-  diamonds: { symbol: '♦', name: 'DIAMONDS', theme: 'money, greed and ambition' },
-  clubs: { symbol: '♣', name: 'CLUBS', theme: 'society, strangers and the absurd' },
-  spades: { symbol: '♠', name: 'SPADES', theme: 'danger, power and survival' },
+  hearts: { name: 'HEARTS', theme: 'love, friendship and family' },
+  diamonds: { name: 'DIAMONDS', theme: 'money, greed and ambition' },
+  clubs: { name: 'CLUBS', theme: 'society, strangers and the absurd' },
+  spades: { name: 'SPADES', theme: 'danger, power and survival' },
 }
 
 export type Pace = 'quick' | 'steady' | 'slow'

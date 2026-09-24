@@ -2,6 +2,7 @@ import { useEffect, useEffectEvent, useRef, useState, type FormEvent } from 'rea
 import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
 import { SpeechBubble } from '../components/SpeechBubble'
+import { SuitIcon } from '../components/SuitIcon'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { CHAOS_INTRO_LINE, SUIT_COPY, paceOf, reactionLine } from '../game/copy'
 import {
@@ -158,8 +159,8 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
             CHAOS CARD · COUNTS ×{CHAOS_WEIGHT} · NO SAFE ANSWERS
           </p>
         )}
-        <p className={`font-display text-[11px] ${suitColor}`}>
-          <span aria-hidden="true">{suit.symbol} </span>
+        <p className={`flex items-center gap-2 font-display text-[11px] ${suitColor}`}>
+          <SuitIcon suit={card.suit} />
           {suit.name}
         </p>
         <h2 className="text-2xl leading-snug">{card.prompt}</h2>
@@ -188,15 +189,19 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
                 className={`relative flex min-h-32 animate-deal items-center justify-center bg-night px-5 py-10 text-lg leading-snug pixel-border transition-transform duration-150 ease-[steps(3)] focus-visible:outline-none ${chaos ? 'md:min-h-40' : 'md:min-h-60'} ${look}`}
                 style={{ animationDelay: `${i * 120}ms` }}
               >
-                <span className={`absolute top-3 left-3 font-display text-sm ${suitColor}`}>
-                  {letter} {suit.symbol}
+                <span
+                  className={`absolute top-3 left-3 flex items-center gap-1.5 font-display text-sm ${suitColor}`}
+                >
+                  {letter}
+                  <SuitIcon suit={card.suit} />
                 </span>
                 <span>{option.text}</span>
                 <span
                   aria-hidden="true"
-                  className={`absolute right-3 bottom-3 rotate-180 font-display text-sm ${suitColor}`}
+                  className={`absolute right-3 bottom-3 flex rotate-180 items-center gap-1.5 font-display text-sm ${suitColor}`}
                 >
-                  {letter} {suit.symbol}
+                  {letter}
+                  <SuitIcon suit={card.suit} />
                 </span>
               </button>
             )

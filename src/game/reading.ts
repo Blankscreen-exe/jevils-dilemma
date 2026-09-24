@@ -4,7 +4,6 @@ import {
   LEANING_WORDS,
   STEADY_SUIT_LINE,
   SUIT_CONTEXT,
-  SUIT_COPY,
   alignmentCopy,
   chaosDraggedLine,
 } from './copy'
@@ -39,7 +38,7 @@ function hash(text: string): number {
 
 /**
  * Names the suit where the player leaned hardest, and which way.
- * e.g. { suit: 'diamonds', text: '♦ Most ruthless with money.' }
+ * e.g. { suit: 'diamonds', text: 'Most ruthless with money.' } (the suit icon is drawn by the UI)
  */
 export function suitLineOf(bySuit: Record<Suit, Alignment | null>): SuitLine {
   let strongest: { suit: Suit; axis: 'chaos' | 'good'; value: number } | null = null
@@ -62,7 +61,7 @@ export function suitLineOf(bySuit: Record<Suit, Alignment | null>): SuitLine {
     axis === 'chaos' ? (value > 0 ? 'chaotic' : 'lawful') : value > 0 ? 'good' : 'evil'
   return {
     suit,
-    text: `${SUIT_COPY[suit].symbol} ${LEANING_WORDS[leaning]} ${SUIT_CONTEXT[suit]}.`,
+    text: `${LEANING_WORDS[leaning]} ${SUIT_CONTEXT[suit]}.`,
   }
 }
 

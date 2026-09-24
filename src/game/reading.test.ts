@@ -26,13 +26,13 @@ describe('suitLineOf', () => {
   it('names the suit with the strongest lean, and which way', () => {
     const line = suitLineOf(bySuit({ hearts: at(0.5, 0.5), diamonds: at(0, -1) }))
 
-    expect(line).toEqual({ suit: 'diamonds', text: '♦ Most ruthless with money.' })
+    expect(line).toEqual({ suit: 'diamonds', text: 'Most ruthless with money.' })
   })
 
   it.each([
-    [at(1, 0), '♥ Wildest in love and friendship.'],
-    [at(-1, 0), '♥ Strictest in love and friendship.'],
-    [at(0, 1), '♥ Kindest in love and friendship.'],
+    [at(1, 0), 'Wildest in love and friendship.'],
+    [at(-1, 0), 'Strictest in love and friendship.'],
+    [at(0, 1), 'Kindest in love and friendship.'],
   ])('describes %o', (alignment, text) => {
     expect(suitLineOf(bySuit({ hearts: alignment })).text).toBe(text)
   })
@@ -60,7 +60,7 @@ describe('readingOf', () => {
       title: ALIGNMENT_COPY['evil-lawful'].titles.pure,
     })
     expect(ALIGNMENT_COPY['evil-lawful'].verdicts).toContain(reading.verdict)
-    expect(reading.suitLine.text).toBe('♠ Strictest when danger calls.')
+    expect(reading.suitLine.text).toBe('Strictest when danger calls.')
   })
 
   it('says when the CHAOS card dragged the player into a new cell', () => {

@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import { AlignmentChart } from '../components/AlignmentChart'
 import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
+import { SuitIcon } from '../components/SuitIcon'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { SUIT_COPY, alignmentCopy } from '../game/copy'
 import { CHAOS_WEIGHT, SUITS, type Card } from '../game/deck'
@@ -72,6 +73,9 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
               <p
                 className={`mt-1 text-lg ${reading.suitLine.suit ? SUIT_TEXT[reading.suitLine.suit] : 'text-jester-500'}`}
               >
+                {reading.suitLine.suit && (
+                  <SuitIcon suit={reading.suitLine.suit} className="mr-1.5" />
+                )}
                 {reading.suitLine.text}
               </p>
               {reading.chaosLine && (
@@ -93,11 +97,13 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
                   {SUITS.map((suit) => {
                     const suitAlignment = summary.bySuit[suit]
                     if (!suitAlignment) return null
-                    const { symbol, name } = SUIT_COPY[suit]
+                    const { name } = SUIT_COPY[suit]
                     return (
                       <div key={suit} className="contents">
-                        <dt className={`font-display text-[11px] leading-7 ${SUIT_TEXT[suit]}`}>
-                          <span aria-hidden="true">{symbol} </span>
+                        <dt
+                          className={`flex items-center gap-2 font-display text-[11px] leading-7 ${SUIT_TEXT[suit]}`}
+                        >
+                          <SuitIcon suit={suit} />
                           {name}
                         </dt>
                         <dd>{alignmentCopy(suitAlignment.moral, suitAlignment.ethic).label}</dd>
@@ -118,9 +124,7 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
                 />
                 <div>
                   <p className="text-jester-300">
-                    <span aria-hidden="true" className={SUIT_TEXT[card.suit]}>
-                      {SUIT_COPY[card.suit].symbol}{' '}
-                    </span>
+                    <SuitIcon suit={card.suit} className={`mr-1.5 ${SUIT_TEXT[card.suit]}`} />
                     {card.prompt}
                   </p>
                   <p>
