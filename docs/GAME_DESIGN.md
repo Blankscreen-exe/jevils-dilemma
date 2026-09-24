@@ -142,7 +142,8 @@ Status: ✅ in v1 · 🕓 later
 
 ## 4. Game flow (v1)
 
-1. **Title screen**: Start, plus Continue if a run is in progress.
+1. **Title screen**: Jevil greets the player with a random line in a speech bubble; Start, plus
+   Continue if a run is in progress.
 2. **Card**: suit + question + three answer cards (A/B/C, shuffled). Hesitation timer starts
    when the card is shown. Card 10 is the **CHAOS card**: four drastic answers (A–D), ×3.
 3. **Pick**: Jevil reacts; optional "Why?" field; Next.
@@ -216,7 +217,8 @@ The prototype predates the three-answer change and still shows two answers. Suit
 
 ## 6. The reading
 
-The reading has three lines: a **title**, a **verdict** and a **suit line**. Text lives in
+The reading has three lines: a **title**, a **verdict** and a **suit line**. Jevil speaks the
+verdict (and the CHAOS line) in a speech bubble beside his face. Text lives in
 `src/game/copy.ts`; the logic in `src/game/reading.ts`.
 
 ### Titles: 9 cells × 3 tiers = 27
