@@ -159,8 +159,7 @@ corner with a speech bubble, the question is a banner under its suit, and the th
 are large playing cards that are dealt in (side by side on wide screens, stacked on phones).
 The picked card lifts; the others tilt away.
 
-The prototype predates the three-answer change and still shows two answers. The jester
-sprite and suit symbols are placeholders; final art will be supplied separately.
+The prototype predates the three-answer change and still shows two answers. Suit symbols are pixel icons (see [ASSETS.md](./ASSETS.md)).
 
 ## 5. Card data shape
 
@@ -257,6 +256,4 @@ money." If no suit leaves the neutral band: "Steady in every suit. How dull!"
 
 ## 7. Open questions
 
-- Pixel-art suit icons: the pixel fonts have no ♥ ♦ ♣ ♠ glyphs, so the symbols currently fall
-  back to a system font. Planned with the other image assets (see [ASSETS.md](./ASSETS.md)).
 - Art: original pixel art only (see IP note in DECISIONS.md).

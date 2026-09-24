@@ -7,12 +7,12 @@
 
 ## Needed
 
-| Asset                      | Native size (1×)                              | Shown at                                                            | Notes                                                                                                                                                                                          |
-| -------------------------- | --------------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Jevil idle**             | **48 × 54 px**                                | Title 4× (192 × 216)<br>Card 2× (96 × 108)<br>Results 2× (96 × 108) | Replaces the placeholder in `src/components/Jester.tsx`. Any size works as long as every frame matches.                                                                                        |
-| **Jevil animation frames** | 48 × 54 per frame, in a horizontal strip      | Same as above                                                       | Suggested states:<br>idle, 2 frames (the bob)<br>reacting/laughing, 2–4 frames (after a pick)<br>shake, optional (quick picks)                                                                 |
-| **Suit icons ♥ ♦ ♣ ♠**     | **9 × 9 px** each (4 files or a 36 × 9 strip) | 2× (18 × 18) on cards and labels                                    | Replaces the ♥ ♦ ♣ ♠ text symbols, which the pixel fonts lack. An odd width gives a centre column for symmetric shapes.                                                                        |
-| **App icon**               | **32 × 32 px** art, delivered as **SVG**      | Browser tab, home screen, splash                                    | Replaces `public/icon.svg`. Must stay SVG: some generated sizes (48, 180) are not whole multiples of 32, so a PNG would blur. Keep important art in the middle 80%; Android crops to a circle. |
+| Asset                          | Native size (1×)                         | Shown at                                                            | Notes                                                                                                                                                                                          |
+| ------------------------------ | ---------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Jevil idle**                 | **48 × 54 px**                           | Title 4× (192 × 216)<br>Card 2× (96 × 108)<br>Results 2× (96 × 108) | Replaces the placeholder in `src/components/Jester.tsx`. Any size works as long as every frame matches.                                                                                        |
+| **Jevil animation frames**     | 48 × 54 per frame, in a horizontal strip | Same as above                                                       | Suggested states:<br>idle, 2 frames (the bob)<br>reacting/laughing, 2–4 frames (after a pick)<br>shake, optional (quick picks)                                                                 |
+| **Suit icons ♥ ♦ ♣ ♠** ✅ done | 9 × 9 art, delivered at **18 × 18** (2×) | 1:1 (18 × 18) as a CSS mask, tinted with the suit colour            | In `src/assets/suits/`; drawn by the project author. Used as masks at their exact size because browsers do not reliably keep masks crisp when scaling.                                         |
+| **App icon**                   | **32 × 32 px** art, delivered as **SVG** | Browser tab, home screen, splash                                    | Replaces `public/icon.svg`. Must stay SVG: some generated sizes (48, 180) are not whole multiples of 32, so a PNG would blur. Keep important art in the middle 80%; Android crops to a circle. |
 
 ## Optional
 
@@ -53,6 +53,6 @@
 
 - [ ] Jevil sprite + frames in `Jester.tsx`, with whole-number display sizes per screen
 - [ ] Frame animations (idle bob, reaction, optional shake) as stepped CSS animations
-- [ ] Suit icon component replacing the text symbols on cards, labels and the results screen
+- [x] Suit icon component (`SuitIcon`) replacing the text symbols on cards, labels and the results screen
 - [ ] New `public/icon.svg`; check generated icons in a production build
 - [ ] Offline cache already includes `.png` and `.svg`; confirm the new files are precached
