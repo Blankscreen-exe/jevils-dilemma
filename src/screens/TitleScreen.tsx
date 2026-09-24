@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { Jester } from '../components/Jester'
+import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
 import { CARDS_PER_RUN } from '../game/deck'
+import { TITLE_EXPRESSION } from '../game/expressions'
 
 interface TitleScreenProps {
   canResume: boolean
@@ -14,7 +15,7 @@ export function TitleScreen({ canResume, onStart, onResume }: TitleScreenProps) 
 
   return (
     <main className="flex min-h-dvh flex-col items-center justify-center gap-7 p-6 text-center">
-      <Jester size={160} className="animate-bob" />
+      <JevilFace expression={TITLE_EXPRESSION} scale={4} className="animate-bob" />
       <h1 className="font-display text-3xl leading-normal text-gold uppercase text-shadow-[4px_4px_0_var(--color-jester-700)] sm:text-4xl">
         Jevil&apos;s
         <br />

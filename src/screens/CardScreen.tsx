@@ -1,5 +1,5 @@
 import { useEffect, useEffectEvent, useRef, useState, type FormEvent } from 'react'
-import { Jester } from '../components/Jester'
+import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
 import { SpeechBubble } from '../components/SpeechBubble'
 import { SUIT_TEXT } from '../components/suitStyles'
@@ -12,6 +12,12 @@ import {
   type CardOption,
   type OptionId,
 } from '../game/deck'
+import {
+  CHAOS_EXPRESSION,
+  IDLE_EXPRESSION,
+  expressionForPace,
+  type Expression,
+} from '../game/expressions'
 import type { PlayingState } from '../game/state'
 import { useDecisionTimer } from '../hooks/useDecisionTimer'
 
@@ -82,8 +88,14 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
   const readElapsed = useDecisionTimer()
   const answers = answersFor(card, chaos)
   // Jevil announces the CHAOS card as soon as it is dealt.
-  const [reaction, setReaction] = useState<{ line: string; shake: boolean } | null>(
-    chaos ? { line: CHAOS_INTRO_LINE, shake: true } : null,
+  const [reaction, setReaction] = useState<{
+    line: string | null
+    face: Expression
+    shake: boolean
+  }>(
+    chaos
+      ? { line: CHAOS_INTRO_LINE, face: CHAOS_EXPRESSION, shake: true }
+      : { line: null, face: IDLE_EXPRESSION, shake: false },
   )
   const [reason, setReason] = useState('')
   const reasonRef = useRef<HTMLInputElement>(null)
@@ -97,7 +109,11 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
     if (locked) return
     const elapsedMs = readElapsed()
     const pace = paceOf(elapsedMs)
-    setReaction({ line: reactionLine(pace), shake: pace === 'quick' })
+    setReaction({
+      line: reactionLine(pace),
+      face: expressionForPace(pace),
+      shake: pace === 'quick',
+    })
     onPick(option.id, elapsedMs)
   }
 
@@ -127,8 +143,13 @@ function Dilemma({ card, chaos, pickedId, onPick, onNext }: DilemmaProps) {
   return (
     <>
       <div className="flex items-end gap-4">
-        <Jester size={112} className={reaction?.shake ? 'animate-shake' : ''} />
-        <SpeechBubble text={reaction?.line ?? null} />
+        <JevilFace
+          key={reaction.face}
+          expression={reaction.face}
+          scale={2}
+          className={reaction.shake ? 'animate-shake' : ''}
+        />
+        <SpeechBubble text={reaction.line} />
       </div>
 
       <div className="flex flex-col items-center gap-2 px-3 text-center">

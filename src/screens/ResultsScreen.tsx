@@ -1,10 +1,11 @@
 import { useMemo, useRef, useState } from 'react'
 import { AlignmentChart } from '../components/AlignmentChart'
-import { Jester } from '../components/Jester'
+import { JevilFace } from '../components/JevilFace'
 import { PixelButton } from '../components/PixelButton'
 import { SUIT_TEXT } from '../components/suitStyles'
 import { SUIT_COPY, alignmentCopy } from '../game/copy'
 import { CHAOS_WEIGHT, SUITS, type Card } from '../game/deck'
+import { expressionForAlignment } from '../game/expressions'
 import { readingOf } from '../game/reading'
 import type { Answer } from '../game/state'
 import { summarize, type ResolvedPick } from '../game/summary'
@@ -62,7 +63,7 @@ export function ResultsScreen({ cards, answers, onPlayAgain, onTitle }: ResultsS
       <div ref={captureRef} className="p-2">
         <section className="flex flex-col gap-5 bg-night p-6 pixel-border pixel-border-gold">
           <div className="flex items-center gap-5">
-            <Jester size={96} />
+            <JevilFace expression={expressionForAlignment(summary.alignment)} scale={2} />
             <div>
               <h2 className="font-display text-base leading-normal text-gold sm:text-xl">
                 {reading.title}
