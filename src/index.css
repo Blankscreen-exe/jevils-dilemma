@@ -80,6 +80,21 @@
 @layer base {
   html {
     color-scheme: dark;
+
+    /*
+     * Pixel heart pointer (the 11×10 heart at 3×; browsers never scale cursor images).
+     * The hotspot sits on the top-left lobe. Falls back to the system cursor.
+     */
+    --cursor-heart: url('./assets/heart-cursor.png') 4 4;
+    cursor: var(--cursor-heart), auto;
+  }
+
+  /* Keep the heart on clickable things instead of switching to the hand pointer. */
+  a,
+  button:not(:disabled),
+  label[for],
+  summary {
+    cursor: var(--cursor-heart), pointer;
   }
 
   body {
