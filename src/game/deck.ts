@@ -1,5 +1,4 @@
 import * as z from 'zod/mini'
-import rawCards from '../data/cards.json'
 
 /** Cards dealt in a single run. The last one is the CHAOS card. */
 export const CARDS_PER_RUN = 10
@@ -136,6 +135,3 @@ export function answersFor(card: Card, chaos: boolean): readonly CardOption[] {
 export function isChaosAnswer(option: Pick<CardOption, 'id'>): boolean {
   return (CHAOS_OPTION_IDS as readonly string[]).includes(option.id)
 }
-
-/** The bundled deck, validated once at startup so a bad card fails loudly. */
-export const deck: readonly Card[] = deckSchema.parse(rawCards)

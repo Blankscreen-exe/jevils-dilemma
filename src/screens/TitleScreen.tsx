@@ -6,14 +6,18 @@ import { titleGreeting } from '../game/copy'
 import { CARDS_PER_RUN } from '../game/deck'
 import { TITLE_EXPRESSION } from '../game/expressions'
 import { pokeReaction } from '../game/poke'
+import type { DeckState } from '../hooks/useDeck'
 
 interface TitleScreenProps {
+  /** The deck loads in the background; play is only possible once it is ready. */
+  deckStatus: DeckState['status']
   canResume: boolean
   onStart: () => void
   onResume: () => void
 }
 
-export function TitleScreen({ canResume, onStart, onResume }: TitleScreenProps) {
+export function TitleScreen({ deckStatus, canResume, onStart, onResume }: TitleScreenProps) {
+  const ready = deckStatus === 'ready'
   const [showHelp, setShowHelp] = useState(false)
   // A new greeting each time the title screen is shown.
   const [greeting] = useState(() => titleGreeting())
@@ -59,11 +63,19 @@ export function TitleScreen({ canResume, onStart, onResume }: TitleScreenProps) 
 
       <nav className="flex flex-col items-stretch gap-4" aria-label="Main menu">
         {canResume && <PixelButton onClick={onResume}>CONTINUE</PixelButton>}
-        <PixelButton onClick={onStart}>{canResume ? 'NEW GAME' : 'START'}</PixelButton>
+        <PixelButton onClick={onStart} disabled={!ready}>
+          {ready ? (canResume ? 'NEW GAME' : 'START') : 'SHUFFLING...'}
+        </PixelButton>
         <PixelButton onClick={() => setShowHelp((open) => !open)} aria-expanded={showHelp}>
           HOW TO PLAY
         </PixelButton>
       </nav>
+
+      {deckStatus === 'failed' && (
+        <p role="alert" className="max-w-md text-lg leading-snug text-chaos">
+          The cards could not be loaded. Check your connection and reload the page.
+        </p>
+      )}
 
       {showHelp && (
         <p className="max-w-md text-lg leading-snug text-bone">

@@ -6,8 +6,15 @@ import { TITLE_EXPRESSION } from '../game/expressions'
 import { pokeReaction } from '../game/poke'
 import { TitleScreen } from './TitleScreen'
 
-const renderTitle = () =>
-  render(<TitleScreen canResume={false} onStart={() => {}} onResume={() => {}} />)
+const renderTitle = (deckStatus: 'loading' | 'ready' | 'failed' = 'ready') =>
+  render(
+    <TitleScreen
+      deckStatus={deckStatus}
+      canResume={false}
+      onStart={() => {}}
+      onResume={() => {}}
+    />,
+  )
 
 const face = () => screen.getByTestId('jevil-head').querySelector('img')
 
@@ -17,6 +24,18 @@ describe('TitleScreen', () => {
 
     expect(TITLE_GREETINGS.some((line) => screen.queryByText(line))).toBe(true)
     expect(face()).toHaveAttribute('data-expression', TITLE_EXPRESSION)
+  })
+
+  it('disables START while the deck is loading', () => {
+    renderTitle('loading')
+
+    expect(screen.getByRole('button', { name: 'SHUFFLING...' })).toBeDisabled()
+  })
+
+  it('explains when the deck fails to load', () => {
+    renderTitle('failed')
+
+    expect(screen.getByRole('alert')).toHaveTextContent(/could not be loaded/i)
   })
 
   it('reacts to each poke with a new line, face and shake', async () => {

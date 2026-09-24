@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, describe, expect, it } from 'vitest'
 import App from './App'
@@ -9,6 +9,13 @@ import { SAVE_KEY, loadSave } from './game/save'
 afterEach(() => {
   localStorage.clear()
 })
+
+/** The deck loads in the background; wait until START is usable. */
+async function startButton() {
+  const start = await screen.findByRole('button', { name: 'START' })
+  await waitFor(() => expect(start).toBeEnabled())
+  return start
+}
 
 const choices = () => screen.getAllByRole('button', { pressed: false })
 
@@ -21,11 +28,11 @@ async function playCard(user: ReturnType<typeof userEvent.setup>, reason = '') {
 }
 
 describe('App', () => {
-  it('renders the title screen', () => {
+  it('renders the title screen', async () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: /jevil's\s*dilemma/i })).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument()
+    expect(await startButton()).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'CONTINUE' })).not.toBeInTheDocument()
   })
 
@@ -40,7 +47,7 @@ describe('App', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'START' }))
+    await user.click(await startButton())
     expect(screen.getByText(`CARD 1/${CARDS_PER_RUN}`)).toBeInTheDocument()
 
     await playCard(user, 'no regrets')
@@ -55,7 +62,7 @@ describe('App', () => {
   it('makes the last card the CHAOS card, with four drastic answers', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByRole('button', { name: 'START' }))
+    await user.click(await startButton())
 
     expect(screen.queryByText(/chaos card/i)).not.toBeInTheDocument()
     for (let i = 1; i < CARDS_PER_RUN; i++) await playCard(user)
@@ -70,7 +77,7 @@ describe('App', () => {
   it('shows a reaction and asks why after a pick', async () => {
     const user = userEvent.setup()
     render(<App />)
-    await user.click(screen.getByRole('button', { name: 'START' }))
+    await user.click(await startButton())
 
     await user.keyboard('b')
 
@@ -82,22 +89,22 @@ describe('App', () => {
   it('offers to continue an unfinished run after a reload', async () => {
     const user = userEvent.setup()
     const { unmount } = render(<App />)
-    await user.click(screen.getByRole('button', { name: 'START' }))
+    await user.click(await startButton())
     await playCard(user)
     await playCard(user)
     unmount()
 
     render(<App />)
-    await user.click(screen.getByRole('button', { name: 'CONTINUE' }))
+    await user.click(await screen.findByRole('button', { name: 'CONTINUE' }))
 
     expect(screen.getByText(`CARD 3/${CARDS_PER_RUN}`)).toBeInTheDocument()
   })
 
-  it('ignores a corrupt save', () => {
+  it('ignores a corrupt save', async () => {
     localStorage.setItem(SAVE_KEY, '{broken')
 
     render(<App />)
 
-    expect(screen.getByRole('button', { name: 'START' })).toBeInTheDocument()
+    expect(await startButton()).toBeInTheDocument()
   })
 })

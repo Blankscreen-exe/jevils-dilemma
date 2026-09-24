@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest'
-import rawCards from '../data/cards.json'
 import { makeCard } from '../test/fixtures'
-import { CARDS_PER_RUN, MIN_PER_SUIT, SUITS, deck, deckSchema, type Card } from './deck'
+import { CARDS_PER_RUN, MIN_PER_SUIT, SUITS, deckSchema, type Card } from './deck'
+import { loadDeck } from './loadDeck'
+
+// The real deck, loaded the same way the app loads it.
+const deck = await loadDeck()
 
 /** A valid deck: enough cards overall, spread across every suit. */
 const deckOf = (count: number): Card[] =>
@@ -129,20 +132,31 @@ const pairingOf = (card: Card) =>
  * shape, so they live here instead of in the schema.
  */
 describe('bundled deck', () => {
-  it('passes the schema', () => {
-    expect(deck).toHaveLength(rawCards.length)
+  it('loads and passes the schema', () => {
+    expect(deck).toHaveLength(1000)
   })
 
-  it.each(SUITS)('has six %s cards', (suit) => {
-    expect(deck.filter((card) => card.suit === suit)).toHaveLength(6)
+  it.each(SUITS)('has 250 %s cards', (suit) => {
+    expect(deck.filter((card) => card.suit === suit)).toHaveLength(250)
   })
 
-  it.each(SUITS)('uses all six score pairings within %s', (suit) => {
-    const pairings = new Set(deck.filter((card) => card.suit === suit).map(pairingOf))
+  it.each(SUITS)('uses all six score pairings evenly within %s', (suit) => {
+    const counts = new Map<string, number>()
+    deck
+      .filter((card) => card.suit === suit)
+      .forEach((card) => counts.set(pairingOf(card), (counts.get(pairingOf(card)) ?? 0) + 1))
 
-    // Six ways to pair -1/0/+1 chaos with -1/0/+1 good; each suit should use them all
-    // so no pattern (e.g. "the chaotic answer is always the kind one") can be learned.
-    expect(pairings.size).toBe(6)
+    // Six ways to pair -1/0/+1 chaos with -1/0/+1 good. Using them all, in similar amounts,
+    // means no pattern (e.g. "the chaotic answer is always the kind one") can be learned.
+    expect(counts.size).toBe(6)
+    const values = [...counts.values()]
+    expect(Math.max(...values) - Math.min(...values)).toBeLessThanOrEqual(10)
+  })
+
+  it('has no duplicate prompts', () => {
+    const prompts = deck.map((card) => card.prompt.trim().toLowerCase())
+
+    expect(new Set(prompts).size).toBe(prompts.length)
   })
 
   it('can deal a full run with every suit represented', () => {

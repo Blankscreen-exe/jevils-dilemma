@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react'
 import { dealRun } from '../game/deal'
 import type { Card, OptionId } from '../game/deck'
 import {
@@ -13,16 +13,24 @@ import { gameReducer, initialState, type PlayingState } from '../game/state'
 
 /**
  * Wires the pure game reducer to the browser: deals cards, and mirrors every change
- * into the local save so a run survives a refresh.
+ * into the local save so a run survives a refresh. `deck` is null while it is still
+ * loading; nothing can be dealt or resumed until it arrives.
  */
-export function useGame(deck: readonly Card[], storage?: SaveStorage | null) {
-  const [loaded] = useState(() => {
-    const save = loadSave(storage)
-    return { save, resumable: save.current ? fromSavedRun(save.current, deck) : null }
-  })
-  const saveRef = useRef(loaded.save)
-  const [resumable, setResumable] = useState<PlayingState | null>(loaded.resumable)
+export function useGame(deck: readonly Card[] | null, storage?: SaveStorage | null) {
+  const [initialSave] = useState(() => loadSave(storage))
+  const saveRef = useRef(initialSave)
   const [state, dispatch] = useReducer(gameReducer, initialState)
+
+  // The run saved before this visit can only be rebuilt once the deck has loaded.
+  const savedRun = useMemo(
+    () => (deck && initialSave.current ? fromSavedRun(initialSave.current, deck) : null),
+    [deck, initialSave],
+  )
+  // Quitting mid-run keeps that run available to continue.
+  const [quitRun, setQuitRun] = useState<PlayingState | null>(null)
+  // Starting or resuming uses up the saved run offered on the title screen.
+  const [savedRunUsed, setSavedRunUsed] = useState(false)
+  const resumable = quitRun ?? (savedRunUsed ? null : savedRun)
 
   useEffect(() => {
     // Leaving to the title keeps the unfinished run saved, so it can be continued.
@@ -36,13 +44,16 @@ export function useGame(deck: readonly Card[], storage?: SaveStorage | null) {
   }, [state, storage])
 
   const start = useCallback(() => {
-    setResumable(null)
+    if (!deck) return
+    setQuitRun(null)
+    setSavedRunUsed(true)
     dispatch({ type: 'start', cards: dealRun(deck) })
   }, [deck])
 
   const resume = useCallback(() => {
     if (!resumable) return
-    setResumable(null)
+    setQuitRun(null)
+    setSavedRunUsed(true)
     dispatch({ type: 'resume', run: resumable })
   }, [resumable])
 
@@ -53,11 +64,20 @@ export function useGame(deck: readonly Card[], storage?: SaveStorage | null) {
   const next = useCallback((reason: string) => dispatch({ type: 'next', reason }), [])
 
   const quit = useCallback(() => {
-    if (state.phase === 'playing') setResumable(state)
+    if (state.phase === 'playing') setQuitRun(state)
     dispatch({ type: 'quit' })
   }, [state])
 
-  return { state, canResume: resumable !== null, start, resume, pick, next, quit }
+  return {
+    state,
+    ready: deck !== null,
+    canResume: resumable !== null,
+    start,
+    resume,
+    pick,
+    next,
+    quit,
+  }
 }
 
 export type Game = ReturnType<typeof useGame>

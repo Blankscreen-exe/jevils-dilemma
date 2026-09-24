@@ -1,16 +1,24 @@
-import { deck } from './game/deck'
+import { useDeck } from './hooks/useDeck'
 import { useGame } from './hooks/useGame'
 import { CardScreen } from './screens/CardScreen'
 import { ResultsScreen } from './screens/ResultsScreen'
 import { TitleScreen } from './screens/TitleScreen'
 
 export default function App() {
-  const game = useGame(deck)
+  const deckState = useDeck()
+  const game = useGame(deckState.status === 'ready' ? deckState.deck : null)
   const { state } = game
 
   switch (state.phase) {
     case 'title':
-      return <TitleScreen canResume={game.canResume} onStart={game.start} onResume={game.resume} />
+      return (
+        <TitleScreen
+          deckStatus={deckState.status}
+          canResume={game.canResume}
+          onStart={game.start}
+          onResume={game.resume}
+        />
+      )
     case 'playing':
       return <CardScreen state={state} onPick={game.pick} onNext={game.next} onQuit={game.quit} />
     case 'results':
