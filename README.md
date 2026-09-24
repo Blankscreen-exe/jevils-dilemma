@@ -73,4 +73,5 @@ UI mockups: [Figma](https://www.figma.com/file/SH41uZRXfEhQfxOGUbACUS/Untitled?t
 
 This is a non-commercial fan project. Jevil and Deltarune are created by and belong to
 Toby Fox. _Dilemma_ is a separate commercial card game; the cards in this project are
-original wording. All artwork in this repository is original.
+original wording. The suit icons are original; the Jevil sprites and the heart cursor are
+third-party pixel art, credited to their artists here once confirmed.
