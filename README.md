@@ -8,7 +8,7 @@ Each card puts you in an awkward situation with two choices. There are no right 
 Jevil is keeping track: every pick nudges you across a **Lawful ↔ Chaotic** and **Good ↔ Evil**
 alignment chart, and at the end he gives you his reading of who you really are. Save the result as an image.
 
-> **Status:** in development. The project is being rebuilt from scratch.
+GO PLAY: https://jevils-dilemma.vercel.app/
 
 ## Features (v1)
 
@@ -59,9 +59,9 @@ bun run dev
 
 > Use `bun run test`, not `bun test`: the latter starts Bun's own test runner instead of Vitest.
 
-## Design
+## Preview
 
-UI mockups: [Figma](https://www.figma.com/file/SH41uZRXfEhQfxOGUbACUS/Untitled?type=design&node-id=0%3A1&mode=design&t=EAoU2P1Cn54kKSOB-1)
+![preview](docs/images/preview.png)
 
 ## Contributing
 
