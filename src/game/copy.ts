@@ -193,6 +193,9 @@ export const SUIT_CONTEXT: Record<Suit, string> = {
 
 export const STEADY_SUIT_LINE = 'Steady in every suit. How dull!'
 
+/** Where the project's source code lives; shown in the About dialog. */
+export const PROJECT_URL = 'https://github.com/Blankscreen-exe/jevils-dilemma'
+
 /** Jevil's greeting on the title screen; one is picked at random each visit. */
 export const TITLE_GREETINGS: readonly string[] = [
   'UEE HEE! A NEW PLAYMATE!',

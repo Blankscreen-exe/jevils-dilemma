@@ -1,7 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it } from 'vitest'
-import { TITLE_GREETINGS } from '../game/copy'
+import { PROJECT_URL, TITLE_GREETINGS } from '../game/copy'
 import { TITLE_EXPRESSION } from '../game/expressions'
 import { pokeReaction } from '../game/poke'
 import { TitleScreen } from './TitleScreen'
@@ -50,5 +50,22 @@ describe('TitleScreen', () => {
       expect(face()).toHaveAttribute('data-expression', expression)
       expect(face()).toHaveClass('animate-shake')
     }
+  })
+})
+
+describe('TitleScreen about dialog', () => {
+  it('opens with the project details and GitHub link, and closes again', async () => {
+    const user = userEvent.setup()
+    renderTitle()
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'ABOUT' }))
+
+    const dialog = screen.getByRole('dialog', { name: 'ABOUT' })
+    expect(dialog).toHaveTextContent(/fan project/i)
+    expect(within(dialog).getByRole('link')).toHaveAttribute('href', PROJECT_URL)
+
+    await user.click(within(dialog).getByRole('button', { name: 'CLOSE' }))
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
   })
 })
