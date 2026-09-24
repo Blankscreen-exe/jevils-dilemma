@@ -143,7 +143,12 @@ Status: ✅ in v1 · 🕓 later
 ## 4. Game flow (v1)
 
 1. **Title screen**: Jevil greets the player with a random line in a speech bubble; Start, plus
-   Continue if a run is in progress.
+   Continue if a run is in progress. **Poking his head** (mouse or touch) makes him shake and
+   react with a new face and line. He escalates from playful (pokes 1–4) to irritated (5–9)
+   to annoyed (10+), with a one-off special line on the 15th poke; neither the face nor the
+   line repeats twice in a row. The reaction stays until the next poke, and the count resets
+   when the title screen is left. It is deliberately not keyboard-focusable: a decorative
+   easter egg that hides no information.
 2. **Card**: suit + question + three answer cards (A/B/C, shuffled). Hesitation timer starts
    when the card is shown. Card 10 is the **CHAOS card**: four drastic answers (A–D), ×3.
 3. **Pick**: Jevil reacts; optional "Why?" field; Next.
