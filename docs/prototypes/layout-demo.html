@@ -1,0 +1,1329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jevil's Dilemma: Layout Demo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;700&family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --void: #0b0614;
+        --night: #1a0f2e;
+        --jester-900: #2a1450;
+        --jester-700: #4b2a8c;
+        --jester-500: #7b4fd6;
+        --jester-300: #b69cf2;
+        --gold: #f5d63d;
+        --gold-dark: #b8901a;
+        --teal: #3ec7c2;
+        --bone: #ece8f4;
+        --order: #3ec7c2;
+        --chaos: #e0436b;
+        --px: 4px;
+        --display: 'Press Start 2P', monospace;
+        --body: 'Pixelify Sans', monospace;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+
+      html,
+      body {
+        background: #05030a;
+        color: var(--bone);
+        font-family: var(--body);
+        font-size: 18px;
+        min-height: 100dvh;
+      }
+
+      button,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+
+      /* ---------- Demo toolbar (not part of the game) ---------- */
+      .devbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 16px;
+        background: #000;
+        border-bottom: 2px solid #222;
+        font-family: system-ui, sans-serif;
+        font-size: 13px;
+        color: #aaa;
+      }
+      .devbar .group {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .devbar button {
+        background: #1b1b1b;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 4px 10px;
+        cursor: pointer;
+        color: #ddd;
+      }
+      .devbar button[aria-pressed='true'] {
+        background: var(--jester-700);
+        border-color: var(--jester-300);
+        color: #fff;
+      }
+
+      /* ---------- Stage ---------- */
+      .stage-wrap {
+        display: grid;
+        place-items: center;
+        padding: 24px 16px;
+      }
+      .stage {
+        position: relative;
+        width: 100%;
+        max-width: 960px;
+        min-height: 640px;
+        background:
+          radial-gradient(circle at 50% 30%, rgba(75, 42, 140, 0.35), transparent 60%), var(--void);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+      .stage.phone {
+        max-width: 390px;
+        min-height: 780px;
+        outline: 3px solid #333;
+        outline-offset: 8px;
+        border-radius: 2px;
+      }
+      /* Faint checkerboard, like Jevil's cell floor */
+      .stage::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(45deg, rgba(182, 156, 242, 0.04) 25%, transparent 25%),
+          linear-gradient(-45deg, rgba(182, 156, 242, 0.04) 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, rgba(182, 156, 242, 0.04) 75%),
+          linear-gradient(-45deg, transparent 75%, rgba(182, 156, 242, 0.04) 75%);
+        background-size: 48px 48px;
+        background-position:
+          0 0,
+          0 24px,
+          24px -24px,
+          -24px 0;
+        pointer-events: none;
+      }
+      .screen {
+        position: relative;
+        flex: 1;
+        display: none;
+        flex-direction: column;
+        padding: 24px;
+        gap: 20px;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      /* ---------- Pixel primitives ---------- */
+      .pixel-border {
+        box-shadow:
+          0 calc(var(--px) * -1) 0 0 var(--pb, var(--jester-300)),
+          0 var(--px) 0 0 var(--pb, var(--jester-300)),
+          calc(var(--px) * -1) 0 0 0 var(--pb, var(--jester-300)),
+          var(--px) 0 0 0 var(--pb, var(--jester-300));
+      }
+      .textbox {
+        background: #000;
+        border: var(--px) solid var(--bone);
+        padding: 20px 24px;
+        font-size: 22px;
+        line-height: 1.45;
+        min-height: 120px;
+      }
+      .display {
+        font-family: var(--display);
+        line-height: 1.5;
+      }
+      .sprite {
+        image-rendering: pixelated;
+        shape-rendering: crispEdges;
+        display: block;
+      }
+      .heart {
+        width: 18px;
+        height: 16px;
+        flex: none;
+        visibility: hidden;
+      }
+
+      .menu-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        background: none;
+        border: none;
+        padding: 8px 4px;
+        cursor: pointer;
+        text-align: left;
+        color: var(--bone);
+      }
+      .menu-btn .label {
+        font-family: var(--display);
+        font-size: 14px;
+      }
+      .menu-btn:hover .label,
+      .menu-btn.selected .label {
+        color: var(--gold);
+      }
+      .menu-btn.selected .heart {
+        visibility: visible;
+      }
+      .menu-btn:focus-visible {
+        outline: 2px dashed var(--gold);
+        outline-offset: 4px;
+      }
+
+      .px-btn {
+        --pb: var(--gold);
+        background: var(--jester-900);
+        border: none;
+        padding: 12px 18px;
+        font-family: var(--display);
+        font-size: 12px;
+        cursor: pointer;
+        color: var(--gold);
+      }
+      .px-btn:hover,
+      .px-btn:focus-visible {
+        background: var(--jester-700);
+        outline: none;
+      }
+      .px-btn:active {
+        transform: translateY(var(--px));
+      }
+
+      /* ---------- Title ---------- */
+      #title {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        gap: 28px;
+      }
+      #title h1 {
+        font-size: clamp(22px, 5vw, 40px);
+        color: var(--gold);
+        text-shadow: var(--px) var(--px) 0 var(--jester-700);
+      }
+      #title .tag {
+        color: var(--jester-300);
+        font-size: 20px;
+      }
+      .title-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+      }
+      .hint {
+        color: var(--jester-500);
+        font-size: 15px;
+      }
+      .bob {
+        animation: bob 1.2s steps(2) infinite;
+      }
+      @keyframes bob {
+        50% {
+          transform: translateY(calc(var(--px) * -2));
+        }
+      }
+      .shake {
+        animation: shake 0.4s steps(4);
+      }
+      @keyframes shake {
+        25% {
+          transform: translate(calc(var(--px) * -2), 0);
+        }
+        50% {
+          transform: translate(calc(var(--px) * 2), calc(var(--px) * -1));
+        }
+        75% {
+          transform: translate(calc(var(--px) * -1), var(--px));
+        }
+      }
+
+      /* ---------- Card screen: shared ---------- */
+      .hud {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--display);
+        font-size: 11px;
+        color: var(--jester-300);
+      }
+      .pips {
+        display: flex;
+        gap: 6px;
+      }
+      .pip {
+        width: 10px;
+        height: 10px;
+        background: var(--jester-900);
+      }
+      .pip.done {
+        background: var(--jester-500);
+      }
+      .pip.now {
+        background: var(--gold);
+      }
+      .jevil-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 16px;
+      }
+      .bubble {
+        --pb: var(--bone);
+        position: relative;
+        background: var(--bone);
+        color: var(--void);
+        padding: 10px 14px;
+        font-family: var(--display);
+        font-size: 11px;
+        line-height: 1.6;
+        max-width: 280px;
+        min-height: 20px;
+        opacity: 0;
+        transition: opacity 0.1s steps(1);
+      }
+      .bubble.show {
+        opacity: 1;
+      }
+      .bubble::after {
+        content: '';
+        position: absolute;
+        left: -12px;
+        bottom: 8px;
+        border: 6px solid transparent;
+        border-right-color: var(--bone);
+      }
+      .why {
+        display: none;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .why.show {
+        display: flex;
+      }
+      .why label {
+        font-family: var(--display);
+        font-size: 11px;
+        color: var(--jester-300);
+      }
+      .why-row {
+        display: flex;
+        gap: 12px;
+      }
+      .why input {
+        --pb: var(--jester-500);
+        flex: 1;
+        min-width: 0;
+        background: var(--night);
+        border: none;
+        padding: 12px;
+        font-size: 18px;
+      }
+      .why input:focus {
+        outline: none;
+        --pb: var(--gold);
+      }
+
+      /* ---------- Layout A: Battle box ---------- */
+      .layout-battle .table-only {
+        display: none !important;
+      }
+      .layout-battle .jevil-row {
+        justify-content: center;
+        min-height: 150px;
+      }
+      .battle-options {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .battle-options .menu-btn {
+        align-items: flex-start;
+      }
+      .battle-options .menu-btn .label {
+        font-family: var(--body);
+        font-size: 20px;
+        line-height: 1.35;
+      }
+      .battle-options .menu-btn .key {
+        font-family: var(--display);
+        font-size: 12px;
+        color: var(--jester-500);
+        padding-top: 4px;
+      }
+      .battle-options .menu-btn .heart {
+        margin-top: 5px;
+      }
+      .battle-options .menu-btn.picked .label {
+        color: var(--gold);
+      }
+      .battle-options .menu-btn.dim {
+        opacity: 0.35;
+      }
+
+      /* ---------- Layout B: Card table ---------- */
+      .layout-table .battle-only {
+        display: none !important;
+      }
+      .layout-table .jevil-row {
+        justify-content: flex-start;
+      }
+      .banner {
+        text-align: center;
+        font-size: 24px;
+        line-height: 1.4;
+        padding: 8px 12px;
+        color: var(--bone);
+        min-height: 72px;
+      }
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        flex: 1;
+        align-items: stretch;
+      }
+      .play-card {
+        --pb: var(--jester-300);
+        position: relative;
+        background: var(--night);
+        border: none;
+        padding: 40px 18px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        font-size: 20px;
+        line-height: 1.4;
+        min-height: 220px;
+        transition: transform 0.15s steps(3);
+        animation: deal 0.3s steps(4) both;
+      }
+      .play-card:nth-child(2) {
+        animation-delay: 0.12s;
+      }
+      @keyframes deal {
+        from {
+          transform: translateY(40px) rotate(-6deg);
+          opacity: 0;
+        }
+      }
+      .play-card .suit {
+        position: absolute;
+        font-family: var(--display);
+        font-size: 14px;
+      }
+      .play-card .tl {
+        top: 12px;
+        left: 12px;
+      }
+      .play-card .br {
+        bottom: 12px;
+        right: 12px;
+        transform: rotate(180deg);
+      }
+      .play-card.a .suit {
+        color: var(--order);
+      }
+      .play-card.b .suit {
+        color: var(--chaos);
+      }
+      .play-card:hover,
+      .play-card.selected,
+      .play-card:focus-visible {
+        --pb: var(--gold);
+        transform: translateY(calc(var(--px) * -3));
+        outline: none;
+      }
+      .play-card.picked {
+        --pb: var(--gold);
+        background: var(--jester-900);
+        transform: translateY(calc(var(--px) * -4));
+      }
+      .play-card.dim {
+        opacity: 0.3;
+        transform: translateY(var(--px)) rotate(2deg);
+      }
+
+      /* ---------- Results ---------- */
+      #results {
+        gap: 18px;
+      }
+      #results h2 {
+        text-align: center;
+        font-size: 16px;
+        color: var(--jester-300);
+      }
+      .result-card {
+        --pb: var(--gold);
+        background: var(--night);
+        padding: 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .verdict {
+        display: flex;
+        gap: 18px;
+        align-items: center;
+      }
+      .verdict .name {
+        font-family: var(--display);
+        font-size: clamp(14px, 3vw, 20px);
+        color: var(--gold);
+        line-height: 1.5;
+      }
+      .verdict .sub {
+        color: var(--jester-300);
+        margin-top: 6px;
+      }
+      .reading {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 20px;
+        align-items: start;
+      }
+      .chart {
+        display: grid;
+        grid-template-columns: 18px 1fr 18px;
+        grid-template-rows: auto 1fr auto;
+        gap: 6px;
+        font-family: var(--display);
+        font-size: 9px;
+      }
+      .chart .ax-top {
+        grid-area: 1 / 2;
+      }
+      .chart .ax-bottom {
+        grid-area: 3 / 2;
+      }
+      .chart .grid9 {
+        grid-area: 2 / 2;
+      }
+      .chart .ax-top,
+      .chart .ax-bottom {
+        text-align: center;
+        color: var(--jester-300);
+      }
+      .chart .ax-side {
+        grid-row: 2;
+        writing-mode: vertical-rl;
+        text-align: center;
+      }
+      .chart .ax-lawful {
+        grid-column: 1;
+        transform: rotate(180deg);
+      }
+      .chart .ax-chaotic {
+        grid-column: 3;
+      }
+      .grid9 {
+        position: relative;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+        gap: 3px;
+        aspect-ratio: 1;
+      }
+      .cell {
+        background: var(--void);
+        display: grid;
+        place-items: center;
+        text-align: center;
+        padding: 4px;
+        font-size: 7px;
+        line-height: 1.5;
+        color: var(--jester-500);
+      }
+      .cell.you {
+        background: var(--jester-700);
+        color: var(--gold);
+        box-shadow: inset 0 0 0 var(--px) var(--gold);
+      }
+      .grid9 .marker {
+        position: absolute;
+        width: 18px;
+        height: 16px;
+        transform: translate(-50%, -50%);
+        filter: drop-shadow(2px 2px 0 var(--void));
+      }
+      .ax-lawful {
+        color: var(--order);
+      }
+      .ax-chaotic {
+        color: var(--chaos);
+      }
+      .reading .stats {
+        grid-template-columns: 1fr;
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+      .stat {
+        --pb: var(--jester-700);
+        background: var(--void);
+        padding: 12px;
+      }
+      .stat .k {
+        font-family: var(--display);
+        font-size: 9px;
+        color: var(--jester-300);
+        margin-bottom: 8px;
+      }
+      .stat .v {
+        font-size: 17px;
+        line-height: 1.35;
+      }
+      .answers {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        max-height: 260px;
+        overflow: auto;
+        padding-right: 6px;
+      }
+      .answer {
+        display: grid;
+        grid-template-columns: 26px 1fr;
+        gap: 10px;
+        font-size: 16px;
+        line-height: 1.35;
+      }
+      .answer .dot {
+        width: 14px;
+        height: 14px;
+        margin-top: 4px;
+      }
+      .answer .q {
+        color: var(--jester-300);
+      }
+      .answer .r {
+        color: var(--jester-500);
+        font-style: italic;
+      }
+      .actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .toast {
+        position: absolute;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background: #000;
+        border: 2px solid var(--gold);
+        padding: 10px 14px;
+        font-size: 15px;
+        display: none;
+        z-index: 5;
+      }
+      .toast.show {
+        display: block;
+      }
+
+      /* ---------- Narrow screens ---------- */
+      .stage.phone .cards,
+      .stage.phone .reading,
+      .stage.phone .stats {
+        grid-template-columns: 1fr;
+      }
+      .stage.phone .play-card {
+        min-height: 140px;
+        padding: 30px 16px;
+      }
+      .stage.phone .textbox {
+        font-size: 19px;
+      }
+      @media (max-width: 560px) {
+        .cards,
+        .reading,
+        .stats {
+          grid-template-columns: 1fr;
+        }
+        .play-card {
+          min-height: 140px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-delay: 0s !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="devbar" role="toolbar" aria-label="Demo controls">
+      <div class="group">
+        <span>Card layout:</span>
+        <button data-layout="battle" aria-pressed="false">A · Battle box</button>
+        <button data-layout="table" aria-pressed="true">B · Card table</button>
+      </div>
+      <div class="group">
+        <span>Frame:</span>
+        <button data-frame="full" aria-pressed="true">Desktop</button>
+        <button data-frame="phone" aria-pressed="false">Phone</button>
+      </div>
+      <div class="group">
+        <span>Jump to:</span>
+        <button data-jump="title">Title</button>
+        <button data-jump="card">Card</button>
+        <button data-jump="results">Results</button>
+      </div>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage layout-table" id="stage">
+        <!-- TITLE -->
+        <section class="screen active" id="title" aria-label="Title screen">
+          <div class="bob" data-jevil="160"></div>
+          <h1 class="display">JEVIL'S<br />DILEMMA</h1>
+          <p class="tag">Choose. Explain. Be judged.</p>
+          <div class="title-menu" role="menu">
+            <button class="menu-btn selected" data-action="start" role="menuitem">
+              <svg class="heart sprite" viewBox="0 0 9 8"><use href="#heart" /></svg>
+              <span class="label">START</span>
+            </button>
+            <button class="menu-btn" data-action="how" role="menuitem">
+              <svg class="heart sprite" viewBox="0 0 9 8"><use href="#heart" /></svg>
+              <span class="label">HOW TO PLAY</span>
+            </button>
+          </div>
+          <p class="hint">↑↓ to move · Z / Enter to select</p>
+        </section>
+
+        <!-- CARD -->
+        <section class="screen" id="card" aria-label="Dilemma">
+          <div class="hud">
+            <span id="hud-count">CARD 1/10</span>
+            <div class="pips" id="pips" aria-hidden="true"></div>
+          </div>
+
+          <div class="jevil-row">
+            <div id="card-jevil" data-jevil="120"></div>
+            <div class="bubble pixel-border" id="bubble" aria-live="polite"></div>
+          </div>
+
+          <!-- Layout A -->
+          <div class="textbox battle-only" id="question-a"></div>
+          <div class="battle-options battle-only" id="options-a" role="radiogroup"></div>
+
+          <!-- Layout B -->
+          <p class="banner table-only" id="question-b"></p>
+          <div class="cards table-only" id="options-b" role="radiogroup"></div>
+
+          <div class="why" id="why">
+            <label for="why-input">WHY? (OPTIONAL)</label>
+            <div class="why-row">
+              <input
+                id="why-input"
+                class="pixel-border"
+                maxlength="80"
+                placeholder="Defend yourself..."
+                autocomplete="off"
+              />
+              <button class="px-btn pixel-border" id="next-btn">NEXT ▸</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- RESULTS -->
+        <section class="screen" id="results" aria-label="Results">
+          <h2 class="display">JEVIL'S READING</h2>
+          <div class="result-card pixel-border" id="result-card">
+            <div class="verdict">
+              <div data-jevil="96"></div>
+              <div>
+                <div class="name" id="verdict-name"></div>
+                <div class="sub" id="verdict-sub"></div>
+              </div>
+            </div>
+            <div class="reading">
+              <div class="chart" aria-label="Alignment chart">
+                <div class="ax-top">GOOD</div>
+                <div class="ax-side ax-lawful">LAWFUL</div>
+                <div class="grid9" id="grid9"></div>
+                <div class="ax-side ax-chaotic">CHAOTIC</div>
+                <div class="ax-bottom">EVIL</div>
+              </div>
+              <div class="stats">
+                <div class="stat pixel-border">
+                  <div class="k">HARDEST DILEMMA</div>
+                  <div class="v" id="stat-hard"></div>
+                </div>
+                <div class="stat pixel-border">
+                  <div class="k">QUICKEST DRAW</div>
+                  <div class="v" id="stat-fast"></div>
+                </div>
+              </div>
+            </div>
+            <div class="answers" id="answers"></div>
+          </div>
+          <div class="actions">
+            <button class="px-btn pixel-border" id="save-btn">SAVE IMAGE</button>
+            <button class="px-btn pixel-border" id="again-btn">PLAY AGAIN</button>
+          </div>
+        </section>
+
+        <div class="toast" id="toast" role="status"></div>
+      </div>
+    </div>
+
+    <svg width="0" height="0" style="position: absolute" aria-hidden="true">
+      <symbol id="heart" viewBox="0 0 9 8">
+        <path
+          fill="#e0436b"
+          d="M1 0h2v1H1zM6 0h2v1H6zM0 1h4v1H0zM5 1h4v1H5zM0 2h9v2H0zM1 4h7v1H1zM2 5h5v1H2zM3 6h3v1H3zM4 7h1v1H4z"
+        />
+      </symbol>
+    </svg>
+
+    <script>
+      // ---------- Draft deck (original wording) ----------
+      // chaos: -2 (lawful) ... +2 (chaotic)
+      // good:  -2 (evil)   ... +2 (good)
+      const DECK = [
+        {
+          id: 'basement-door',
+          prompt: "A door appears in your basement that wasn't there yesterday.",
+          options: [
+            { text: 'Brick it up and never speak of it', chaos: -2, good: 0 },
+            { text: 'Walk through it in your pajamas', chaos: 2, good: 0 },
+          ],
+        },
+        {
+          id: 'kazoo-neighbor',
+          prompt: 'Your lovely new neighbour plays the kazoo at 3 a.m.',
+          options: [
+            { text: 'Leave a polite, well-formatted note', chaos: -1, good: 1 },
+            { text: 'Buy a kazoo and harmonise', chaos: 2, good: 1 },
+          ],
+        },
+        {
+          id: 'wedding-cake',
+          prompt: 'The wedding cake collapses before anyone cuts it.',
+          options: [
+            { text: 'Quietly rescue it with spoons and dignity', chaos: -1, good: 2 },
+            { text: 'Declare it a buffet and dig in first', chaos: 1, good: -1 },
+          ],
+        },
+        {
+          id: 'one-way-talk',
+          prompt: 'For one week you may only communicate one way.',
+          options: [
+            { text: 'Formal handwritten letters', chaos: -2, good: 0 },
+            { text: 'Interpretive dance', chaos: 2, good: 0 },
+          ],
+        },
+        {
+          id: 'genie-fine-print',
+          prompt: 'A genie grants one wish. The contract is 400 pages.',
+          options: [
+            { text: 'Read every page, then wish for world peace', chaos: -2, good: 2 },
+            { text: 'Skip to the end and wish your enemies itchy forever', chaos: 2, good: -2 },
+          ],
+        },
+        {
+          id: 'group-trip',
+          prompt: 'Your friends are planning a trip together.',
+          options: [
+            { text: 'Build everyone a colour-coded itinerary', chaos: -2, good: 1 },
+            { text: 'Arrive at the airport with no bag', chaos: 2, good: 0 },
+          ],
+        },
+        {
+          id: 'lost-wallet',
+          prompt: 'You find a wallet stuffed with cash. No one saw you.',
+          options: [
+            { text: 'Hand it to the police, untouched', chaos: -2, good: 2 },
+            { text: 'Keep the cash, post the wallet back', chaos: 1, good: -1 },
+          ],
+        },
+        {
+          id: 'swap-a-day',
+          prompt: 'You can swap lives with someone for one day.',
+          options: [
+            { text: 'Your boss, to see how it really works', chaos: -1, good: 0 },
+            { text: 'A cat who lives in a bakery', chaos: 2, good: 0 },
+          ],
+        },
+        {
+          id: 'last-slice',
+          prompt: 'One slice of pizza left. You and a friend both want it.',
+          options: [
+            { text: 'Cut it into two perfectly equal halves', chaos: -2, good: 1 },
+            { text: 'Lick it and claim it', chaos: 2, good: -1 },
+          ],
+        },
+        {
+          id: 'polite-ghost',
+          prompt: 'Your home is haunted by an extremely polite ghost.',
+          options: [
+            { text: 'Draw up house rules together', chaos: -1, good: 1 },
+            { text: 'Train it to haunt your rivals', chaos: 2, good: -2 },
+          ],
+        },
+        {
+          id: 'random-button',
+          prompt: 'You receive a button that does something random. Once.',
+          options: [
+            { text: 'Lock it in a safe, unpressed', chaos: -2, good: 0 },
+            { text: "Press it while pointing at your neighbour's house", chaos: 2, good: -1 },
+          ],
+        },
+        {
+          id: 'villain-job',
+          prompt: 'A supervillain offers you a job. Great benefits.',
+          options: [
+            { text: 'Accept, and run their paperwork flawlessly', chaos: -2, good: -2 },
+            { text: 'Accept, then sabotage everything from within', chaos: 2, good: 2 },
+          ],
+        },
+        {
+          id: 'no-theme-party',
+          prompt: "You're invited to a costume party with no theme.",
+          options: [
+            { text: 'A classic costume, flawlessly made', chaos: -1, good: 0 },
+            { text: 'A sentient houseplant', chaos: 2, good: 0 },
+          ],
+        },
+        {
+          id: 'autocorrect',
+          prompt: 'Your phone’s autocorrect develops a personality.',
+          options: [
+            { text: 'Factory reset immediately', chaos: -2, good: 0 },
+            { text: 'Let it write your work emails', chaos: 2, good: -1 },
+          ],
+        },
+        {
+          id: 'instant-skill',
+          prompt: 'You can master one skill instantly.',
+          options: [
+            { text: 'First aid', chaos: -1, good: 2 },
+            { text: 'Pickpocketing', chaos: 2, good: -2 },
+          ],
+        },
+      ]
+
+      const REACTIONS = {
+        lawful: ['BORING! BORING!!', 'A PERFECT LITTLE SQUARE!', 'HOW SENSIBLE. HOW DULL.'],
+        chaotic: [
+          'UEE HEE HEE! NOW WE PLAY!',
+          'DELIGHTFUL! SIMPLY DELIGHTFUL!',
+          'THE CAROUSEL SPINS FASTER!',
+        ],
+        good: ['UGH, HOW NOBLE.', 'A HERO! HOW TERRIBLY SWEET.'],
+        evil: ['OHO! WICKED! I LOVE IT!', 'NAUGHTY, NAUGHTY!'],
+        neutral: ['A COIN THAT LANDS ON ITS EDGE!'],
+      }
+
+      // Rows: good, neutral, evil. Columns: lawful, neutral, chaotic.
+      const ALIGNMENTS = [
+        [
+          { name: 'A GOLDEN RULE-FOLLOWER', sub: 'Thou dost good, and by the book.' },
+          { name: 'A KINDLY WANDERER', sub: 'Good for goodness’ sake. How quaint!' },
+          { name: 'A MERRY TRICKSTER', sub: 'Chaos, but make it charitable!' },
+        ],
+        [
+          { name: 'THE RULEBOOK INCARNATE', sub: 'Rules for rules’ sake. Yawn.' },
+          { name: 'A PERFECTLY SHUFFLED DECK', sub: 'Balanced. Unreadable. Suspicious.' },
+          { name: 'A TRUE CHAOS FREAK!', sub: 'Thou art free. Just like me!' },
+        ],
+        [
+          { name: 'A TYRANT WITH A CLIPBOARD', sub: 'Wickedness, filed in triplicate.' },
+          { name: 'A SNEAKY LITTLE KNAVE', sub: 'Thou lookest out for thyself alone.' },
+          { name: 'A JESTER AFTER MINE OWN HEART!', sub: 'UEE HEE HEE! Let us burn the castle!' },
+        ],
+      ]
+      const CELL_LABELS = [
+        ['LAWFUL<br>GOOD', 'NEUTRAL<br>GOOD', 'CHAOTIC<br>GOOD'],
+        ['LAWFUL<br>NEUTRAL', 'TRUE<br>NEUTRAL', 'CHAOTIC<br>NEUTRAL'],
+        ['LAWFUL<br>EVIL', 'NEUTRAL<br>EVIL', 'CHAOTIC<br>EVIL'],
+      ]
+
+      const RUN_LENGTH = 10
+
+      // ---------- Original pixel jester (not a copy of the game sprite) ----------
+      const JEVIL_MAP = [
+        '................',
+        '.GG..........GG.',
+        '.GG..........GG.',
+        '..PP........LL..',
+        '...PPP....LLL...',
+        '...PPPP..LLLL...',
+        '....PPPPLLLL....',
+        '....PPPPLLLL....',
+        '...PPPPPLLLLL...',
+        '...GGGGGGGGGG...',
+        '...GGTGGGGTGG...',
+        '...WWWWWWWWWW...',
+        '...WKKWWWWKKW...',
+        '...WWWWWWWWWW...',
+        '...WKGKGKGKGW...',
+        '...WWKKKKKKWW...',
+        '....WWWWWWWW....',
+        '.....TTTTTT.....',
+      ]
+      const PALETTE = {
+        G: '#f5d63d',
+        P: '#7b4fd6',
+        L: '#b69cf2',
+        W: '#ece8f4',
+        K: '#0b0614',
+        T: '#3ec7c2',
+      }
+
+      function jevilSvg(size) {
+        const rects = []
+        JEVIL_MAP.forEach((row, y) =>
+          [...row].forEach((c, x) => {
+            if (PALETTE[c])
+              rects.push(`<rect x="${x}" y="${y}" width="1" height="1" fill="${PALETTE[c]}"/>`)
+          }),
+        )
+        const h = Math.round((size * JEVIL_MAP.length) / 16)
+        return `<svg class="sprite" width="${size}" height="${h}" viewBox="0 0 16 ${JEVIL_MAP.length}" role="img" aria-label="Jevil">${rects.join('')}</svg>`
+      }
+      document.querySelectorAll('[data-jevil]').forEach((el) => {
+        el.innerHTML = jevilSvg(Number(el.dataset.jevil))
+      })
+
+      // ---------- State ----------
+      const $ = (id) => document.getElementById(id)
+      const stage = $('stage')
+      let run = []
+      let index = 0
+      let answers = []
+      let selected = 0
+      let picked = null
+      let shownAt = 0
+      let typing = null
+
+      const pick = (arr) => arr[Math.floor(Math.random() * arr.length)]
+      const shuffle = (arr) => {
+        const a = [...arr]
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1))
+          ;[a[i], a[j]] = [a[j], a[i]]
+        }
+        return a
+      }
+      const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
+
+      function show(id) {
+        document
+          .querySelectorAll('.screen')
+          .forEach((s) => s.classList.toggle('active', s.id === id))
+      }
+
+      function toast(msg) {
+        const t = $('toast')
+        t.textContent = msg
+        t.classList.add('show')
+        clearTimeout(toast.timer)
+        toast.timer = setTimeout(() => t.classList.remove('show'), 2200)
+      }
+
+      // ---------- Title ----------
+      function titleMenu() {
+        return [...document.querySelectorAll('#title .menu-btn')]
+      }
+      function setTitleSel(i) {
+        titleMenu().forEach((b, n) => b.classList.toggle('selected', n === i))
+        titleMenu()[i].focus()
+      }
+      document.querySelector('[data-action="start"]').onclick = startRun
+      document.querySelector('[data-action="how"]').onclick = () =>
+        toast('Pick A or B. Say why if you like. Jevil keeps score.')
+
+      // ---------- Card ----------
+      function startRun() {
+        run = shuffle(DECK).slice(0, RUN_LENGTH)
+        index = 0
+        answers = []
+        show('card')
+        renderCard()
+      }
+
+      function typeText(el, text) {
+        clearInterval(typing)
+        if (reducedMotion) {
+          el.textContent = text
+          return
+        }
+        let i = 0
+        el.textContent = ''
+        typing = setInterval(() => {
+          el.textContent = text.slice(0, ++i)
+          if (i >= text.length) clearInterval(typing)
+        }, 22)
+      }
+
+      function renderCard() {
+        const card = run[index]
+        picked = null
+        selected = 0
+        $('hud-count').textContent = `CARD ${index + 1}/${run.length}`
+        $('pips').innerHTML = run
+          .map(
+            (_, i) => `<span class="pip ${i < index ? 'done' : i === index ? 'now' : ''}"></span>`,
+          )
+          .join('')
+        $('bubble').classList.remove('show')
+        $('why').classList.remove('show')
+        $('why-input').value = ''
+
+        typeText($('question-a'), card.prompt)
+        typeText($('question-b'), card.prompt)
+
+        $('options-a').innerHTML = card.options
+          .map(
+            (o, i) => `
+          <button class="menu-btn" role="radio" aria-checked="false" data-i="${i}">
+            <svg class="heart sprite" viewBox="0 0 9 8"><use href="#heart"/></svg>
+            <span class="key">${'AB'[i]}</span>
+            <span class="label">${o.text}</span>
+          </button>`,
+          )
+          .join('')
+
+        $('options-b').innerHTML = card.options
+          .map(
+            (o, i) => `
+          <button class="play-card pixel-border ${'ab'[i]}" role="radio" aria-checked="false" data-i="${i}">
+            <span class="suit tl">${'AB'[i]} ${i ? '♥' : '♠'}</span>
+            <span>${o.text}</span>
+            <span class="suit br">${'AB'[i]} ${i ? '♥' : '♠'}</span>
+          </button>`,
+          )
+          .join('')
+
+        document.querySelectorAll('[data-i]').forEach((b) => {
+          b.onclick = () => choose(Number(b.dataset.i))
+          b.onmouseenter = () => picked === null && setSel(Number(b.dataset.i))
+        })
+        setSel(0)
+        shownAt = performance.now()
+      }
+
+      function optionButtons() {
+        const layout = stage.classList.contains('layout-table') ? 'options-b' : 'options-a'
+        return [...$(layout).querySelectorAll('[data-i]')]
+      }
+
+      function setSel(i) {
+        selected = i
+        document.querySelectorAll('[data-i]').forEach((b) => {
+          b.classList.toggle('selected', Number(b.dataset.i) === i && picked === null)
+        })
+      }
+
+      function choose(i) {
+        if (picked !== null) return
+        clearInterval(typing)
+        const card = run[index]
+        $('question-a').textContent = card.prompt
+        $('question-b').textContent = card.prompt
+        picked = i
+        const option = card.options[i]
+        const ms = performance.now() - shownAt
+        answers.push({ card, choice: i, ms, why: '' })
+
+        document.querySelectorAll('[data-i]').forEach((b) => {
+          const n = Number(b.dataset.i)
+          b.classList.remove('selected')
+          b.classList.toggle('picked', n === i)
+          b.classList.toggle('dim', n !== i)
+          b.setAttribute('aria-checked', String(n === i))
+        })
+
+        const bubble = $('bubble')
+        bubble.textContent = pick(REACTIONS[reactionKey(option)])
+        bubble.classList.add('show')
+        if ((option.chaos >= 2 || option.good <= -2) && !reducedMotion) {
+          const j = $('card-jevil')
+          j.classList.remove('shake')
+          void j.offsetWidth
+          j.classList.add('shake')
+        }
+        $('why').classList.add('show')
+        $('why-input').focus()
+      }
+
+      // Jevil reacts to whichever axis the pick leans on hardest.
+      function reactionKey({ chaos, good }) {
+        if (chaos === 0 && good === 0) return 'neutral'
+        if (Math.abs(good) > Math.abs(chaos)) return good > 0 ? 'good' : 'evil'
+        return chaos > 0 ? 'chaotic' : 'lawful'
+      }
+
+      function next() {
+        if (picked === null) return
+        answers[answers.length - 1].why = $('why-input').value.trim()
+        index++
+        if (index >= run.length) renderResults()
+        else renderCard()
+      }
+      $('next-btn').onclick = next
+      $('why-input').addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') next()
+        e.stopPropagation()
+      })
+
+      // ---------- Results ----------
+      function renderResults() {
+        // Average each axis to -1..1, then split into thirds.
+        const max = answers.length * 2
+        const sum = (axis) => answers.reduce((t, a) => t + a.card.options[a.choice][axis], 0)
+        const x = sum('chaos') / max
+        const y = sum('good') / max
+        const third = (v) => (v < -1 / 3 ? 0 : v > 1 / 3 ? 2 : 1)
+        const col = third(x)
+        const row = 2 - third(y)
+        const v = ALIGNMENTS[row][col]
+        $('verdict-name').textContent = v.name
+        $('verdict-sub').textContent = v.sub
+
+        const cells = CELL_LABELS.flatMap((r, ri) =>
+          r.map(
+            (label, ci) =>
+              `<div class="cell ${ri === row && ci === col ? 'you' : ''}">${label}</div>`,
+          ),
+        )
+        const left = ((x + 1) / 2) * 100
+        const top = ((1 - y) / 2) * 100
+        $('grid9').innerHTML =
+          cells.join('') +
+          `<svg class="marker sprite" viewBox="0 0 9 8" style="left:${left}%;top:${top}%" aria-hidden="true"><use href="#heart"/></svg>`
+
+        const byTime = [...answers].sort((a, b) => b.ms - a.ms)
+        const fmt = (a) => `“${a.card.prompt}” <br><b>${(a.ms / 1000).toFixed(1)}s</b>`
+        $('stat-hard').innerHTML = fmt(byTime[0])
+        $('stat-fast').innerHTML = fmt(byTime[byTime.length - 1])
+
+        $('answers').innerHTML = answers
+          .map((a) => {
+            const o = a.card.options[a.choice]
+            const color =
+              o.chaos > 0 ? 'var(--chaos)' : o.chaos < 0 ? 'var(--order)' : 'var(--jester-300)'
+            return `<div class="answer">
+              <span class="dot" style="background:${color}"></span>
+              <div><div class="q">${a.card.prompt}</div><div>${o.text}</div>${a.why ? `<div class="r">“${a.why}”</div>` : ''}</div>
+            </div>`
+          })
+          .join('')
+        show('results')
+      }
+      $('again-btn').onclick = startRun
+      $('save-btn').onclick = () => toast('The real app saves this card as a PNG (html-to-image).')
+
+      // ---------- Keyboard ----------
+      document.addEventListener('keydown', (e) => {
+        const screen = document.querySelector('.screen.active').id
+        const confirm = e.key === 'Enter' || e.key.toLowerCase() === 'z'
+        if (screen === 'title') {
+          const i = titleMenu().findIndex((b) => b.classList.contains('selected'))
+          if (e.key === 'ArrowDown') setTitleSel((i + 1) % 2)
+          else if (e.key === 'ArrowUp') setTitleSel((i + 1) % 2)
+          else if (confirm) {
+            e.preventDefault()
+            titleMenu()[i].click()
+          }
+        } else if (screen === 'card') {
+          if (picked !== null) return
+          const k = e.key.toLowerCase()
+          if (['arrowup', 'arrowleft'].includes(k)) setSel(0)
+          else if (['arrowdown', 'arrowright'].includes(k)) setSel(1)
+          else if (k === 'a' || k === '1') choose(0)
+          else if (k === 'b' || k === '2') choose(1)
+          else if (confirm) {
+            e.preventDefault()
+            choose(selected)
+          }
+          optionButtons()[selected]?.focus({ preventScroll: true })
+        }
+      })
+
+      // ---------- Demo toolbar ----------
+      function press(group, btn) {
+        document
+          .querySelectorAll(`[data-${group}]`)
+          .forEach((b) => b.setAttribute('aria-pressed', String(b === btn)))
+      }
+      document.querySelectorAll('[data-layout]').forEach((b) => {
+        b.onclick = () => {
+          press('layout', b)
+          stage.classList.toggle('layout-battle', b.dataset.layout === 'battle')
+          stage.classList.toggle('layout-table', b.dataset.layout === 'table')
+        }
+      })
+      document.querySelectorAll('[data-frame]').forEach((b) => {
+        b.onclick = () => {
+          press('frame', b)
+          stage.classList.toggle('phone', b.dataset.frame === 'phone')
+        }
+      })
+      document.querySelectorAll('[data-jump]').forEach((b) => {
+        b.onclick = () => {
+          const to = b.dataset.jump
+          if (to === 'title') show('title')
+          if (to === 'card') startRun()
+          if (to === 'results') {
+            run = shuffle(DECK).slice(0, RUN_LENGTH)
+            answers = run.map((card) => ({
+              card,
+              choice: Math.random() < 0.6 ? 1 : 0,
+              ms: 800 + Math.random() * 9000,
+              why:
+                Math.random() < 0.4
+                  ? pick(['It just felt right.', 'Obviously.', 'No comment.'])
+                  : '',
+            }))
+            renderResults()
+          }
+        }
+      })
+
+      // Deep links, e.g. ?layout=table&frame=phone&screen=card
+      const params = new URLSearchParams(location.search)
+      document.querySelector(`[data-layout="${params.get('layout')}"]`)?.click()
+      document.querySelector(`[data-frame="${params.get('frame')}"]`)?.click()
+      document.querySelector(`[data-jump="${params.get('screen')}"]`)?.click()
+      if (params.get('pick')) choose(Number(params.get('pick')))
+    </script>
+  </body>
+</html>

@@ -11,15 +11,14 @@
 ### Client-Side Setup (using React):
 
 **Joining a Game:**
+
 - When a player with the sharable link opens the game in their browser, their React app parses the link to extract the game ID.
 - The React app connects to the WebSocket server and sends a message indicating they want to join the game with the extracted ID.
-**Server Validation**
+  **Server Validation**
 - The server receives the join request with the game ID.
 - The server checks if a game exists with that ID and if it's currently available for another player to join.
-**Game Start/Waiting Room:**
+  **Game Start/Waiting Room:**
 - If the game exists and is available:
   - The server adds the joining player to the game and sends them the initial game state (current dilemma, player information).
   - Both players' React components receive updates and display the same dilemma.
 - If the game doesn't exist or is full, the server sends an appropriate message to the joining player (e.g., "Game not found" or "Game already full").
-
-

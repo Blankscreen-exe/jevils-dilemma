@@ -1,68 +1,161 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import 'tailwindcss';
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+/* Self-hosted pixel fonts (latin subset only) so the game works offline. */
+@import '@fontsource/press-start-2p/latin-400.css';
+@import '@fontsource/pixelify-sans/latin-400.css';
+@import '@fontsource/pixelify-sans/latin-700.css';
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/*
+ * Jevil theme.
+ * Default palettes, radii and soft shadows are cleared so only on-theme values exist.
+ */
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
+  /* Dark World backdrop */
+  --color-void: #0b0614;
+  --color-night: #1a0f2e;
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
+  /* Jester purples */
+  --color-jester-900: #2a1450;
+  --color-jester-700: #4b2a8c;
+  --color-jester-500: #7b4fd6;
+  --color-jester-300: #b69cf2;
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
+  /* Accents */
+  --color-gold: #f5d63d;
+  --color-gold-dark: #b8901a;
+  --color-teal: #3ec7c2;
+  --color-bone: #ece8f4;
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
+  /* Order <-> Chaos meter */
+  --color-order: #3ec7c2;
+  --color-chaos: #e0436b;
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+  --font-*: initial;
+  --font-display: 'Press Start 2P', monospace;
+  --font-body: 'Pixelify Sans', monospace;
+
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --blur-*: initial;
+
+  /* One "art pixel" at 1x. Spacing is a multiple of this to keep the grid. */
+  --pixel: 4px;
+  --spacing: var(--pixel);
+
+  /* Stepped animations read as sprite frames rather than smooth tweens. */
+  --animate-bob: bob 1.2s steps(2) infinite;
+  --animate-shake: shake 0.4s steps(4);
+  --animate-deal: deal 0.3s steps(4) both;
+
+  @keyframes bob {
+    50% {
+      transform: translateY(calc(var(--pixel) * -2));
+    }
   }
-  a:hover {
-    color: #747bff;
+  @keyframes shake {
+    25% {
+      transform: translate(calc(var(--pixel) * -2), 0);
+    }
+    50% {
+      transform: translate(calc(var(--pixel) * 2), calc(var(--pixel) * -1));
+    }
+    75% {
+      transform: translate(calc(var(--pixel) * -1), var(--pixel));
+    }
   }
-  button {
-    background-color: #f9f9f9;
+  @keyframes deal {
+    from {
+      transform: translateY(calc(var(--pixel) * 10)) rotate(-6deg);
+      opacity: 0;
+    }
   }
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+
+    /*
+     * Pixel heart pointer (the 11×10 heart at 3×; browsers never scale cursor images).
+     * The hotspot sits on the top-left lobe. Falls back to the system cursor.
+     */
+    --cursor-heart: url('./assets/heart-cursor.png') 4 4;
+    cursor: var(--cursor-heart), auto;
+  }
+
+  /* Keep the heart on clickable things instead of switching to the hand pointer. */
+  a,
+  button:not(:disabled),
+  label[for],
+  summary {
+    cursor: var(--cursor-heart), pointer;
+  }
+
+  body {
+    @apply bg-void font-body text-bone;
+    min-height: 100dvh;
+
+    /* Faint checkerboard floor (like Jevil's cell) under a soft purple glow. */
+    --checker: color-mix(in srgb, var(--color-jester-300) 4%, transparent);
+    --checker-size: calc(var(--pixel) * 12);
+    background-image:
+      radial-gradient(
+        circle at 50% 30%,
+        color-mix(in srgb, var(--color-jester-700) 35%, transparent),
+        transparent 60%
+      ),
+      linear-gradient(45deg, var(--checker) 25%, transparent 25%),
+      linear-gradient(-45deg, var(--checker) 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, var(--checker) 75%),
+      linear-gradient(-45deg, transparent 75%, var(--checker) 75%);
+    background-size:
+      100% 100dvh,
+      var(--checker-size) var(--checker-size),
+      var(--checker-size) var(--checker-size),
+      var(--checker-size) var(--checker-size),
+      var(--checker-size) var(--checker-size);
+    background-position:
+      0 0,
+      0 0,
+      0 calc(var(--checker-size) / 2),
+      calc(var(--checker-size) / 2) calc(var(--checker-size) / -2),
+      calc(var(--checker-size) / -2) 0;
+    background-repeat: no-repeat, repeat, repeat, repeat, repeat;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-delay: 0s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* Stepped border with notched corners, drawn with box-shadow so it adds no layout size. */
+@utility pixel-border {
+  --pixel-border-color: var(--color-jester-300);
+  box-shadow:
+    0 calc(var(--pixel) * -1) 0 0 var(--pixel-border-color),
+    0 var(--pixel) 0 0 var(--pixel-border-color),
+    calc(var(--pixel) * -1) 0 0 0 var(--pixel-border-color),
+    var(--pixel) 0 0 0 var(--pixel-border-color);
+}
+
+@utility pixel-border-* {
+  --pixel-border-color: --value(--color-*);
+}
+
+/* Keeps scaled sprites crisp instead of blurred. */
+@utility pixelated {
+  image-rendering: pixelated;
 }
