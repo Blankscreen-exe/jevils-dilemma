@@ -92,12 +92,13 @@ meaningless. Avoids a dependency and keeps state as the single source of truth.
 
 **Status:** Accepted
 
-Questions live in `src/data/cards.json`, imported at build time (bundled and precached — no
-fetch/loading states). A schema (e.g. Zod) validates the deck in a unit test so a malformed
-card fails CI rather than production. Card IDs are stable slugs.
+Questions live in `src/data/cards/{hearts,diamonds,clubs,spades}.json` (250 each, 1,000 in
+total). A schema (Zod) validates every card at load, and the deck tests enforce content rules
+(balance, no duplicates) so a malformed card fails CI rather than production. Card IDs are
+stable slugs.
 
 Implemented with **Zod**: one schema in `src/game/deck.ts` both validates the JSON and generates
-the TypeScript types (`z.infer`), so the two cannot drift. The deck is parsed once at startup;
+the TypeScript types (`z.infer`), so the two cannot drift. The deck is parsed once after load;
 content rules about balance (e.g. enough cards with a moral edge) live in the deck tests rather
 than the schema. Zod will also validate saved data from `localStorage` (ADR-007).
 
@@ -105,6 +106,15 @@ Uses the tree-shakable **`zod/mini`** build rather than classic `zod`: schemas a
 functions (`z.string().check(z.trim(), z.minLength(1))`) instead of chained methods, which let
 the bundler drop unused validators. This cut the main bundle from 101.9 kB to 84.8 kB gzipped
 (−17%) with no behaviour change; the existing schema tests passed unmodified.
+
+**Loading 1,000 questions.** The full deck is ~1 MB of text; bundled eagerly it tripled the
+main bundle (87 → 270 kB gzipped) and added ~18 ms of validation before the first paint. The
+suit files are therefore loaded with dynamic `import()` (`src/game/loadDeck.ts`): the main
+bundle is back to ~93 kB gzipped, the title screen renders immediately, and the four ~45 kB
+chunks download in parallel while START shows "SHUFFLING...". They are still precached by the
+service worker, so the game remains fully offline after the first visit.
+**Rejected:** serving the deck as a static JSON file fetched at runtime (loses type-checked
+imports and Vite's content hashing for cache-busting).
 **Rejected:** hand-written type guards (duplicated types, easy to get out of sync); JSON Schema
 (needs a separate type generator step).
 

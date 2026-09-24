@@ -79,8 +79,8 @@ alignment is only revealed in the final reading.
 
 ### Suits
 
-Every question belongs to one of four suits. The deck has **six questions per suit**, and each
-run deals **at least two from every suit**.
+Every question belongs to one of four suits. The deck has **250 questions per suit** (1,000 in
+total), and each run deals **at least two from every suit**.
 
 | Suit       | Theme                             |
 | ---------- | --------------------------------- |
